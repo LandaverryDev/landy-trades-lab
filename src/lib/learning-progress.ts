@@ -33,6 +33,7 @@ export const defaultLearningProgress: StoredLearningProgress = {
   quizBestScores: {},
   drillBestScores: {},
   chartBestScores: {},
+  scenarioBestScores: {},
   reviewStates: {},
   streakDays: 0,
   lastActiveDate: null,
@@ -197,6 +198,7 @@ export function readStoredLearningProgress(): StoredLearningProgress {
       quizBestScores: parsed.quizBestScores ?? {},
       drillBestScores: parsed.drillBestScores ?? {},
       chartBestScores: parsed.chartBestScores ?? {},
+      scenarioBestScores: parsed.scenarioBestScores ?? {},
       reviewStates: parsed.reviewStates ?? {},
     };
   } catch {
@@ -281,11 +283,16 @@ export function recordChartChallengeCompletion(challengeSlug: string, score: num
   );
 }
 
-export function recordScenarioCompletion(scenarioSlug: string) {
+export function recordScenarioCompletion(scenarioSlug: string, score: number) {
   return updateStoredLearningProgress((state) =>
     applyActivity({
       ...state,
       completedScenarioSlugs: addUnique(state.completedScenarioSlugs, scenarioSlug),
+      scenarioBestScores: {
+        ...state.scenarioBestScores,
+        [scenarioSlug]: Math.max(state.scenarioBestScores[scenarioSlug] ?? 0, score),
+      },
+      reviewStates: buildReviewState(state.reviewStates, "simulator", scenarioSlug, score),
     }),
   );
 }
@@ -296,6 +303,7 @@ function buildAchievements(state: StoredLearningProgress): Achievement[] {
   const quizScores = Object.values(state.quizBestScores);
   const drillScores = Object.values(state.drillBestScores);
   const chartScores = Object.values(state.chartBestScores);
+  const scenarioScores = Object.values(state.scenarioBestScores);
 
   if (completedLessonCount > 0) {
     achievements.push({
@@ -345,6 +353,14 @@ function buildAchievements(state: StoredLearningProgress): Achievement[] {
     });
   }
 
+  if (scenarioScores.some((score) => score >= 80)) {
+    achievements.push({
+      id: "decision-operator",
+      title: "Decision Operator",
+      detail: "Reached 80% or better decision quality in a replay simulator.",
+    });
+  }
+
   return achievements;
 }
 
@@ -362,6 +378,7 @@ function buildReviewQueue(
   quizLookup: Map<string, (typeof quizzes)[number]>,
   drillLookup: Map<string, (typeof drillSets)[number]>,
   challengeLookup: Map<string, (typeof chartChallenges)[number]>,
+  scenarioLookup: Map<string, (typeof scenarios)[number]>,
 ) {
   const queue: ReviewQueueItem[] = [];
   const today = todayString();
@@ -550,6 +567,69 @@ function buildReviewQueue(
             href: `/chart-challenge/${module.chartChallengeSlug}`,
             score,
             reason: dueGap <= 0 ? "Chart read is due for another pass" : "Chart read refresh is coming up soon",
+            priority: dueGap <= 0 ? 2 : 4,
+            dueDate: reviewState.dueDate,
+            dueLabel: describeDueLabel(reviewState.dueDate),
+            dueState: dueGap <= 0 ? "due" : "upcoming",
+            masteryLabel: describeMasteryLabel(reviewState),
+          });
+        }
+      }
+    }
+
+    if (module.simulatorSlug) {
+      const reviewState = state.reviewStates[getReviewKey("simulator", module.simulatorSlug)];
+      const score = reviewState?.lastScore ?? state.scenarioBestScores[module.simulatorSlug] ?? null;
+      const completed = state.completedScenarioSlugs.includes(module.simulatorSlug);
+
+      if (!completed) {
+        queue.push({
+          id: `simulator:${module.simulatorSlug}`,
+          kind: "simulator",
+          slug: module.simulatorSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: scenarioLookup.get(module.simulatorSlug)?.title ?? "Replay Simulator",
+          href: `/simulator/${module.simulatorSlug}`,
+          score,
+          reason: "Unfinished replay scenario",
+          priority: 0,
+          dueDate: null,
+          dueLabel: "Start now",
+          dueState: "new",
+          masteryLabel: "First pass",
+        });
+      } else if ((score ?? 0) < 80) {
+        queue.push({
+          id: `simulator:${module.simulatorSlug}`,
+          kind: "simulator",
+          slug: module.simulatorSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: scenarioLookup.get(module.simulatorSlug)?.title ?? "Replay Simulator",
+          href: `/simulator/${module.simulatorSlug}`,
+          score,
+          reason: `Decision quality is still only ${score ?? 0}%. Replay it before widening the interval`,
+          priority: 1,
+          dueDate: reviewState?.dueDate ?? today,
+          dueLabel: describeDueLabel(reviewState?.dueDate ?? today),
+          dueState: "weak",
+          masteryLabel: describeMasteryLabel(reviewState),
+        });
+      } else if (reviewState) {
+        const dueGap = dayDiff(today, reviewState.dueDate);
+
+        if (dueGap <= 0 || dueGap <= 2) {
+          queue.push({
+            id: `simulator:${module.simulatorSlug}`,
+            kind: "simulator",
+            slug: module.simulatorSlug,
+            moduleSlug: module.slug,
+            moduleTitle: module.title,
+            title: scenarioLookup.get(module.simulatorSlug)?.title ?? "Replay Simulator",
+            href: `/simulator/${module.simulatorSlug}`,
+            score,
+            reason: dueGap <= 0 ? "Replay decision-making is due again now" : "Replay refresh comes due soon",
             priority: dueGap <= 0 ? 2 : 4,
             dueDate: reviewState.dueDate,
             dueLabel: describeDueLabel(reviewState.dueDate),
@@ -750,7 +830,8 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
   const quizAccuracy = average(Object.values(state.quizBestScores));
   const drillAccuracy = average(Object.values(state.drillBestScores));
   const chartAccuracy = average(Object.values(state.chartBestScores));
-  const reviewQueue = buildReviewQueue(modules, state, quizLookup, drillLookup, challengeLookup);
+  const simulatorAccuracy = average(Object.values(state.scenarioBestScores));
+  const reviewQueue = buildReviewQueue(modules, state, quizLookup, drillLookup, challengeLookup, scenarioLookup);
   const reviewDueCount = reviewQueue.filter((item) => item.dueState !== "upcoming").length;
   const upcomingReviewCount = reviewQueue.filter((item) => item.dueState === "upcoming").length;
   const totalContentItems = modules.reduce((sum, module) => sum + module.totalItems, 0);
@@ -768,6 +849,7 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
     quizAccuracy,
     drillAccuracy,
     chartAccuracy,
+    simulatorAccuracy,
     overallProgressPercent:
       totalContentItems === 0 ? 0 : Math.round((totalCompletedItems / totalContentItems) * 100),
     reviewDueCount,

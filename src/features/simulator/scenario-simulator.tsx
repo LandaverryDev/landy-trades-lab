@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
-import { recordScenarioCompletion } from "@/lib/learning-progress";
+import { describeDueLabel, recordScenarioCompletion, useLearningProgress } from "@/lib/learning-progress";
 import type { Scenario, ScenarioAction, ScenarioStep } from "@/types/trading";
 
 type MistakeTagId =
@@ -220,6 +220,9 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
   const [submitted, setSubmitted] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [decisionReview, setDecisionReview] = useState<DecisionReviewItem[]>([]);
+  const [nextReviewLabel, setNextReviewLabel] = useState<string | null>(null);
+  const { raw } = useLearningProgress();
+  const bestScore = raw.scenarioBestScores[scenario.slug] ?? null;
 
   const step = scenario.steps[stepIndex];
   const selectedAction = useMemo(
@@ -280,7 +283,26 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
     ]);
 
     if (stepIndex === scenario.steps.length - 1) {
-      recordScenarioCompletion(scenario.slug);
+      const finalReview = [
+        ...decisionReview,
+        {
+          stepId: step.id,
+          stepTitle: step.title,
+          selectedActionLabel: selectedAction.label,
+          selectedActionRationale: selectedAction.rationale,
+          correctActionLabel: correctAction?.label ?? "Best action",
+          correctActionRationale: correctAction?.rationale ?? "Follow the cleaner process path.",
+          correct: isCorrect,
+          mistakeTags,
+          projectedOutcome,
+          coachingRule: buildCoachingRule(mistakeTags),
+        },
+      ];
+      const correctReviewCount = finalReview.filter((item) => item.correct).length;
+      const score = scenario.steps.length === 0 ? 0 : Math.round((correctReviewCount / scenario.steps.length) * 100);
+      const nextState = recordScenarioCompletion(scenario.slug, score);
+      setDecisionReview(finalReview);
+      setNextReviewLabel(describeDueLabel(nextState.reviewStates[`simulator:${scenario.slug}`]?.dueDate ?? null));
       setCompleted(true);
       return;
     }
@@ -296,6 +318,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
     setSubmitted(false);
     setCompleted(false);
     setDecisionReview([]);
+    setNextReviewLabel(null);
   }
 
   if (completed) {
@@ -312,11 +335,12 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
           <p className="eyebrow-label text-emerald-300">Replay Complete</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{scenario.title}</h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">{grade.detail}</p>
-          <div className="mt-6 grid gap-4 md:grid-cols-4">
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             <FinalTile label="Scenario XP" value={`${scenario.xpReward}`} />
             <FinalTile label="Decision Grade" value={grade.label} />
             <FinalTile label="Strong Decisions" value={`${correctReviewCount}/${scenario.steps.length}`} />
             <FinalTile label="Reset Signals" value={`${wrongReviewCount}`} />
+            <FinalTile label="Next Review" value={nextReviewLabel ?? "Due soon"} />
           </div>
         </section>
 
@@ -477,7 +501,9 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
             <p className="mt-2 font-mono text-3xl text-white">
               {stepIndex + 1}/{scenario.steps.length}
             </p>
-            <p className="mt-2 text-xs text-slate-400">{decisionReview.length} decisions logged</p>
+            <p className="mt-2 text-xs text-slate-400">
+              {bestScore !== null ? `Best local score: ${bestScore}%` : `${decisionReview.length} decisions logged`}
+            </p>
           </div>
         </div>
       </section>

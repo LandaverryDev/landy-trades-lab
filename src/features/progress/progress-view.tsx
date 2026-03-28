@@ -30,6 +30,7 @@ export function ProgressView() {
             <MetricCard label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
             <MetricCard label="Drill Accuracy" value={`${progress.drillAccuracy}%`} />
             <MetricCard label="Chart Accuracy" value={`${progress.chartAccuracy}%`} />
+            <MetricCard label="Replay Quality" value={`${progress.simulatorAccuracy}%`} />
             <MetricCard label="Due Reviews" value={`${progress.reviewDueCount}`} />
           </div>
         </div>

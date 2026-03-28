@@ -1,6 +1,6 @@
 export type TierSlug = "beginner" | "intermediate" | "advanced";
 export type ModuleStatus = "active" | "locked" | "completed";
-export type ReviewKind = "quiz" | "drill" | "chart";
+export type ReviewKind = "quiz" | "drill" | "chart" | "simulator";
 export type ReviewDueState = "new" | "weak" | "due" | "upcoming";
 export type QuestionType =
   | "multiple-choice"
@@ -278,6 +278,7 @@ export interface ProgressSnapshot {
   quizAccuracy: number;
   drillAccuracy: number;
   chartAccuracy: number;
+  simulatorAccuracy: number;
   overallProgressPercent: number;
   reviewDueCount: number;
   upcomingReviewCount: number;
@@ -293,6 +294,7 @@ export interface StoredLearningProgress {
   quizBestScores: Record<string, number>;
   drillBestScores: Record<string, number>;
   chartBestScores: Record<string, number>;
+  scenarioBestScores: Record<string, number>;
   reviewStates: Record<string, StoredReviewState>;
   streakDays: number;
   lastActiveDate: string | null;

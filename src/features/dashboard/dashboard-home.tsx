@@ -101,6 +101,7 @@ export function DashboardHome() {
               <MetricCard label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
               <MetricCard label="Drill Accuracy" value={`${progress.drillAccuracy}%`} />
               <MetricCard label="Chart Accuracy" value={`${progress.chartAccuracy}%`} />
+              <MetricCard label="Replay Quality" value={`${progress.simulatorAccuracy}%`} />
               <MetricCard label="Due Now" value={`${progress.reviewDueCount}`} />
             </div>
             <div className="mt-5">

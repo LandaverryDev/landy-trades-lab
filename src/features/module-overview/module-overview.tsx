@@ -30,6 +30,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
   const simulatorComplete = baseModule.simulatorSlug
     ? raw.completedScenarioSlugs.includes(baseModule.simulatorSlug)
     : true;
+  const simulatorBestScore = baseModule.simulatorSlug ? raw.scenarioBestScores[baseModule.simulatorSlug] : undefined;
 
   const nextHref = firstIncompleteLesson
     ? `/lesson/${firstIncompleteLesson.slug}`
@@ -166,7 +167,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                 description="Make a decision inside a guided scenario and review the outcome."
                 href={`/simulator/${baseModule.simulatorSlug}`}
                 done={simulatorComplete}
-                meta={simulatorComplete ? "Completed" : "Decision practice"}
+                meta={simulatorComplete ? `Best ${simulatorBestScore ?? 0}%` : "Decision practice"}
                 icon={<PlayCircle className="h-4 w-4 text-emerald-300" />}
               />
             ) : null}
