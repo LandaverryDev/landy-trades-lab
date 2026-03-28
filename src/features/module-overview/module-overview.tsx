@@ -37,43 +37,42 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
       ? `/quiz/${baseModule.quizSlug}`
       : !drillComplete && baseModule.drillSlug
         ? `/drill/${baseModule.drillSlug}`
-      : !chartComplete && baseModule.chartChallengeSlug
-        ? `/chart-challenge/${baseModule.chartChallengeSlug}`
-        : !simulatorComplete && baseModule.simulatorSlug
-          ? `/simulator/${baseModule.simulatorSlug}`
-          : "/progress";
-  const formatStep = (value: number) => `${value}`.padStart(2, "0");
-  const quizStep = formatStep(lessons.length + 1);
-  const drillStep = formatStep(lessons.length + (baseModule.quizSlug ? 2 : 1));
-  const chartStep = formatStep(lessons.length + (baseModule.quizSlug ? 2 : 1) + (baseModule.drillSlug ? 1 : 0));
-  const simulatorStep = formatStep(
-    lessons.length +
-      (baseModule.quizSlug ? 2 : 1) +
-      (baseModule.drillSlug ? 1 : 0) +
-      (baseModule.chartChallengeSlug ? 1 : 0),
-  );
+        : !chartComplete && baseModule.chartChallengeSlug
+          ? `/chart-challenge/${baseModule.chartChallengeSlug}`
+          : !simulatorComplete && baseModule.simulatorSlug
+            ? `/simulator/${baseModule.simulatorSlug}`
+            : "/progress";
+
+  if (!liveModule.unlocked) {
+    return (
+      <div className="space-y-8">
+        <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-8 text-center">
+          <Lock className="mx-auto h-8 w-8 text-slate-500" />
+          <p className="mt-4 text-sm uppercase tracking-[0.28em] text-slate-400">Module Locked</p>
+          <h1 className="mt-3 text-4xl font-semibold text-white">{baseModule.title}</h1>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">{baseModule.unlockRule}</p>
+          <Link
+            href="/learn"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+          >
+            Back to curriculum
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
       <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 sm:p-8">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs uppercase tracking-[0.28em] text-emerald-200">
-            Module Overview
-          </span>
-          <span className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-1 text-xs uppercase tracking-[0.28em] text-slate-300">
-            {liveModule.completedItems}/{liveModule.totalItems} completed
-          </span>
-        </div>
-
-        <div className="mt-6 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-slate-400">{baseModule.tier} module</p>
-            <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              {baseModule.title}
-            </h1>
+            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Module</p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl">{baseModule.title}</h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">{baseModule.summary}</p>
 
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap gap-2">
               {baseModule.focusAreas.map((area) => (
                 <span key={area} className="rounded-full border border-white/8 bg-white/[0.03] px-4 py-2 text-sm text-slate-200">
                   {area}
@@ -82,153 +81,121 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
             </div>
           </div>
 
-          <div className="grid gap-4">
-            <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Live module progress</p>
-                <span
-                  className={`rounded-full px-3 py-1 text-xs uppercase tracking-[0.22em] ${
-                    liveModule.unlocked
-                      ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-                      : "border border-white/10 bg-white/[0.03] text-slate-400"
-                  }`}
-                >
-                  {liveModule.liveStatus}
-                </span>
-              </div>
-              <div className="mt-4">
-                <ProgressBar value={liveModule.progressPercent} label="Completion" />
-              </div>
-              <p className="mt-4 text-sm leading-6 text-slate-300">{baseModule.unlockRule}</p>
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Module Progress</p>
+            <div className="mt-4">
+              <ProgressBar value={liveModule.progressPercent} label="Completion" />
             </div>
-
-            <div className="rounded-[28px] border border-cyan-400/12 bg-cyan-400/[0.05] p-5">
-              <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/70">Bot Builder Hook</p>
-              <p className="mt-3 text-sm leading-6 text-slate-200">{baseModule.botBuilderHook}</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <MiniStat label="Completed" value={`${liveModule.completedItems}/${liveModule.totalItems}`} />
+              <MiniStat label="Reward" value={`${baseModule.xpReward} XP`} />
             </div>
+            <Link
+              href={nextHref}
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+            >
+              {liveModule.completed ? "Open progress" : "Continue module"}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {!liveModule.unlocked ? (
-        <section className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 text-center">
-          <Lock className="mx-auto h-8 w-8 text-slate-500" />
-          <h2 className="mt-4 text-2xl font-semibold text-white">This module is still locked</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-            Finish the earlier module sequence to unlock this training block. The app now unlocks modules based on local
-            stored progress, not a fixed mock status.
-          </p>
-          <div className="mt-6">
-            <Link
-              href="/learn"
-              className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
-            >
-              Back to learning path
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)]">
+        <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Learning Sequence</p>
+          <h2 className="mt-2 text-3xl font-semibold text-white">Work through this in order</h2>
+
+          <div className="mt-6 space-y-4">
+            {lessons.map((lesson, index) => {
+              const done = raw.completedLessonSlugs.includes(lesson.slug);
+
+              return (
+                <SequenceRow
+                  key={lesson.slug}
+                  step={String(index + 1).padStart(2, "0")}
+                  title={lesson.title}
+                  description={lesson.summary}
+                  href={`/lesson/${lesson.slug}`}
+                  done={done}
+                  meta={done ? "Completed" : `${lesson.estimatedMinutes} min`}
+                />
+              );
+            })}
+
+            {baseModule.quizSlug ? (
+              <SequenceRow
+                step="QZ"
+                title="Module Quiz"
+                description="Check your understanding with direct questions and instant feedback."
+                href={`/quiz/${baseModule.quizSlug}`}
+                done={quizComplete}
+                meta={quizComplete ? "Completed" : "Assessment"}
+                icon={<Trophy className="h-4 w-4 text-cyan-300" />}
+              />
+            ) : null}
+
+            {baseModule.drillSlug ? (
+              <SequenceRow
+                step="DR"
+                title="Rapid Review"
+                description="Repeat the key concepts in a short shuffled drill loop."
+                href={`/drill/${baseModule.drillSlug}`}
+                done={drillComplete}
+                meta={drillComplete ? "Completed" : "Repetition"}
+                icon={<BrainCircuit className="h-4 w-4 text-emerald-300" />}
+              />
+            ) : null}
+
+            {baseModule.chartChallengeSlug ? (
+              <SequenceRow
+                step="CH"
+                title="Chart Challenge"
+                description="Apply the module’s concept directly on a trading chart."
+                href={`/chart-challenge/${baseModule.chartChallengeSlug}`}
+                done={chartComplete}
+                meta={chartComplete ? "Completed" : "Chart practice"}
+                icon={<ChartCandlestick className="h-4 w-4 text-fuchsia-300" />}
+              />
+            ) : null}
+
+            {baseModule.simulatorSlug ? (
+              <SequenceRow
+                step="RP"
+                title="Replay Simulator"
+                description="Make a decision inside a guided scenario and review the outcome."
+                href={`/simulator/${baseModule.simulatorSlug}`}
+                done={simulatorComplete}
+                meta={simulatorComplete ? "Completed" : "Decision practice"}
+                icon={<PlayCircle className="h-4 w-4 text-emerald-300" />}
+              />
+            ) : null}
           </div>
-        </section>
-      ) : (
-        <>
-          <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Module Sequence</p>
-                <h2 className="mt-2 text-3xl font-semibold text-white">Follow the training in order</h2>
-              </div>
-              <Link
-                href={nextHref}
-                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
-              >
-                {firstIncompleteLesson ? "Continue module" : liveModule.completed ? "Review progress" : "Resume assessments"}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+        </div>
 
-            <div className="mt-6 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-              {lessons.map((lesson, index) => {
-                const done = raw.completedLessonSlugs.includes(lesson.slug);
-
-                return (
-                  <SequenceCard
-                    key={lesson.slug}
-                    step={`0${index + 1}`}
-                    title={lesson.title}
-                    description={lesson.summary}
-                    href={`/lesson/${lesson.slug}`}
-                    done={done}
-                    meta={done ? "Completed" : `${lesson.estimatedMinutes} min`}
-                  />
-                );
-              })}
-
-              {baseModule.quizSlug ? (
-                <SequenceCard
-                  step={quizStep}
-                  title="Module Quiz"
-                  description="Checkpoint your understanding with instant feedback and local score tracking."
-                  href={`/quiz/${baseModule.quizSlug}`}
-                  done={quizComplete}
-                  meta={quizComplete ? "Completed" : "Assessment"}
-                  icon={<Trophy className="h-4 w-4 text-cyan-300" />}
-                />
-              ) : null}
-
-              {baseModule.drillSlug ? (
-                <SequenceCard
-                  step={drillStep}
-                  title="Rapid Review"
-                  description="Run a short shuffled reinforcement loop to build faster recall before the chart work."
-                  href={`/drill/${baseModule.drillSlug}`}
-                  done={drillComplete}
-                  meta={drillComplete ? "Completed" : "Repetition loop"}
-                  icon={<BrainCircuit className="h-4 w-4 text-emerald-300" />}
-                />
-              ) : null}
-
-              {baseModule.chartChallengeSlug ? (
-                <SequenceCard
-                  step={chartStep}
-                  title="Chart Challenge"
-                  description="Apply the module's visual ideas directly on a mock candlestick chart."
-                  href={`/chart-challenge/${baseModule.chartChallengeSlug}`}
-                  done={chartComplete}
-                  meta={chartComplete ? "Completed" : "Visual drill"}
-                  icon={<ChartCandlestick className="h-4 w-4 text-fuchsia-300" />}
-                />
-              ) : null}
-
-              {baseModule.simulatorSlug ? (
-                <SequenceCard
-                  step={simulatorStep}
-                  title="Replay Simulator"
-                  description="Practice decisions inside a guided scenario with immediate coaching feedback."
-                  href={`/simulator/${baseModule.simulatorSlug}`}
-                  done={simulatorComplete}
-                  meta={simulatorComplete ? "Completed" : "Scenario drill"}
-                  icon={<PlayCircle className="h-4 w-4 text-emerald-300" />}
-                />
-              ) : null}
-            </div>
-          </section>
+        <div className="space-y-6">
+          <aside className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Why This Module Matters</p>
+            <p className="mt-4 text-sm leading-7 text-slate-300">{baseModule.botBuilderHook}</p>
+          </aside>
 
           {reviewCharts.length ? (
-            <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-              <div className="flex flex-wrap items-center justify-between gap-4">
+            <aside className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
+              <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Extra Reps</p>
-                  <h2 className="mt-2 text-3xl font-semibold text-white">Review chart packs</h2>
+                  <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Optional Review</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-white">Extra chart reps</h2>
                 </div>
-                <p className="text-sm text-slate-400">Optional repetition, not required for unlocks</p>
+                <p className="text-sm text-slate-400">Not required to unlock the next module</p>
               </div>
 
-              <div className="mt-6 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-5 space-y-3">
                 {reviewCharts.map((challenge) => {
                   const done = raw.completedChartChallengeSlugs.includes(challenge.slug);
                   const bestScore = raw.chartBestScores[challenge.slug];
 
                   return (
-                    <SequenceCard
+                    <SequenceRow
                       key={challenge.slug}
                       step="R"
                       title={challenge.title}
@@ -241,15 +208,15 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                   );
                 })}
               </div>
-            </section>
+            </aside>
           ) : null}
-        </>
-      )}
+        </div>
+      </section>
     </div>
   );
 }
 
-function SequenceCard({
+function SequenceRow({
   step,
   title,
   description,
@@ -269,22 +236,30 @@ function SequenceCard({
   return (
     <Link
       href={href}
-      className={`rounded-[28px] border p-5 transition hover:-translate-y-0.5 ${
-        done
-          ? "border-emerald-400/16 bg-emerald-400/[0.06]"
-          : "border-white/8 bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(8,11,18,0.95))] hover:border-cyan-300/20"
+      className={`flex flex-col gap-3 rounded-[24px] border p-4 transition hover:border-cyan-300/20 hover:bg-white/[0.05] ${
+        done ? "border-emerald-400/16 bg-emerald-400/[0.06]" : "border-white/8 bg-slate-950/65"
       }`}
     >
       <div className="flex items-center justify-between gap-3">
-        <p className="font-mono text-sm text-cyan-300">{step}</p>
-        {icon ?? <span className="text-xs uppercase tracking-[0.24em] text-slate-500">Lesson</span>}
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-sm text-cyan-300">{step}</span>
+          {icon ?? <span className="text-xs uppercase tracking-[0.24em] text-slate-500">Lesson</span>}
+        </div>
+        <span className={done ? "text-sm text-emerald-200" : "text-sm text-slate-400"}>{meta}</span>
       </div>
-      <h3 className="mt-4 text-xl font-semibold text-white">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
-      <div className="mt-4 flex items-center justify-between text-sm">
-        <span className={done ? "text-emerald-200" : "text-slate-400"}>{meta}</span>
-        <span className="text-slate-400">Open</span>
+      <div>
+        <h3 className="text-xl font-semibold text-white">{title}</h3>
+        <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
       </div>
     </Link>
+  );
+}
+
+function MiniStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/8 bg-slate-950/70 p-4">
+      <p className="text-xs uppercase tracking-[0.22em] text-slate-400">{label}</p>
+      <p className="mt-2 font-mono text-xl text-white">{value}</p>
+    </div>
   );
 }
