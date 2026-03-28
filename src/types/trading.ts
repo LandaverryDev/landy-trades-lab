@@ -234,6 +234,29 @@ export interface Scenario {
   closingNotes: string[];
 }
 
+export interface StrategyBuilderOption {
+  id: string;
+  label: string;
+  summary: string;
+  ruleText: string;
+  lessonRefs: string[];
+  warning?: string;
+}
+
+export interface StrategyBuilderSection {
+  id: string;
+  title: string;
+  summary: string;
+  prompt: string;
+  options: StrategyBuilderOption[];
+}
+
+export interface StoredStrategyBuilderDraft {
+  strategyName: string;
+  selections: Record<string, string>;
+  updatedAt: string | null;
+}
+
 export interface Achievement {
   id: string;
   title: string;

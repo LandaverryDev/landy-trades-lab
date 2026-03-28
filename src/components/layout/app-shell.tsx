@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowRight, BarChart3, BrainCircuit, LayoutDashboard, Target } from "lucide-react";
+import { ArrowRight, BarChart3, BrainCircuit, LayoutDashboard, Target, Workflow } from "lucide-react";
 
 import { BrandMark } from "@/components/ui/brand-mark";
 import { ProgressBar } from "@/components/ui/progress-bar";
@@ -12,6 +12,7 @@ import { useLearningProgress } from "@/lib/learning-progress";
 const navItems = [
   { href: "/", label: "Home", note: "Resume and review", icon: LayoutDashboard },
   { href: "/learn", label: "Curriculum", note: "Modules and lessons", icon: BrainCircuit },
+  { href: "/strategy-builder", label: "Strategy Builder", note: "Turn concepts into rules", icon: Workflow },
   { href: "/progress", label: "Progress", note: "XP, scores, streak", icon: BarChart3 },
 ];
 

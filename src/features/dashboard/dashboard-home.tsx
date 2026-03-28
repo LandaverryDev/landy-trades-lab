@@ -8,6 +8,7 @@ import {
   ChartCandlestick,
   PlayCircle,
   Target,
+  Workflow,
 } from "lucide-react";
 
 import { CandlestickChart } from "@/components/ui/candlestick-chart";
@@ -129,6 +130,27 @@ export function DashboardHome() {
         />
 
         <div className="grid gap-6">
+          <div className="course-card rounded-[32px] p-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="eyebrow-label">Strategy Builder</p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">Assemble your first rule stack</h2>
+              </div>
+              <Workflow className="h-5 w-5 text-cyan-300" />
+            </div>
+            <p className="mt-3 text-sm leading-7 text-slate-300">
+              Convert the course into a usable system blueprint: market, setup, trigger, filters, risk engine, exits,
+              and automation guardrails.
+            </p>
+            <Link
+              href="/strategy-builder"
+              className="focus-visible-ring mt-5 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+            >
+              Open builder
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
           <div className="course-card-raised min-w-0 overflow-hidden rounded-[32px] p-5">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
