@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { ScenarioSimulator } from "@/components/simulator/scenario-simulator";
+import { ScenarioSimulator } from "@/features/simulator/scenario-simulator";
 import { getScenarioBySlug } from "@/lib/course";
 
 export default async function SimulatorPage({

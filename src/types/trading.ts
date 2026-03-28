@@ -5,6 +5,9 @@ export type QuestionType =
   | "true-false"
   | "pattern-match"
   | "what-happens-next";
+export type LessonBlockTone = "neutral" | "coach" | "bot" | "warning";
+export type LessonVisualKey = "trade-loop" | "market-map" | "candle-breakdown";
+export type ChartQuestionType = "multiple-choice" | "hotspot";
 
 export interface Tier {
   slug: TierSlug;
@@ -35,13 +38,54 @@ export interface LearningModule {
   simulatorSlug?: string;
 }
 
+export interface LessonTextBlock {
+  id: string;
+  type: "text";
+  title?: string;
+  body: string;
+  bullets?: string[];
+}
+
+export interface LessonCalloutBlock {
+  id: string;
+  type: "callout";
+  tone: LessonBlockTone;
+  title: string;
+  body: string;
+}
+
+export interface LessonDiagramBlock {
+  id: string;
+  type: "diagram";
+  title: string;
+  caption: string;
+  items: Array<{
+    label: string;
+    value: string;
+    detail: string;
+  }>;
+}
+
+export interface LessonImageBlock {
+  id: string;
+  type: "image";
+  title: string;
+  caption: string;
+  imageKey: LessonVisualKey;
+}
+
+export type LessonBlock =
+  | LessonTextBlock
+  | LessonCalloutBlock
+  | LessonDiagramBlock
+  | LessonImageBlock;
+
 export interface LessonSection {
   id: string;
   eyebrow: string;
   title: string;
-  body: string;
-  bullets: string[];
-  coachNote?: string;
+  summary: string;
+  blocks: LessonBlock[];
 }
 
 export interface Lesson {
@@ -104,16 +148,26 @@ export interface ChartHotspot {
   explanation: string;
 }
 
+export interface ChartChallengeQuestion {
+  id: string;
+  type: ChartQuestionType;
+  prompt: string;
+  instruction: string;
+  explanation: string;
+  coaching: string;
+  choices?: QuizChoice[];
+  correctChoiceId?: string;
+  hotspots?: ChartHotspot[];
+}
+
 export interface ChartChallenge {
   slug: string;
   moduleSlug: string;
   title: string;
   summary: string;
-  prompt: string;
-  instruction: string;
   xpReward: number;
   candles: Candle[];
-  hotspots: ChartHotspot[];
+  questions: ChartChallengeQuestion[];
   coachDebrief: string[];
 }
 

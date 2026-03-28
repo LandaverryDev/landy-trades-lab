@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
+import { getModuleBySlug } from "@/lib/course";
+import { readStoredBestScore, writeStoredBestScore } from "@/lib/assessment-storage";
 import type { Quiz } from "@/types/trading";
 
 export function QuizPlayer({ quiz }: { quiz: Quiz }) {
@@ -12,6 +14,9 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [bestScore, setBestScore] = useState<number | null>(() => readStoredBestScore("quiz", quiz.slug));
+
+  const learningModule = getModuleBySlug(quiz.moduleSlug);
 
   const question = quiz.questions[currentIndex];
   const choice = question.choices.find((item) => item.id === selectedChoiceId);
@@ -31,6 +36,11 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
 
   function handleNext() {
     if (currentIndex === quiz.questions.length - 1) {
+      const percent = Math.round((correctCount / quiz.questions.length) * 100);
+      const nextBest = bestScore === null ? percent : Math.max(bestScore, percent);
+
+      writeStoredBestScore("quiz", quiz.slug, percent);
+      setBestScore(nextBest);
       setCompleted(true);
       return;
     }
@@ -50,6 +60,7 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
 
   if (completed) {
     const percent = Math.round((correctCount / quiz.questions.length) * 100);
+    const nextBest = bestScore === null ? percent : Math.max(bestScore, percent);
 
     return (
       <div className="space-y-6">
@@ -63,7 +74,7 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             <SummaryStat label="Correct" value={`${correctCount}/${quiz.questions.length}`} />
             <SummaryStat label="XP Earned" value={`${quiz.xpReward}`} />
-            <SummaryStat label="Next Move" value="Chart Drill" />
+            <SummaryStat label="Best Local Score" value={`${nextBest}%`} />
           </div>
         </section>
 
@@ -76,13 +87,15 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
             <RotateCcw className="h-4 w-4" />
             Retry quiz
           </button>
-          <Link
-            href="/chart-challenge/support-zone-breakout"
-            className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
-          >
-            Open chart challenge
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          {learningModule?.chartChallengeSlug ? (
+            <Link
+              href={`/chart-challenge/${learningModule.chartChallengeSlug}`}
+              className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+            >
+              Open chart challenge
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          ) : null}
         </div>
       </div>
     );
@@ -102,6 +115,7 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
             <p className="mt-2 font-mono text-3xl text-white">
               {currentIndex + 1}/{quiz.questions.length}
             </p>
+            {bestScore !== null ? <p className="mt-2 text-xs text-slate-400">Best local score: {bestScore}%</p> : null}
           </div>
         </div>
       </section>

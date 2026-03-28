@@ -14,21 +14,21 @@ export const tiers: Tier[] = [
     label: "Level 1",
     tagline: "Tape Apprentice",
     description:
-      "Learn what markets are doing, how candles tell a story, and how to stop making random clicks.",
+      "Build the first layer: what trading is, how markets work, and how candles tell a visual story.",
   },
   {
     slug: "intermediate",
     label: "Level 2",
     tagline: "Execution Builder",
     description:
-      "Turn pattern recognition into repeatable trade plans with risk rules, structure, and timing.",
+      "Turn chart reading into cleaner timing, better trade location, and disciplined execution logic.",
   },
   {
     slug: "advanced",
     label: "Level 3",
     tagline: "System Architect",
     description:
-      "Translate your edge into rules, signals, and automation-friendly trading logic.",
+      "Translate your edge into signals, rules, risk controls, and automation-friendly decision trees.",
   },
 ];
 
@@ -40,89 +40,64 @@ export const learningModules: LearningModule[] = [
     level: 1,
     order: 1,
     status: "active",
-    title: "Market Bootcamp",
+    title: "Beginner Foundations",
     summary:
-      "A fast, visual crash course on what trading is, how price moves, and how to read the market's first language.",
-    xpReward: 300,
-    lessonCount: 4,
-    estimatedMinutes: 36,
-    progressPercent: 48,
-    focusAreas: ["Market basics", "Candles", "Support and resistance", "Trend context"],
+      "A visual starter flow covering what trading is, the basic market concepts that matter first, and how to read candlesticks.",
+    xpReward: 280,
+    lessonCount: 3,
+    estimatedMinutes: 24,
+    progressPercent: 34,
+    focusAreas: ["What is trading?", "Basic market concepts", "Candlestick reading"],
     botBuilderHook:
-      "Every trading bot starts with basic state detection: market, direction, levels, and invalidation.",
+      "This module teaches the first machine-readable inputs you will later need for strategy rules: market type, price movement, and candle behavior.",
     unlockRule: "Available now",
-    lessonSlugs: [
-      "what-is-trading",
-      "market-arena-map",
-      "candlestick-basics",
-      "support-and-resistance",
-    ],
-    quizSlug: "bootcamp-quiz",
-    chartChallengeSlug: "support-zone-breakout",
+    lessonSlugs: ["what-is-trading", "basic-market-concepts", "candlestick-basics"],
+    quizSlug: "beginner-foundations-quiz",
+    chartChallengeSlug: "trend-and-support-challenge",
     simulatorSlug: "open-drive-pullback",
   },
   {
     id: "module-02",
-    slug: "risk-engine",
+    slug: "levels-trends-and-risk",
     tier: "beginner",
     level: 1,
     order: 2,
     status: "locked",
-    title: "Risk Engine",
+    title: "Levels, Trends, and Risk",
     summary:
-      "Position sizing, stop placement, reward-to-risk, and why one bad trade should never sink the week.",
+      "Learn support and resistance, trend direction, stop placement, and simple position sizing.",
     xpReward: 340,
     lessonCount: 5,
-    estimatedMinutes: 42,
+    estimatedMinutes: 38,
     progressPercent: 0,
-    focusAreas: ["Risk management", "Stop loss", "Position sizing", "Volatility"],
+    focusAreas: ["Support", "Resistance", "Trend direction", "Risk basics"],
     botBuilderHook:
-      "Automation only works when the risk model is explicit and enforced before every order is sent.",
-    unlockRule: "Unlock after Market Bootcamp",
+      "The next step is defining direction, levels, and invalidation in a way a rules engine could later evaluate.",
+    unlockRule: "Unlock after Beginner Foundations",
     lessonSlugs: [],
   },
   {
     id: "module-03",
-    slug: "market-structure-and-trends",
+    slug: "structure-and-execution",
     tier: "intermediate",
     level: 2,
     order: 1,
     status: "locked",
-    title: "Market Structure and Trends",
+    title: "Structure and Execution",
     summary:
-      "Read trend quality, pullbacks, breakouts, and when structure is too messy to touch.",
+      "Study breakouts, pullbacks, entries, exits, volume context, and when to skip weak structure.",
     xpReward: 420,
     lessonCount: 6,
-    estimatedMinutes: 50,
+    estimatedMinutes: 48,
     progressPercent: 0,
-    focusAreas: ["Trend quality", "Pullbacks", "Breakouts", "Volume context"],
+    focusAreas: ["Breakouts", "Pullbacks", "Entries", "Exits"],
     botBuilderHook:
-      "System design gets easier once you can define higher highs, lower lows, and regime shifts in code.",
-    unlockRule: "Unlock after Risk Engine",
+      "This is where chart ideas become triggers, filters, and management rules.",
+    unlockRule: "Unlock after Levels, Trends, and Risk",
     lessonSlugs: [],
   },
   {
     id: "module-04",
-    slug: "playbook-lab",
-    tier: "intermediate",
-    level: 2,
-    order: 2,
-    status: "locked",
-    title: "Playbook Lab",
-    summary:
-      "Turn recurring setups into entry rules, exit logic, and disciplined trade management.",
-    xpReward: 450,
-    lessonCount: 5,
-    estimatedMinutes: 44,
-    progressPercent: 0,
-    focusAreas: ["Entries", "Exits", "Setup quality", "Trade management"],
-    botBuilderHook:
-      "This is where intuition becomes a decision tree with filters, triggers, and invalidations.",
-    unlockRule: "Unlock after Market Structure and Trends",
-    lessonSlugs: [],
-  },
-  {
-    id: "module-05",
     slug: "psychology-and-discipline",
     tier: "advanced",
     level: 3,
@@ -130,19 +105,19 @@ export const learningModules: LearningModule[] = [
     status: "locked",
     title: "Psychology and Discipline",
     summary:
-      "Train consistency, routine, and self-awareness so your best plan survives live pressure.",
-    xpReward: 520,
+      "Build the habits that keep good trade logic alive when real money and live pressure show up.",
+    xpReward: 500,
     lessonCount: 4,
-    estimatedMinutes: 38,
+    estimatedMinutes: 34,
     progressPercent: 0,
-    focusAreas: ["Discipline", "Routine", "Bias control", "Common mistakes"],
+    focusAreas: ["Discipline", "Bias", "Routine", "Common mistakes"],
     botBuilderHook:
-      "Bots remove impulse, but only if you can define the mistakes and guardrails clearly first.",
-    unlockRule: "Unlock after Playbook Lab",
+      "Bots remove impulse, but only after you identify the impulses and guardrails clearly.",
+    unlockRule: "Unlock after Structure and Execution",
     lessonSlugs: [],
   },
   {
-    id: "module-06",
+    id: "module-05",
     slug: "strategy-systems-and-bots",
     tier: "advanced",
     level: 3,
@@ -150,14 +125,14 @@ export const learningModules: LearningModule[] = [
     status: "locked",
     title: "Strategy Systems and Bots",
     summary:
-      "Package your edge into rules, signals, filters, and controls that can later drive automation tools.",
-    xpReward: 640,
+      "Package setups into rules, signals, filters, and risk controls that can later power automation tools.",
+    xpReward: 620,
     lessonCount: 6,
-    estimatedMinutes: 60,
+    estimatedMinutes: 58,
     progressPercent: 0,
-    focusAreas: ["Signals", "Rules", "Execution logic", "Automation controls"],
+    focusAreas: ["Signals", "Logic", "Risk engine", "Automation"],
     botBuilderHook:
-      "You will map patterns to machine-readable inputs, then connect them to risk and execution logic.",
+      "Every earlier module feeds directly into this systems layer.",
     unlockRule: "Unlock after Psychology and Discipline",
     lessonSlugs: [],
   },
@@ -167,395 +142,456 @@ export const lessons: Lesson[] = [
   {
     slug: "what-is-trading",
     moduleSlug: "market-bootcamp",
-    title: "What Trading Actually Is",
+    title: "What Is Trading?",
     summary:
-      "Trading is not guessing. It is making a short-term decision on who is in control, where the risk is, and what invalidates the idea.",
-    objective: "Understand what traders are doing when they enter a position and why price moves at all.",
+      "Trading is a short-term decision on movement, timing, and risk. It is not random guessing and it is not just clicking buy.",
+    objective: "Understand what a trader is actually trying to do and what makes a trade idea structured.",
     estimatedMinutes: 6,
     xpReward: 60,
-    keyTerms: ["Bid and ask", "Liquidity", "Risk", "Edge"],
+    keyTerms: ["Price movement", "Setup", "Trigger", "Invalidation"],
     sections: [
       {
-        id: "market-loop",
+        id: "trade-loop",
         eyebrow: "Core Idea",
-        title: "A trade is a bet on movement, not a belief about a company",
-        body:
-          "Day traders care about whether price is likely to move from one area to another before their risk limit is hit.",
-        bullets: [
-          "Price moves when buyers and sellers disagree strongly enough to transact at new levels.",
-          "You do not need to predict everything. You need a setup, a trigger, and a place where you are wrong.",
-          "Good trading starts with a repeatable decision process, not excitement.",
+        title: "A trade is a plan for what should happen next",
+        summary: "Good trades start with a simple if-then framework.",
+        blocks: [
+          {
+            id: "trade-loop-text",
+            type: "text",
+            body:
+              "A trader looks for a market condition, decides what would confirm the idea, and defines where the idea is wrong before entering.",
+            bullets: [
+              "Setup: the chart or context that gets your attention.",
+              "Trigger: the specific event that confirms entry.",
+              "Invalidation: the point where the idea clearly fails.",
+            ],
+          },
+          {
+            id: "trade-loop-image",
+            type: "image",
+            title: "The trading loop",
+            caption: "Spot the setup, wait for confirmation, define the risk, then act.",
+            imageKey: "trade-loop",
+          },
+          {
+            id: "trade-loop-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Fast rule",
+            body: "If you cannot explain where the trade is wrong, you are not ready to take it.",
+          },
         ],
-        coachNote: "If you cannot explain where you're wrong, the trade idea is not ready.",
       },
       {
-        id: "instruments",
-        eyebrow: "Market View",
-        title: "Different markets, same decision framework",
-        body:
-          "Stocks, futures, forex, options, and crypto move differently, but all still revolve around structure, volatility, and risk.",
-        bullets: [
-          "Stocks are ownership shares with strong earnings and news catalysts.",
-          "Futures are standardized contracts that often suit active intraday traders.",
-          "Crypto trades almost nonstop, which adds opportunity and noise.",
-        ],
-      },
-      {
-        id: "bot-angle",
-        eyebrow: "Bot Builder Lens",
-        title: "Bots need rules humans can describe",
-        body:
-          "Later, if you automate trades, you will have to convert your judgment into clear conditions a system can check in real time.",
-        bullets: [
-          "Signal: what pattern or condition is present?",
-          "Trigger: what exact event causes entry?",
-          "Risk control: where is the stop and how large is the position?",
+        id: "risk-first",
+        eyebrow: "Mindset",
+        title: "The first job is not to be right. The first job is to stay in the game.",
+        summary: "Trading skill compounds only when losses stay controlled.",
+        blocks: [
+          {
+            id: "risk-first-text",
+            type: "text",
+            body:
+              "A clean trade idea has upside, but it also has a clear stop. New traders often focus on profit first and risk second. That order should be reversed.",
+          },
+          {
+            id: "risk-first-diagram",
+            type: "diagram",
+            title: "Three questions before entry",
+            caption: "These are the core checks behind every disciplined trade.",
+            items: [
+              {
+                label: "What do I expect?",
+                value: "Market thesis",
+                detail: "Example: buyers should defend a breakout retest.",
+              },
+              {
+                label: "What confirms it?",
+                value: "Trigger",
+                detail: "Example: a strong candle closes back above support.",
+              },
+              {
+                label: "What proves me wrong?",
+                value: "Stop / invalidation",
+                detail: "Example: price loses the support zone and stays below it.",
+              },
+            ],
+          },
+          {
+            id: "risk-first-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Strategies and bots need these same three ideas. They just need them written as clear rules instead of intuition.",
+          },
         ],
       },
     ],
     takeaways: [
       "Trading is structured decision-making under uncertainty.",
-      "Every trade needs a thesis, a trigger, and an invalidation point.",
-      "The same logic later becomes rule-based strategy design.",
+      "Every trade needs a setup, a trigger, and an invalidation point.",
+      "Risk logic comes before profit targets.",
     ],
-    botBuilderSignals: [
-      "Direction bias",
-      "Entry trigger",
-      "Stop location",
-      "Position size rule",
-    ],
-    nextLessonSlug: "market-arena-map",
+    botBuilderSignals: ["Setup state", "Trigger event", "Invalidation level", "Risk size"],
+    nextLessonSlug: "basic-market-concepts",
   },
   {
-    slug: "market-arena-map",
+    slug: "basic-market-concepts",
     moduleSlug: "market-bootcamp",
-    title: "Stocks vs Options vs Futures vs Forex vs Crypto",
+    title: "Basic Market Concepts",
     summary:
-      "See the major trading arenas side by side so you know what each one offers, what makes it tricky, and why beginners should learn the shared concepts first.",
-    objective: "Compare the main market types without drowning in jargon.",
+      "Before strategies or indicators, you need to know what you are trading, why price moves, and how different markets package the same core game.",
+    objective: "Understand the basic market language that every beginner needs before deeper chart work.",
     estimatedMinutes: 8,
     xpReward: 70,
-    keyTerms: ["Leverage", "Contract", "Spot market", "Liquidity"],
+    keyTerms: ["Liquidity", "Volatility", "Leverage", "Session"],
     sections: [
       {
-        id: "compare",
-        eyebrow: "Quick Map",
-        title: "Each market changes the packaging, not the core job",
-        body:
-          "You are still reading price, timing entries, and managing risk. The difference is how the instrument behaves.",
-        bullets: [
-          "Stocks: simple to understand and heavily news-driven.",
-          "Options: flexible but contain extra variables like time decay.",
-          "Futures: clean structure and leverage, but require discipline.",
-          "Forex: macro-driven and highly liquid.",
-          "Crypto: accessible and fast-moving, but often erratic.",
+        id: "why-price-moves",
+        eyebrow: "Market Logic",
+        title: "Price moves because buyers and sellers keep disagreeing",
+        summary: "The chart is the visible record of that disagreement.",
+        blocks: [
+          {
+            id: "price-moves-text",
+            type: "text",
+            body:
+              "When buyers are aggressive enough to keep lifting price, candles climb. When sellers overpower them, candles fall. Liquidity and volatility decide how clean or chaotic that movement feels.",
+            bullets: [
+              "Liquidity: how easily positions can be entered and exited.",
+              "Volatility: how quickly price expands and contracts.",
+              "Session: when a market is most active and meaningful.",
+            ],
+          },
+          {
+            id: "price-moves-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "First principle",
+            body: "The chart is not random noise. It is pressure and reaction made visible.",
+          },
         ],
       },
       {
-        id: "beginner-edge",
-        eyebrow: "Practical Advice",
-        title: "Start by learning price behavior before chasing leverage",
-        body:
-          "Beginners often rush into complex products. The smarter move is to master chart reading and risk logic first.",
-        bullets: [
-          "The chart does not care whether you are trading a stock or a futures contract.",
-          "Leverage magnifies bad habits as aggressively as it magnifies gains.",
-          "Learn to identify clean setups before adding complexity.",
+        id: "market-map",
+        eyebrow: "Instrument Map",
+        title: "Stocks, futures, forex, options, and crypto all use the same reading skills",
+        summary: "The packaging changes. The core read does not.",
+        blocks: [
+          {
+            id: "market-map-image",
+            type: "image",
+            title: "Market map",
+            caption: "Different markets, same job: read movement, manage risk, choose the right timing.",
+            imageKey: "market-map",
+          },
+          {
+            id: "market-map-diagram",
+            type: "diagram",
+            title: "How each market feels",
+            caption: "Beginner focus should stay on the shared concepts first.",
+            items: [
+              {
+                label: "Stocks",
+                value: "Simple structure",
+                detail: "Strong for learning catalysts, chart levels, and session behavior.",
+              },
+              {
+                label: "Futures",
+                value: "Fast and leveraged",
+                detail: "Very popular for active intraday trading once discipline improves.",
+              },
+              {
+                label: "Crypto",
+                value: "Always on",
+                detail: "Accessible and visual, but often noisier and less forgiving.",
+              },
+            ],
+          },
+          {
+            id: "market-map-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Later, systems need market-specific settings like session hours, volatility filters, and leverage limits.",
+          },
         ],
-        coachNote: "Complex instruments do not create skill. They expose whether skill exists.",
       },
     ],
     takeaways: [
-      "All markets share structure, timing, and risk logic.",
-      "Leverage is useful only when paired with discipline.",
-      "Price-reading skill transfers across instruments.",
+      "Price moves through pressure and response between buyers and sellers.",
+      "Liquidity and volatility shape how tradeable a chart feels.",
+      "The same chart-reading skill transfers across different markets.",
     ],
-    botBuilderSignals: [
-      "Instrument volatility profile",
-      "Trading session hours",
-      "Liquidity filter",
-      "Leverage constraints",
-    ],
+    botBuilderSignals: ["Session filter", "Volatility filter", "Market selection", "Liquidity rule"],
     nextLessonSlug: "candlestick-basics",
   },
   {
     slug: "candlestick-basics",
     moduleSlug: "market-bootcamp",
-    title: "Candlestick Basics",
+    title: "Candlesticks",
     summary:
-      "Candles compress a battle into a single visual unit: where price opened, where it tried to go, and who closed stronger.",
-    objective: "Read a candle fast enough to tell whether momentum is building, stalling, or reversing.",
-    estimatedMinutes: 7,
-    xpReward: 75,
-    keyTerms: ["Body", "Wick", "Range", "Rejection"],
+      "Candlesticks are the first real visual language of trading. Each candle shows where price opened, where it pushed, and who controlled the close.",
+    objective: "Read a candle quickly enough to judge strength, rejection, and momentum shift.",
+    estimatedMinutes: 9,
+    xpReward: 80,
+    keyTerms: ["Body", "Wick", "Range", "Close strength"],
     sections: [
       {
         id: "candle-anatomy",
-        eyebrow: "Read the Bar",
-        title: "The body shows control and the wick shows failed exploration",
-        body:
-          "A strong bullish candle often closes near its high. A long upper wick says buyers pushed, then lost control.",
-        bullets: [
-          "Open and close form the body.",
-          "High and low form the total range.",
-          "Long wicks can signal indecision or rejection depending on context.",
+        eyebrow: "Visual Read",
+        title: "A candle compresses a battle into one shape",
+        summary: "Body size and wick size tell different parts of the story.",
+        blocks: [
+          {
+            id: "candle-anatomy-image",
+            type: "image",
+            title: "Break down a candle fast",
+            caption: "Body = control. Wicks = exploration and rejection. Close = conviction.",
+            imageKey: "candle-breakdown",
+          },
+          {
+            id: "candle-anatomy-text",
+            type: "text",
+            body:
+              "A strong bullish candle usually closes near its high. A long upper wick means buyers pushed up but could not fully hold the move into the close.",
+            bullets: [
+              "Large body: stronger directional control.",
+              "Long wick: rejection or indecision.",
+              "Strong close: the side in control finished the candle better.",
+            ],
+          },
         ],
       },
       {
-        id: "sequence",
-        eyebrow: "Context Beats Pattern",
+        id: "sequence-matters",
+        eyebrow: "Context",
         title: "One candle matters less than the sequence around it",
-        body:
-          "A green candle inside a messy range is different from a green candle breaking above repeated highs with rising volume.",
-        bullets: [
-          "Ask where the candle formed.",
-          "Ask whether range is expanding or shrinking.",
-          "Ask whether the close confirms strength or hesitation.",
-        ],
-        coachNote: "Never grade candles in isolation. Grade them inside structure.",
-      },
-      {
-        id: "automation",
-        eyebrow: "Bot Builder Lens",
-        title: "Candles become measurable inputs",
-        body:
-          "What looks visual to you can later be described numerically for a strategy or bot.",
-        bullets: [
-          "Body-to-range ratio",
-          "Distance from close to high or low",
-          "Series of higher closes or lower lows",
+        summary: "You read candles inside a location and a story, not in isolation.",
+        blocks: [
+          {
+            id: "sequence-text",
+            type: "text",
+            body:
+              "A green candle inside a messy chop zone is not the same as a green candle breaking above repeated highs with momentum. Context gives the candle meaning.",
+            bullets: [
+              "Ask where the candle formed.",
+              "Ask what price had been doing before it formed.",
+              "Ask whether the close shows acceptance or hesitation.",
+            ],
+          },
+          {
+            id: "sequence-coach",
+            type: "callout",
+            tone: "coach",
+            title: "Fast read",
+            body: "Do not memorize candle names first. Learn to read control, rejection, and close strength.",
+          },
+          {
+            id: "sequence-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "What looks visual now can later become measurements like body-to-range ratio, wick percentage, and consecutive close direction.",
+          },
         ],
       },
     ],
     takeaways: [
-      "Candles show intent, rejection, and close strength.",
-      "Context matters more than candle names.",
-      "Visual reads can be translated into numerical rules later.",
+      "Candles reveal control, rejection, and close strength.",
+      "The same candle can mean different things in different locations.",
+      "Visual reads can be translated into numerical strategy rules later.",
     ],
-    botBuilderSignals: [
-      "Body-to-range ratio",
-      "Wick rejection threshold",
-      "Consecutive close direction",
-    ],
-    nextLessonSlug: "support-and-resistance",
-  },
-  {
-    slug: "support-and-resistance",
-    moduleSlug: "market-bootcamp",
-    title: "Support and Resistance",
-    summary:
-      "Price reacts around zones where traders previously defended, took profits, or got trapped. These zones create the map.",
-    objective: "Identify the difference between random lines and a meaningful area where price is likely to react.",
-    estimatedMinutes: 7,
-    xpReward: 80,
-    keyTerms: ["Support", "Resistance", "Breakout", "Retest"],
-    sections: [
-      {
-        id: "zones-not-lines",
-        eyebrow: "Map the Chart",
-        title: "Think in zones, not perfect single-price lines",
-        body:
-          "Price often pokes above or below a level before choosing direction. That is normal and why traders map areas instead of exact pixels.",
-        bullets: [
-          "Support is where buyers previously absorbed selling.",
-          "Resistance is where sellers previously capped price.",
-          "Repeated reactions make a zone more meaningful.",
-        ],
-      },
-      {
-        id: "role-reversal",
-        eyebrow: "Decision Edge",
-        title: "Broken resistance can become support",
-        body:
-          "A breakout becomes more interesting when price returns to the former ceiling and holds above it.",
-        bullets: [
-          "The retest filters weak breakouts.",
-          "You get a clearer invalidation point for a stop.",
-          "The trade becomes a structured if-then decision.",
-        ],
-      },
-      {
-        id: "system-thinking",
-        eyebrow: "Bot Builder Lens",
-        title: "Levels become variables in a rules engine",
-        body:
-          "When you later automate, you will need a repeatable definition of how zones are found and confirmed.",
-        bullets: [
-          "How many touches make a zone valid?",
-          "How close does price need to stay to count as a retest?",
-          "What closes above a level confirm acceptance?",
-        ],
-        coachNote: "If a level only exists because you can squint at it, it will be hard to automate.",
-      },
-    ],
-    takeaways: [
-      "Support and resistance are areas of decision, not exact lines.",
-      "Breakout retests often create clearer trade structure.",
-      "Clean levels are the bridge between chart reading and system logic.",
-    ],
-    botBuilderSignals: [
-      "Touch count",
-      "Breakout close above level",
-      "Retest hold",
-      "Stop distance from zone",
-    ],
+    botBuilderSignals: ["Body-to-range ratio", "Wick rejection threshold", "Close location", "Consecutive closes"],
   },
 ];
 
 export const quizzes: Quiz[] = [
   {
-    slug: "bootcamp-quiz",
+    slug: "beginner-foundations-quiz",
     moduleSlug: "market-bootcamp",
-    title: "Market Bootcamp Checkpoint",
+    title: "Beginner Foundations Quiz",
     summary:
-      "Short, fast questions to confirm you can read the basics before moving into deeper execution lessons.",
+      "A short interactive check on the first three ideas: what trading is, how markets behave, and what candlesticks are telling you.",
     xpReward: 90,
     questions: [
       {
         id: "q1",
         type: "multiple-choice",
-        prompt: "What makes a trade idea structured instead of random?",
-        context: "Choose the best answer.",
+        prompt: "Which answer best describes a structured trade idea?",
+        context: "Pick the strongest definition.",
         choices: [
           {
             id: "a",
-            label: "It has a thesis, an entry trigger, and a point where the trade is invalid.",
+            label: "A setup with a trigger, a reason, and a clear point where the idea is invalid.",
           },
           {
             id: "b",
-            label: "It uses the highest leverage available and aims for a large move.",
+            label: "Any chart that looks exciting enough to move fast.",
           },
           {
             id: "c",
-            label: "It is based on a social media opinion and a strong feeling.",
+            label: "A position taken because someone online feels very confident.",
           },
         ],
         correctChoiceId: "a",
         explanation:
-          "A real setup includes what you expect, what confirms entry, and what proves you are wrong.",
-        coaching: "Trade structure matters more than confidence.",
+          "Structure means the trade has logic and boundaries. You know what should happen, what confirms entry, and what proves the idea failed.",
+        coaching: "If there is no invalidation point, there is no proper trade plan yet.",
       },
       {
         id: "q2",
         type: "true-false",
-        prompt: "True or false: a long upper wick can suggest buyers lost control near the highs.",
+        prompt: "True or false: liquidity helps traders enter and exit more easily.",
         choices: [
           { id: "true", label: "True" },
           { id: "false", label: "False" },
         ],
         correctChoiceId: "true",
         explanation:
-          "A long upper wick often means price explored higher but could not hold those levels into the close.",
-        coaching: "Wicks are evidence of failed exploration. Context decides how meaningful that failure is.",
+          "Liquidity improves tradeability because orders can be filled with less friction and less slippage.",
+        coaching: "A chart can look good and still be a bad trading vehicle if liquidity is weak.",
       },
       {
         id: "q3",
         type: "pattern-match",
-        prompt: "Which statement best matches support?",
+        prompt: "What does a long upper wick usually suggest?",
         choices: [
           {
             id: "a",
-            label: "An area where sellers repeatedly capped price and pushed it lower.",
+            label: "Buyers pushed price up, but could not fully hold those higher levels.",
           },
           {
             id: "b",
-            label: "An area where buyers previously defended price and slowed or reversed a drop.",
+            label: "The candle is guaranteed to reverse immediately.",
           },
           {
             id: "c",
-            label: "A guaranteed reversal point with zero risk.",
+            label: "The candle body does not matter anymore.",
           },
         ],
-        correctChoiceId: "b",
+        correctChoiceId: "a",
         explanation:
-          "Support is where demand previously absorbed supply strongly enough to matter.",
-        coaching: "Think in defended zones, not magic lines.",
+          "A long upper wick often signals rejection or hesitation near the highs. Context decides how important that rejection is.",
+        coaching: "Wicks are clues, not automatic signals.",
       },
       {
         id: "q4",
         type: "what-happens-next",
-        prompt:
-          "Price breaks above a well-tested resistance zone, then pulls back and holds above it. What does that usually suggest?",
+        prompt: "Why does candlestick context matter?",
         choices: [
-          { id: "a", label: "Potential acceptance and role reversal from resistance to support" },
-          { id: "b", label: "The breakout automatically failed and should always be shorted" },
-          { id: "c", label: "The chart no longer matters once the first breakout candle closes" },
+          {
+            id: "a",
+            label: "Because the same candle can mean different things depending on location and what happened before it.",
+          },
+          {
+            id: "b",
+            label: "Because candle names are enough by themselves.",
+          },
+          {
+            id: "c",
+            label: "Because strong-looking candles are always tradable immediately.",
+          },
         ],
         correctChoiceId: "a",
         explanation:
-          "A successful retest often signals that former resistance is becoming support and that buyers are defending the new area.",
-        coaching: "Retests matter because they give both confirmation and a clearer stop location.",
+          "A candle only becomes meaningful when you place it inside the surrounding structure and sequence.",
+        coaching: "Read the story around the candle, not just the candle alone.",
       },
     ],
   },
 ];
 
+const beginnerFlowCandles = [
+  { open: 100.2, high: 100.9, low: 99.8, close: 100.7 },
+  { open: 100.7, high: 101.5, low: 100.4, close: 101.2 },
+  { open: 101.2, high: 102.1, low: 101.0, close: 101.9 },
+  { open: 101.9, high: 102.8, low: 101.6, close: 102.5 },
+  { open: 102.5, high: 103.4, low: 102.2, close: 103.1 },
+  { open: 103.1, high: 104.0, low: 102.8, close: 103.6 },
+  { open: 103.6, high: 104.8, low: 103.4, close: 104.4 },
+  { open: 104.4, high: 104.7, low: 103.9, close: 104.1 },
+  { open: 104.1, high: 104.4, low: 103.6, close: 103.8 },
+  { open: 103.8, high: 104.3, low: 103.5, close: 104.0 },
+  { open: 104.0, high: 104.9, low: 103.8, close: 104.7 },
+  { open: 104.7, high: 105.5, low: 104.4, close: 105.2 },
+];
+
 export const chartChallenges: ChartChallenge[] = [
   {
-    slug: "support-zone-breakout",
+    slug: "trend-and-support-challenge",
     moduleSlug: "market-bootcamp",
-    title: "Find the Best Support Zone",
+    title: "Trend and Support Challenge",
     summary:
-      "Price just broke above resistance and is pulling back. Click the zone where a disciplined trader would most want to see support hold.",
-    prompt: "Where is the highest-quality support zone on this chart?",
-    instruction:
-      "Select one of the highlighted zones. After you answer, the chart will explain why the choice is strong or weak.",
-    xpReward: 80,
-    candles: [
-      { open: 100.4, high: 101.1, low: 99.9, close: 100.9 },
-      { open: 100.9, high: 101.7, low: 100.5, close: 101.5 },
-      { open: 101.5, high: 102.2, low: 101.2, close: 101.9 },
-      { open: 101.9, high: 102.1, low: 101.0, close: 101.3 },
-      { open: 101.3, high: 101.8, low: 100.9, close: 101.6 },
-      { open: 101.6, high: 102.8, low: 101.4, close: 102.6 },
-      { open: 102.6, high: 103.7, low: 102.3, close: 103.4 },
-      { open: 103.4, high: 104.5, low: 103.1, close: 104.2 },
-      { open: 104.2, high: 105.4, low: 103.9, close: 105.1 },
-      { open: 105.1, high: 105.6, low: 104.6, close: 104.8 },
-      { open: 104.8, high: 105.1, low: 104.1, close: 104.4 },
-      { open: 104.4, high: 104.8, low: 103.8, close: 104.0 },
-      { open: 104.0, high: 104.9, low: 103.9, close: 104.7 },
-      { open: 104.7, high: 105.7, low: 104.5, close: 105.5 },
-    ],
-    hotspots: [
+      "Use a simple mock candlestick chart to answer two beginner questions: trend direction first, then support location.",
+    xpReward: 100,
+    candles: beginnerFlowCandles,
+    questions: [
       {
-        id: "early-range",
-        label: "Old range low",
-        candleStart: 0,
-        candleEnd: 3,
-        priceLow: 100.1,
-        priceHigh: 100.8,
-        correct: false,
+        id: "trend-read",
+        type: "multiple-choice",
+        prompt: "Looking at this chart overall, is price mostly in an uptrend or a downtrend?",
+        instruction: "Choose the best read based on the sequence of candles.",
         explanation:
-          "This zone is too far below current price. It exists, but it does not offer the cleanest immediate decision area after the breakout.",
+          "The correct read is uptrend. Price is stepping higher overall, making higher pushes and holding pullbacks above earlier levels.",
+        coaching: "Start broad before zooming into one candle. First ask: is the chart mostly climbing, mostly falling, or chopping?",
+        choices: [
+          { id: "uptrend", label: "Uptrend" },
+          { id: "downtrend", label: "Downtrend" },
+          { id: "sideways", label: "Mostly sideways" },
+        ],
+        correctChoiceId: "uptrend",
       },
       {
-        id: "breakout-retest",
-        label: "Breakout retest",
-        candleStart: 7,
-        candleEnd: 12,
-        priceLow: 103.8,
-        priceHigh: 104.4,
-        correct: true,
+        id: "support-read",
+        type: "hotspot",
+        prompt: "Where is the strongest support zone after the pullback?",
+        instruction: "Click the highlighted area where buyers seem most likely to defend.",
         explanation:
-          "This is the strongest answer. It sits near the prior breakout area and gives a logical level where buyers should defend if the move is healthy.",
-      },
-      {
-        id: "late-exhaustion",
-        label: "High-of-day shelf",
-        candleStart: 8,
-        candleEnd: 13,
-        priceLow: 104.9,
-        priceHigh: 105.5,
-        correct: false,
-        explanation:
-          "This area is closer to resistance than support. Buying directly into overhead supply gives you less room and a weaker invalidation point.",
+          "The best support zone is the breakout-retest area. It sits near the recent move's decision point and gives a cleaner place to define risk.",
+        coaching: "Support is strongest when it lines up with prior reaction and the market holds above it after a pullback.",
+        hotspots: [
+          {
+            id: "too-low",
+            label: "Old base",
+            candleStart: 0,
+            candleEnd: 2,
+            priceLow: 100.0,
+            priceHigh: 100.9,
+            correct: false,
+            explanation:
+              "This area matters historically, but it is too far below current price to be the best immediate decision zone.",
+          },
+          {
+            id: "retest-zone",
+            label: "Retest support",
+            candleStart: 6,
+            candleEnd: 10,
+            priceLow: 103.6,
+            priceHigh: 104.2,
+            correct: true,
+            explanation:
+              "This is the clean answer. Price pulled back into this zone and then stabilized before pushing higher again.",
+          },
+          {
+            id: "too-high",
+            label: "High shelf",
+            candleStart: 9,
+            candleEnd: 11,
+            priceLow: 104.7,
+            priceHigh: 105.3,
+            correct: false,
+            explanation:
+              "This area is too close to the highs and acts more like near-term supply than clean support.",
+          },
+        ],
       },
     ],
     coachDebrief: [
-      "The best zone is usually where recent breakout logic and prior reactions overlap.",
-      "A great support area gives you both confirmation and a nearby place to define risk.",
-      "This is the kind of level you can later encode for a bot: breakout, retest, hold, then trigger.",
+      "The best beginner chart reads start broad: direction first, then location.",
+      "Support is more meaningful when it aligns with a recent reaction area instead of a random line.",
+      "This same logic later becomes code: trend filter, zone detection, retest condition, and risk placement.",
     ],
   },
 ];
@@ -566,32 +602,32 @@ export const scenarios: Scenario[] = [
     moduleSlug: "market-bootcamp",
     title: "Open Drive Pullback Simulator",
     summary:
-      "Practice a simple intraday decision sequence after a strong open, a pullback into support, and a fresh push higher.",
+      "A guided replay that turns chart reading into actual trade decisions using confirmation and risk logic.",
     xpReward: 120,
     setup:
-      "A stock opens strong, breaks above the morning range, then pulls back toward the breakout area while volume cools down.",
+      "A stock opens strong, breaks above the morning range, and then pulls back toward the breakout area while volume cools down.",
     steps: [
       {
         id: "step-1",
         title: "After the breakout",
         marketContext:
-          "The first impulse is strong, but price is now pulling back toward the breakout zone instead of chasing higher.",
+          "The first push is strong, but price is now pulling back instead of extending immediately.",
         tapeRead: [
           "Trend is up.",
-          "Pullback is controlled, not a panic flush.",
-          "The prior breakout area is close enough to define risk.",
+          "The pullback is controlled rather than panicked.",
+          "The breakout area is close enough to define risk if it holds.",
         ],
-        riskCallout: "Chasing extension gives poor reward-to-risk.",
+        riskCallout: "Chasing a stretched move usually damages reward-to-risk.",
         actions: [
           {
             id: "buy-now",
             label: "Buy immediately at the current candle",
-            rationale: "Jump in before it runs away again.",
+            rationale: "Jump in before the move continues without you.",
           },
           {
             id: "wait-retest",
-            label: "Wait to see if the breakout zone actually holds",
-            rationale: "Let price confirm support before committing.",
+            label: "Wait to see whether the breakout zone actually holds",
+            rationale: "Look for confirmation and a cleaner invalidation point.",
           },
           {
             id: "short-fade",
@@ -601,83 +637,49 @@ export const scenarios: Scenario[] = [
         ],
         correctActionId: "wait-retest",
         feedback:
-          "The disciplined move is to wait. The chart has promise, but you still need proof that buyers will defend the new support zone.",
+          "Waiting is the disciplined move. The setup is promising, but you still need proof that buyers will defend the new support zone.",
         outcome:
-          "Price taps the breakout area, wicks below it briefly, then closes back above the zone.",
+          "Price taps the breakout area, wicks below it briefly, and then closes back above the zone.",
       },
       {
         id: "step-2",
         title: "Retest response",
         marketContext:
-          "The retest just printed a strong response candle with a close near its high.",
+          "A strong response candle just formed after the pullback, closing near its high.",
         tapeRead: [
           "Buyers defended the zone after testing it.",
-          "The response candle closes with strength.",
-          "Your invalidation point is clearer now.",
+          "The response candle shows control into the close.",
+          "The stop location is much clearer now.",
         ],
-        riskCallout: "The best trades usually become clearer after patience, not before it.",
+        riskCallout: "Patience often improves the setup more than speed.",
         actions: [
           {
             id: "enter-with-stop",
             label: "Enter long with a stop just below the support zone",
-            rationale: "Use the defended level to define risk.",
+            rationale: "Use the defended level to define risk tightly.",
           },
           {
             id: "full-size-no-stop",
-            label: "Enter full size with no stop because the retest worked",
-            rationale: "Confidence is enough once the setup looks clean.",
+            label: "Enter full size with no stop because the setup looks clean",
+            rationale: "Confidence is enough once the chart feels obvious.",
           },
           {
-            id: "do-nothing",
-            label: "Skip because any pullback means the move is broken",
-            rationale: "Momentum trades should never retrace.",
+            id: "skip-it",
+            label: "Skip because any pullback means the trend is broken",
+            rationale: "Momentum should never retrace.",
           },
         ],
         correctActionId: "enter-with-stop",
         feedback:
-          "This is the first high-quality long entry. The zone held, the candle confirmed, and the stop location is nearby and logical.",
+          "This is the first high-quality entry. The chart confirmed support, and the risk is now defined by the retest zone.",
         outcome:
           "Price rotates higher, reclaims the session high, and offers a clean partial into strength.",
       },
-      {
-        id: "step-3",
-        title: "Managing the winner",
-        marketContext:
-          "The trade works. Price is approaching the prior high with momentum slowing slightly.",
-        tapeRead: [
-          "You are in profit, but price is approaching a known decision area.",
-          "Momentum is still positive, but extension is growing.",
-          "A good trade can still pull back sharply from a logical target.",
-        ],
-        riskCallout: "Management matters as much as entry.",
-        actions: [
-          {
-            id: "scale-and-trail",
-            label: "Take partial profit and trail the stop on the rest",
-            rationale: "Lock in progress while giving the trade room.",
-          },
-          {
-            id: "hold-forever",
-            label: "Hold the entire position and ignore the level ahead",
-            rationale: "A winner should never be touched.",
-          },
-          {
-            id: "reverse-short",
-            label: "Close the long and instantly flip short",
-            rationale: "Every resistance test must reverse.",
-          },
-        ],
-        correctActionId: "scale-and-trail",
-        feedback:
-          "Scaling into strength and trailing the remainder is the mature choice. It respects both the open profit and the overhead decision area.",
-        outcome:
-          "Price stalls briefly, then grinds higher. You book a solid gain and still participate in the continuation.",
-      },
     ],
     closingNotes: [
-      "Good trading is often a sequence of small if-then decisions, not one giant prediction.",
-      "Waiting for confirmation improved entry quality and tightened risk.",
-      "This simulator mirrors how bots are built later: state, trigger, stop, target, and management rules.",
+      "The best trades often become clearer after confirmation, not before it.",
+      "A good setup is a chain of if-then decisions, not one giant prediction.",
+      "This replay mirrors system design: detect state, confirm trigger, define risk, manage outcome.",
     ],
   },
 ];
@@ -685,30 +687,30 @@ export const scenarios: Scenario[] = [
 export const progressSnapshot: ProgressSnapshot = {
   currentTier: "beginner",
   title: "Tape Apprentice",
-  totalXp: 340,
-  xpIntoLevel: 340,
-  xpForNextLevel: 500,
-  streakDays: 4,
+  totalXp: 160,
+  xpIntoLevel: 160,
+  xpForNextLevel: 400,
+  streakDays: 3,
   modulesCompleted: 0,
-  lessonsCompleted: 2,
-  quizAccuracy: 82,
-  chartAccuracy: 76,
-  overallProgressPercent: 18,
+  lessonsCompleted: 1,
+  quizAccuracy: 78,
+  chartAccuracy: 72,
+  overallProgressPercent: 14,
   achievements: [
     {
-      id: "candles",
-      title: "Candle Scout",
-      detail: "Identified wick rejection and close strength in practice mode.",
+      id: "starter",
+      title: "First Lesson Cleared",
+      detail: "Completed the opening trading foundations lesson.",
     },
     {
       id: "streak",
-      title: "4-Day Streak",
-      detail: "Returned for four sessions in a row and kept momentum alive.",
+      title: "3-Day Streak",
+      detail: "Returned to train for three sessions in a row.",
     },
     {
-      id: "risk",
-      title: "Risk First",
-      detail: "Used defined invalidation instead of random entry logic.",
+      id: "read",
+      title: "Chart Reader",
+      detail: "Started identifying control, rejection, and support zones with intention.",
     },
   ],
 };

@@ -2,9 +2,12 @@ import Link from "next/link";
 import { Lock, Sparkles } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { learningModules, tiers } from "@/lib/course";
+import { getActiveModule, getModuleLessons, learningModules, progressSnapshot, tiers } from "@/lib/course";
 
 export function LearningPathView() {
+  const activeModule = getActiveModule();
+  const activeLessons = activeModule ? getModuleLessons(activeModule.slug) : [];
+
   return (
     <div className="space-y-8">
       <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 sm:p-8">
@@ -12,21 +15,81 @@ export function LearningPathView() {
         <div className="mt-4 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              A structured path from beginner chart reading to bot-ready strategy logic.
+              First complete beginner flow: trading basics, market basics, then candles.
             </h1>
             <p className="mt-4 text-base leading-7 text-slate-300">
-              The curriculum starts with foundations and deliberately moves toward signals, setups, rules, risk
-              controls, and eventually automation thinking. Modules unlock in order so skill compounds instead of
-              scattering.
+              This MVP now centers the first true learning sequence. Each lesson is short, visual, and connected to a
+              quiz or chart drill so the experience feels like training, not reading.
             </p>
           </div>
           <div className="rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">MVP Coverage</p>
-            <p className="mt-2 font-mono text-3xl text-white">{learningModules.length} modules</p>
-            <p className="mt-2 text-sm text-slate-300">Foundations, risk, structure, psychology, strategy systems</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Current beginner progress</p>
+            <p className="mt-2 font-mono text-3xl text-white">{progressSnapshot.overallProgressPercent}%</p>
+            <p className="mt-2 text-sm text-slate-300">XP, quiz, and chart drills feed the same track.</p>
           </div>
         </div>
       </section>
+
+      {activeModule ? (
+        <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-sm uppercase tracking-[0.24em] text-emerald-300">Active module</p>
+              <h2 className="mt-2 text-3xl font-semibold text-white">{activeModule.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-slate-300">{activeModule.summary}</p>
+            </div>
+            <div className="min-w-[240px] rounded-[24px] border border-white/10 bg-slate-950/70 p-4">
+              <ProgressBar value={activeModule.progressPercent} label="Module progress" />
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-4 xl:grid-cols-5">
+            {activeLessons.map((lesson, index) => (
+              <Link
+                key={lesson.slug}
+                href={`/lesson/${lesson.slug}`}
+                className="rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(8,11,18,0.95))] p-5 transition hover:-translate-y-0.5 hover:border-cyan-300/20"
+              >
+                <p className="font-mono text-sm text-cyan-300">0{index + 1}</p>
+                <h3 className="mt-4 text-xl font-semibold text-white">{lesson.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{lesson.summary}</p>
+                <div className="mt-4 flex items-center justify-between text-sm text-slate-400">
+                  <span>{lesson.estimatedMinutes} min</span>
+                  <span>{lesson.xpReward} XP</span>
+                </div>
+              </Link>
+            ))}
+
+            {activeModule.quizSlug ? (
+              <Link
+                href={`/quiz/${activeModule.quizSlug}`}
+                className="rounded-[28px] border border-cyan-400/12 bg-cyan-400/[0.05] p-5 transition hover:-translate-y-0.5"
+              >
+                <p className="font-mono text-sm text-cyan-300">04</p>
+                <h3 className="mt-4 text-xl font-semibold text-white">Quiz Checkpoint</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">
+                  Instant feedback on the first three lessons with local score tracking.
+                </p>
+                <div className="mt-4 text-sm text-cyan-100/80">Assessment step</div>
+              </Link>
+            ) : null}
+
+            {activeModule.chartChallengeSlug ? (
+              <Link
+                href={`/chart-challenge/${activeModule.chartChallengeSlug}`}
+                className="rounded-[28px] border border-fuchsia-400/12 bg-fuchsia-400/[0.05] p-5 transition hover:-translate-y-0.5"
+              >
+                <p className="font-mono text-sm text-fuchsia-300">05</p>
+                <h3 className="mt-4 text-xl font-semibold text-white">Chart Challenge</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">
+                  Read the trend first, then click where support is most meaningful.
+                </p>
+                <div className="mt-4 text-sm text-fuchsia-100/80">Visual application step</div>
+              </Link>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
 
       <section className="space-y-6">
         {tiers.map((tier) => {
@@ -73,26 +136,12 @@ export function LearningPathView() {
                         <p className="mt-3 text-sm leading-6 text-slate-300">{module.summary}</p>
                       </div>
 
-                      <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-                          <p className="text-xs uppercase tracking-[0.22em] text-slate-400">XP Reward</p>
-                          <p className="mt-2 font-mono text-2xl text-white">{module.xpReward}</p>
-                        </div>
-                        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-                          <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Estimated Time</p>
-                          <p className="mt-2 font-mono text-2xl text-white">{module.estimatedMinutes}m</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-5 space-y-3">
-                        <ProgressBar value={module.progressPercent} label="Module Progress" />
-                        <div className="flex flex-wrap gap-2">
-                          {module.focusAreas.map((area) => (
-                            <span key={area} className="rounded-full border border-white/8 bg-slate-950/70 px-3 py-1 text-sm text-slate-200">
-                              {area}
-                            </span>
-                          ))}
-                        </div>
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        {module.focusAreas.map((area) => (
+                          <span key={area} className="rounded-full border border-white/8 bg-slate-950/70 px-3 py-1 text-sm text-slate-200">
+                            {area}
+                          </span>
+                        ))}
                       </div>
 
                       <div className="mt-5 rounded-[24px] border border-cyan-400/10 bg-cyan-400/[0.06] p-4">

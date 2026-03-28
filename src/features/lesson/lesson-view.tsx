@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ComponentType } from "react";
 import { ArrowRight, BrainCircuit, Clock3 } from "lucide-react";
 
+import { LessonBlocks } from "@/features/lesson/lesson-blocks";
 import { getLessonBySlug, getModuleBySlug } from "@/lib/course";
 
 export function LessonView({ lessonSlug }: { lessonSlug: string }) {
@@ -55,22 +56,8 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
             <article key={section.id} className="rounded-[30px] border border-white/10 bg-white/[0.04] p-6">
               <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">{section.eyebrow}</p>
               <h2 className="mt-3 text-2xl font-semibold text-white">{section.title}</h2>
-              <p className="mt-4 text-base leading-7 text-slate-300">{section.body}</p>
-
-              <div className="mt-5 grid gap-3">
-                {section.bullets.map((bullet) => (
-                  <div key={bullet} className="rounded-2xl border border-white/8 bg-slate-950/75 px-4 py-3 text-sm leading-6 text-slate-200">
-                    {bullet}
-                  </div>
-                ))}
-              </div>
-
-              {section.coachNote ? (
-                <div className="mt-5 rounded-[24px] border border-amber-300/10 bg-amber-300/[0.06] p-4">
-                  <p className="text-xs uppercase tracking-[0.22em] text-amber-100/70">Coach Note</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-200">{section.coachNote}</p>
-                </div>
-              ) : null}
+              <p className="mt-3 text-sm leading-6 text-slate-300">{section.summary}</p>
+              <LessonBlocks blocks={section.blocks} />
             </article>
           ))}
         </div>

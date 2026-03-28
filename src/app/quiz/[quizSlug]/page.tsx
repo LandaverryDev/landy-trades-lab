@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { QuizPlayer } from "@/components/quiz/quiz-player";
+import { QuizPlayer } from "@/features/quiz/quiz-player";
 import { getQuizBySlug } from "@/lib/course";
 
 export default async function QuizPage({

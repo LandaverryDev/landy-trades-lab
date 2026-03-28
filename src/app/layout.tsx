@@ -6,9 +6,9 @@ import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import type { ReactNode } from "react";
 
-import { AppShell } from "@/components/shell/app-shell";
+import { AppShell } from "@/components/layout/app-shell";
 
-import "./globals.css";
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Landy Trades Lab",

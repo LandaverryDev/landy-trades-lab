@@ -33,27 +33,30 @@ A personal trading education web app built as a premium, interactive learning pr
 
 ```text
 src/
-  app/                 Route entry points and global app shell
-  components/          Reusable UI and feature components
-    chart/             Chart challenge client UI
-    dashboard/         Landing/dashboard composition
-    learning/          Learning path view
-    lesson/            Lesson renderer
-    progress/          Progress page
-    quiz/              Quiz player
-    shell/             Shared app shell / navigation
-    simulator/         Scenario replay UI
-    ui/                Base visual building blocks
-  data/                Seed curriculum and mock content
-  lib/                 Data access helpers and selectors
-  types/               Domain types for the learning platform
+  app/                 App Router entry points only
+  components/
+    layout/            Shared shell and navigation
+    ui/                Reusable low-level UI pieces
+  data/                Typed lesson, quiz, chart, and module seed data
+  features/            Screen-level learning experiences
+    dashboard/
+    learning-path/
+    lesson/
+    chart-challenge/
+    progress/
+    quiz/
+    simulator/
+  lib/                 Data selectors and local progress helpers
+  styles/              Global styles and theme surface
+  types/               Trading-learning domain models
 ```
 
 ## Key decisions
 
 - Mock curriculum data lives in typed local files first so the app can scale into a real backend later without rewriting page structure.
-- Lessons are intentionally short and card-based to keep the product visual-first and fast-moving.
+- Lessons use reusable data-driven content blocks so text, callouts, and visuals can expand without rewriting the renderer.
 - Chart and simulator interactions are separate feature surfaces so drills and replay mechanics can expand independently.
+- Quiz and chart challenge best scores are tracked locally in the browser for lightweight persistence.
 - Curriculum content includes bot-builder hooks so concepts can later map to signals, filters, triggers, and risk controls.
 - The default build script uses webpack because it verified cleanly in this environment during setup.
 

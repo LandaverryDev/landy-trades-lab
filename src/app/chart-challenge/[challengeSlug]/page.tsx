@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { ChartChallengePlayer } from "@/components/chart/chart-challenge-player";
+import { ChartChallengePlayer } from "@/features/chart-challenge/chart-challenge-player";
 import { getChartChallengeBySlug } from "@/lib/course";
 
 export default async function ChartChallengePage({

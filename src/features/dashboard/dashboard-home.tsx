@@ -9,6 +9,7 @@ import { chartChallenges, getDashboardSnapshot } from "@/lib/course";
 export function DashboardHome() {
   const { activeModule, progress, tierProgress, upcomingLesson } = getDashboardSnapshot();
   const sampleChart = chartChallenges[0];
+  const supportQuestion = sampleChart.questions.find((question) => question.type === "hotspot");
 
   return (
     <div className="space-y-8">
@@ -18,7 +19,7 @@ export function DashboardHome() {
             <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs uppercase tracking-[0.28em] text-emerald-200">
               Live MVP Track
             </span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.28em] text-slate-300">
+            <span className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-1 text-xs uppercase tracking-[0.28em] text-slate-300">
               Beginner to Bot Builder
             </span>
           </div>
@@ -101,7 +102,7 @@ export function DashboardHome() {
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-300">{sampleChart.summary}</p>
             <div className="mt-5">
-              <CandlestickChart candles={sampleChart.candles} hotspots={sampleChart.hotspots} height={280} />
+              <CandlestickChart candles={sampleChart.candles} hotspots={supportQuestion?.hotspots} height={280} />
             </div>
           </div>
 
@@ -163,15 +164,15 @@ export function DashboardHome() {
             />
             <SequenceCard
               step="02"
-              title="Bootcamp Quiz"
+              title="Foundations Quiz"
               detail="Rapid-fire checks with immediate feedback and reinforcement."
-              href="/quiz/bootcamp-quiz"
+              href={`/quiz/${activeModule?.quizSlug ?? "beginner-foundations-quiz"}`}
             />
             <SequenceCard
               step="03"
-              title="Support Zone Drill"
-              detail="Click the most meaningful support zone directly on the chart."
-              href="/chart-challenge/support-zone-breakout"
+              title="Trend + Support Drill"
+              detail="Read the direction first, then click the best support zone."
+              href={`/chart-challenge/${activeModule?.chartChallengeSlug ?? "trend-and-support-challenge"}`}
             />
           </div>
         </div>

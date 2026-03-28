@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { BarChart3, BrainCircuit, ChartCandlestick, LayoutDashboard, Trophy } from "lucide-react";
+import { BarChart3, BrainCircuit, LayoutDashboard } from "lucide-react";
 
 import { BrandMark } from "@/components/ui/brand-mark";
 import { progressSnapshot } from "@/lib/course";
@@ -8,8 +8,6 @@ import { progressSnapshot } from "@/lib/course";
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/learn", label: "Learning Path", icon: BrainCircuit },
-  { href: "/quiz/bootcamp-quiz", label: "Quiz Drill", icon: Trophy },
-  { href: "/chart-challenge/support-zone-breakout", label: "Chart Challenge", icon: ChartCandlestick },
   { href: "/progress", label: "Progress", icon: BarChart3 },
 ];
 

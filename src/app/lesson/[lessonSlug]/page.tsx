@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { LessonView } from "@/components/lesson/lesson-view";
+import { LessonView } from "@/features/lesson/lesson-view";
 import { getLessonBySlug } from "@/lib/course";
 
 export default async function LessonPage({
