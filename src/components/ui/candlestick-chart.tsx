@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import type { Candle, ChartHotspot } from "@/types/trading";
 
 interface CandlestickChartProps {
@@ -8,6 +10,12 @@ interface CandlestickChartProps {
   selectedHotspotId?: string | null;
   revealHotspots?: boolean;
   onHotspotSelect?: (hotspotId: string) => void;
+  selectedPrice?: number | null;
+  correctPrice?: number | null;
+  priceTolerance?: number;
+  revealPriceAnswer?: boolean;
+  onPriceSelect?: (price: number) => void;
+  priceSelectionLabel?: string;
   height?: number;
 }
 
@@ -17,8 +25,15 @@ export function CandlestickChart({
   selectedHotspotId,
   revealHotspots = false,
   onHotspotSelect,
+  selectedPrice,
+  correctPrice,
+  priceTolerance = 0.25,
+  revealPriceAnswer = false,
+  onPriceSelect,
+  priceSelectionLabel = "Selected level",
   height = 360,
 }: CandlestickChartProps) {
+  const [hoverPrice, setHoverPrice] = useState<number | null>(null);
   const width = 920;
   const paddingX = 48;
   const paddingY = 30;
@@ -32,10 +47,65 @@ export function CandlestickChart({
 
   const priceToY = (price: number) =>
     paddingY + ((maxPrice - price) / priceRange) * (height - paddingY * 2);
+  const yToPrice = (y: number) =>
+    maxPrice - ((y - paddingY) / (height - paddingY * 2)) * priceRange;
 
   const candleToX = (index: number) => paddingX + index * candleSlot + candleSlot / 2;
+  const plotWidth = width - paddingX * 2;
+  const plotHeight = height - paddingY * 2;
 
   const guidePrices = Array.from({ length: 5 }, (_, index) => minPrice + (priceRange / 4) * index);
+  const selectedPriceCorrect =
+    selectedPrice !== null &&
+    selectedPrice !== undefined &&
+    correctPrice !== null &&
+    correctPrice !== undefined &&
+    Math.abs(selectedPrice - correctPrice) <= priceTolerance;
+
+  const toleranceBand =
+    revealPriceAnswer && correctPrice !== null && correctPrice !== undefined
+      ? {
+          y: Math.min(priceToY(correctPrice + priceTolerance), priceToY(correctPrice - priceTolerance)),
+          height: Math.abs(priceToY(correctPrice - priceTolerance) - priceToY(correctPrice + priceTolerance)),
+        }
+      : null;
+
+  function clamp(value: number, min: number, max: number) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function resolveSvgPoint(event: React.PointerEvent<SVGRectElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * width;
+    const y = ((event.clientY - rect.top) / rect.height) * height;
+
+    return {
+      x: clamp(x, paddingX, width - paddingX),
+      y: clamp(y, paddingY, height - paddingY),
+    };
+  }
+
+  function handlePricePointerMove(event: React.PointerEvent<SVGRectElement>) {
+    if (!onPriceSelect) {
+      return;
+    }
+
+    const point = resolveSvgPoint(event);
+    setHoverPrice(Number(yToPrice(point.y).toFixed(2)));
+  }
+
+  function handlePricePointerLeave() {
+    setHoverPrice(null);
+  }
+
+  function handlePriceSelect(event: React.PointerEvent<SVGRectElement>) {
+    if (!onPriceSelect) {
+      return;
+    }
+
+    const point = resolveSvgPoint(event);
+    onPriceSelect(Number(yToPrice(point.y).toFixed(2)));
+  }
 
   return (
     <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(11,16,28,0.95),rgba(6,10,18,0.98))] p-4 shadow-[0_22px_70px_rgba(0,0,0,0.42)]">
@@ -48,6 +118,19 @@ export function CandlestickChart({
         </defs>
 
         <rect x="0" y="0" width={width} height={height} rx="24" fill="rgba(255,255,255,0.01)" />
+
+        {toleranceBand ? (
+          <rect
+            x={paddingX}
+            y={toleranceBand.y}
+            width={plotWidth}
+            height={Math.max(toleranceBand.height, 8)}
+            fill="rgba(34,197,94,0.12)"
+            stroke="rgba(34,197,94,0.35)"
+            strokeDasharray="8 8"
+            rx="16"
+          />
+        ) : null}
 
         {guidePrices.map((price) => {
           const y = priceToY(price);
@@ -68,6 +151,21 @@ export function CandlestickChart({
             </g>
           );
         })}
+
+        {onPriceSelect ? (
+          <rect
+            x={paddingX}
+            y={paddingY}
+            width={plotWidth}
+            height={plotHeight}
+            rx="20"
+            fill="transparent"
+            className="cursor-crosshair"
+            onPointerMove={handlePricePointerMove}
+            onPointerLeave={handlePricePointerLeave}
+            onClick={handlePriceSelect}
+          />
+        ) : null}
 
         {hotspots?.map((hotspot) => {
           const x = candleToX(hotspot.candleStart) - candleSlot / 2;
@@ -117,6 +215,29 @@ export function CandlestickChart({
           );
         })}
 
+        {hoverPrice !== null && onPriceSelect ? (
+          <g pointerEvents="none">
+            <line
+              x1={paddingX}
+              x2={width - paddingX}
+              y1={priceToY(hoverPrice)}
+              y2={priceToY(hoverPrice)}
+              stroke="rgba(56,189,248,0.32)"
+              strokeWidth="1.5"
+              strokeDasharray="8 8"
+            />
+            <text
+              x={width - paddingX - 6}
+              y={priceToY(hoverPrice) - 8}
+              textAnchor="end"
+              fill="rgba(125,211,252,0.9)"
+              fontSize="14"
+            >
+              Hover {hoverPrice.toFixed(2)}
+            </text>
+          </g>
+        ) : null}
+
         <path
           d={`M ${paddingX} ${height - paddingY} L ${width - paddingX} ${height - paddingY}`}
           stroke="rgba(148,163,184,0.18)"
@@ -147,6 +268,63 @@ export function CandlestickChart({
             </g>
           );
         })}
+
+        {correctPrice !== null && correctPrice !== undefined && revealPriceAnswer ? (
+          <g pointerEvents="none">
+            <line
+              x1={paddingX}
+              x2={width - paddingX}
+              y1={priceToY(correctPrice)}
+              y2={priceToY(correctPrice)}
+              stroke="rgba(34,197,94,0.9)"
+              strokeWidth="2"
+              strokeDasharray="10 8"
+            />
+            <text
+              x={paddingX + 8}
+              y={priceToY(correctPrice) - 8}
+              fill="rgba(187,247,208,0.95)"
+              fontSize="14"
+              fontWeight="600"
+            >
+              Answer {correctPrice.toFixed(2)}
+            </text>
+          </g>
+        ) : null}
+
+        {selectedPrice !== null && selectedPrice !== undefined ? (
+          <g pointerEvents="none">
+            <line
+              x1={paddingX}
+              x2={width - paddingX}
+              y1={priceToY(selectedPrice)}
+              y2={priceToY(selectedPrice)}
+              stroke={
+                revealPriceAnswer
+                  ? selectedPriceCorrect
+                    ? "rgba(34,197,94,0.98)"
+                    : "rgba(251,113,133,0.98)"
+                  : "rgba(56,189,248,0.95)"
+              }
+              strokeWidth="2.5"
+            />
+            <text
+              x={paddingX + 8}
+              y={priceToY(selectedPrice) + 18}
+              fill={
+                revealPriceAnswer
+                  ? selectedPriceCorrect
+                    ? "rgba(187,247,208,0.95)"
+                    : "rgba(254,205,211,0.95)"
+                  : "rgba(186,230,253,0.95)"
+              }
+              fontSize="14"
+              fontWeight="600"
+            >
+              {priceSelectionLabel} {selectedPrice.toFixed(2)}
+            </text>
+          </g>
+        ) : null}
 
         <rect
           x={paddingX}

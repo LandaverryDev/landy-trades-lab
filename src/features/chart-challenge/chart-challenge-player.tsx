@@ -13,6 +13,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
   const [selectedHotspotId, setSelectedHotspotId] = useState<string | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -30,7 +31,11 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   const isCorrect =
     question.type === "multiple-choice"
       ? selectedChoiceId === question.correctChoiceId
-      : Boolean(selectedHotspot?.correct);
+      : question.type === "hotspot"
+        ? Boolean(selectedHotspot?.correct)
+        : selectedPrice !== null &&
+          question.correctPrice !== undefined &&
+          Math.abs(selectedPrice - question.correctPrice) <= (question.tolerance ?? 0.25);
 
   function handleSubmit() {
     if (submitted) {
@@ -42,6 +47,10 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     }
 
     if (question.type === "hotspot" && !selectedHotspotId) {
+      return;
+    }
+
+    if (question.type === "price-line" && selectedPrice === null) {
       return;
     }
 
@@ -63,6 +72,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setCurrentIndex((value) => value + 1);
     setSelectedChoiceId(null);
     setSelectedHotspotId(null);
+    setSelectedPrice(null);
     setSubmitted(false);
   }
 
@@ -70,6 +80,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setCurrentIndex(0);
     setSelectedChoiceId(null);
     setSelectedHotspotId(null);
+    setSelectedPrice(null);
     setSubmitted(false);
     setCorrectCount(0);
     setCompleted(false);
@@ -85,8 +96,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           <p className="text-sm uppercase tracking-[0.28em] text-fuchsia-300">Chart Challenge Complete</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{percent}% chart accuracy</h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">
-            You completed the first visual chart drill: read the broad trend first, then identify the meaningful support
-            area inside that trend.
+            You completed a chart drill that mixed directional reading, direct level placement, and setup-quality
+            decisions on the chart itself.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             <SummaryStat label="Correct" value={`${correctCount}/${challenge.questions.length}`} />
@@ -162,6 +173,12 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
             selectedHotspotId={selectedHotspotId}
             revealHotspots={Boolean(submitted)}
             onHotspotSelect={question.type === "hotspot" ? setSelectedHotspotId : undefined}
+            selectedPrice={question.type === "price-line" ? selectedPrice : null}
+            correctPrice={question.type === "price-line" ? question.correctPrice ?? null : null}
+            priceTolerance={question.type === "price-line" ? question.tolerance : undefined}
+            revealPriceAnswer={question.type === "price-line" ? submitted : false}
+            onPriceSelect={question.type === "price-line" && !submitted ? setSelectedPrice : undefined}
+            priceSelectionLabel={question.selectionLabel}
           />
 
           {question.type === "multiple-choice" ? (
@@ -194,6 +211,20 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
               })}
             </div>
           ) : null}
+
+          {question.type === "price-line" ? (
+            <div className="rounded-[24px] border border-cyan-400/12 bg-cyan-400/[0.05] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/70">Direct Chart Markup</p>
+              <p className="mt-3 text-sm leading-6 text-slate-200">
+                Click directly on the chart to place a line where you think the key level belongs.
+              </p>
+              <p className="mt-3 text-sm text-slate-300">
+                {selectedPrice !== null
+                  ? `${question.selectionLabel ?? "Selected level"}: ${selectedPrice.toFixed(2)}`
+                  : "No level placed yet."}
+              </p>
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-5">
@@ -203,7 +234,9 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
               <p className="mt-3 text-sm leading-7 text-slate-300">
                 {question.type === "multiple-choice"
                   ? "Pick the best answer before revealing feedback."
-                  : "Click a highlighted support zone on the chart, then reveal the answer."}
+                  : question.type === "hotspot"
+                    ? "Click a highlighted zone on the chart, then reveal the answer."
+                    : "Place a line directly on the chart where you believe the key level belongs."}
               </p>
             ) : (
               <>
@@ -211,7 +244,9 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                   {isCorrect ? "Strong read" : "Coach correction"}
                 </p>
                 <p className="mt-4 text-sm leading-7 text-slate-300">
-                  {question.type === "hotspot" && selectedHotspot ? selectedHotspot.explanation : question.explanation}
+                  {question.type === "hotspot"
+                    ? selectedHotspot?.explanation ?? question.explanation
+                    : question.explanation}
                 </p>
                 <p className="mt-4 text-sm leading-6 text-slate-400">{question.coaching}</p>
               </>
@@ -222,7 +257,13 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
             {!submitted ? (
               <button
                 type="button"
-                disabled={question.type === "multiple-choice" ? !selectedChoiceId : !selectedHotspotId}
+                disabled={
+                  question.type === "multiple-choice"
+                    ? !selectedChoiceId
+                    : question.type === "hotspot"
+                      ? !selectedHotspotId
+                      : selectedPrice === null
+                }
                 onClick={handleSubmit}
                 className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
               >

@@ -7,7 +7,7 @@ export type QuestionType =
   | "what-happens-next";
 export type LessonBlockTone = "neutral" | "coach" | "bot" | "warning";
 export type LessonVisualKey = "trade-loop" | "market-map" | "candle-breakdown";
-export type ChartQuestionType = "multiple-choice" | "hotspot";
+export type ChartQuestionType = "multiple-choice" | "hotspot" | "price-line";
 
 export interface Tier {
   slug: TierSlug;
@@ -158,6 +158,9 @@ export interface ChartChallengeQuestion {
   choices?: QuizChoice[];
   correctChoiceId?: string;
   hotspots?: ChartHotspot[];
+  correctPrice?: number;
+  tolerance?: number;
+  selectionLabel?: string;
 }
 
 export interface ChartChallenge {

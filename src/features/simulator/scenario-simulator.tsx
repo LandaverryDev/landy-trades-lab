@@ -4,15 +4,24 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
-import { recordScenarioCompletion, useLearningProgress } from "@/lib/learning-progress";
+import { recordScenarioCompletion } from "@/lib/learning-progress";
 import type { Scenario } from "@/types/trading";
+
+interface DecisionReviewItem {
+  stepId: string;
+  stepTitle: string;
+  selectedActionLabel: string;
+  selectedActionRationale: string;
+  correctActionLabel: string;
+  correct: boolean;
+}
 
 export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedActionId, setSelectedActionId] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const { raw } = useLearningProgress();
+  const [decisionReview, setDecisionReview] = useState<DecisionReviewItem[]>([]);
 
   const step = scenario.steps[stepIndex];
   const selectedAction = useMemo(
@@ -30,6 +39,22 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
   }
 
   function handleNext() {
+    if (!selectedAction) {
+      return;
+    }
+
+    setDecisionReview((current) => [
+      ...current,
+      {
+        stepId: step.id,
+        stepTitle: step.title,
+        selectedActionLabel: selectedAction.label,
+        selectedActionRationale: selectedAction.rationale,
+        correctActionLabel: step.actions.find((action) => action.id === step.correctActionId)?.label ?? "Best action",
+        correct: isCorrect,
+      },
+    ]);
+
     if (stepIndex === scenario.steps.length - 1) {
       recordScenarioCompletion(scenario.slug);
       setCompleted(true);
@@ -46,9 +71,14 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
     setSelectedActionId(null);
     setSubmitted(false);
     setCompleted(false);
+    setDecisionReview([]);
   }
 
   if (completed) {
+    const correctReviewCount = decisionReview.filter((item) => item.correct).length;
+    const decisionQuality =
+      scenario.steps.length === 0 ? 0 : Math.round((correctReviewCount / scenario.steps.length) * 100);
+
     return (
       <div className="space-y-6">
         <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 sm:p-8">
@@ -61,10 +91,48 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <FinalTile label="Scenario XP" value={`${scenario.xpReward}`} />
             <FinalTile label="Steps Cleared" value={`${scenario.steps.length}`} />
-            <FinalTile
-              label="Status"
-              value={raw.completedScenarioSlugs.includes(scenario.slug) ? "Completed" : "Decision Quality"}
-            />
+            <FinalTile label="Decision Quality" value={`${decisionQuality}%`} />
+          </div>
+        </section>
+
+        <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(12,20,34,0.88),rgba(10,14,23,0.95))] p-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Decision Review</p>
+              <h2 className="mt-2 text-3xl font-semibold text-white">How each call stacked up</h2>
+            </div>
+            <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-slate-200">
+              {correctReviewCount}/{scenario.steps.length} strong decisions
+            </span>
+          </div>
+
+          <div className="mt-6 grid gap-4">
+            {decisionReview.map((review, index) => (
+              <div
+                key={review.stepId}
+                className={`rounded-[26px] border p-5 ${
+                  review.correct
+                    ? "border-emerald-400/16 bg-emerald-400/[0.06]"
+                    : "border-rose-400/16 bg-rose-400/[0.06]"
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-sm uppercase tracking-[0.24em] text-slate-400">
+                    Step {index + 1} · {review.stepTitle}
+                  </p>
+                  <span className={review.correct ? "text-sm text-emerald-200" : "text-sm text-rose-200"}>
+                    {review.correct ? "Correct" : "Needs work"}
+                  </span>
+                </div>
+                <p className="mt-4 text-sm font-medium text-white">Your action: {review.selectedActionLabel}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{review.selectedActionRationale}</p>
+                {!review.correct ? (
+                  <p className="mt-4 text-sm leading-6 text-slate-200">
+                    Better action: <span className="font-medium text-white">{review.correctActionLabel}</span>
+                  </p>
+                ) : null}
+              </div>
+            ))}
           </div>
         </section>
 

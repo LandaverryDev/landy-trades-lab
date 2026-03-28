@@ -2245,47 +2245,15 @@ export const chartChallenges: ChartChallenge[] = [
       },
       {
         id: "support-read",
-        type: "hotspot",
+        type: "price-line",
         prompt: "Where is the strongest support zone after the pullback?",
-        instruction: "Click the highlighted area where buyers seem most likely to defend.",
+        instruction: "Click directly on the chart to place a support line where buyers seem most likely to defend.",
         explanation:
           "The best support zone is the breakout-retest area. It sits near the recent move's decision point and gives a cleaner place to define risk.",
         coaching: "Support is strongest when it lines up with prior reaction and the market holds above it after a pullback.",
-        hotspots: [
-          {
-            id: "too-low",
-            label: "Old base",
-            candleStart: 0,
-            candleEnd: 2,
-            priceLow: 100.0,
-            priceHigh: 100.9,
-            correct: false,
-            explanation:
-              "This area matters historically, but it is too far below current price to be the best immediate decision zone.",
-          },
-          {
-            id: "retest-zone",
-            label: "Retest support",
-            candleStart: 6,
-            candleEnd: 10,
-            priceLow: 103.6,
-            priceHigh: 104.2,
-            correct: true,
-            explanation:
-              "This is the clean answer. Price pulled back into this zone and then stabilized before pushing higher again.",
-          },
-          {
-            id: "too-high",
-            label: "High shelf",
-            candleStart: 9,
-            candleEnd: 11,
-            priceLow: 104.7,
-            priceHigh: 105.3,
-            correct: false,
-            explanation:
-              "This area is too close to the highs and acts more like near-term supply than clean support.",
-          },
-        ],
+        correctPrice: 103.9,
+        tolerance: 0.35,
+        selectionLabel: "Support line",
       },
     ],
     coachDebrief: [
@@ -2333,47 +2301,15 @@ export const chartChallenges: ChartChallenge[] = [
       },
       {
         id: "stop-zone-read",
-        type: "hotspot",
+        type: "price-line",
         prompt: "If a trader entered long on the bounce, where is the best stop zone?",
-        instruction: "Click the highlighted area that most logically invalidates the long idea.",
+        instruction: "Click directly on the chart to place the stop where the long idea would be invalidated.",
         explanation:
           "The best stop zone sits just under the pullback support area. If price loses that zone cleanly, the bounce thesis weakens sharply.",
         coaching: "Stops belong below the area that should hold if the long setup is real, not at a random dollar amount.",
-        hotspots: [
-          {
-            id: "too-tight",
-            label: "Inside the bounce candle",
-            candleStart: 10,
-            candleEnd: 10,
-            priceLow: 114.5,
-            priceHigh: 114.9,
-            correct: false,
-            explanation:
-              "This is too tight. Normal noise inside the entry area could hit this stop even if the setup remains valid.",
-          },
-          {
-            id: "best-stop-zone",
-            label: "Below support",
-            candleStart: 8,
-            candleEnd: 10,
-            priceLow: 114.0,
-            priceHigh: 114.4,
-            correct: true,
-            explanation:
-              "This is the clean invalidation area. It sits beneath the pullback support zone that buyers should defend if the trend is still healthy.",
-          },
-          {
-            id: "too-wide",
-            label: "Far below structure",
-            candleStart: 0,
-            candleEnd: 2,
-            priceLow: 112.1,
-            priceHigh: 112.9,
-            correct: false,
-            explanation:
-              "This stop is so wide that it ignores the actual setup structure and badly distorts risk for this entry idea.",
-          },
-        ],
+        correctPrice: 114.2,
+        tolerance: 0.28,
+        selectionLabel: "Stop line",
       },
     ],
     coachDebrief: [
