@@ -4,10 +4,12 @@ import { AlertTriangle, Bot, ChevronRight, Copy, Plus, RotateCcw, ShieldCheck, S
 
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { strategyBuilderSections } from "@/data/strategy-builder";
+import { strategyBuilderTemplates } from "@/data/strategy-builder-templates";
 import { deriveStrategyBlueprintSpec } from "@/lib/strategy-builder-spec";
 import {
   clearStrategySelections,
   createStrategyDraft,
+  createStrategyDraftFromTemplate,
   deleteStrategyDraft,
   setActiveStrategyDraft,
   setStrategyName,
@@ -134,6 +136,35 @@ export function StrategyBuilderView() {
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
         <div className="space-y-6">
+          <aside className="course-card rounded-[30px] p-6">
+            <div className="flex items-center gap-3">
+              <Sparkles className="h-5 w-5 text-cyan-300" />
+              <div>
+                <p className="eyebrow-label">Guided Templates</p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">Start from a real playbook shape</h2>
+              </div>
+            </div>
+            <div className="mt-5 space-y-3">
+              {strategyBuilderTemplates.map((template) => (
+                <div key={template.id} className="rounded-[24px] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-base font-semibold text-white">{template.title}</p>
+                  <p className="mt-2 text-sm leading-7 text-slate-300">{template.summary}</p>
+                  <div className="mt-3 rounded-2xl border border-cyan-300/10 bg-cyan-300/[0.05] px-4 py-3 text-sm leading-7 text-cyan-50">
+                    {template.coachNote}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => createStrategyDraftFromTemplate(template)}
+                    className="focus-visible-ring mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/18 bg-cyan-300/[0.08] px-4 py-2 text-sm text-cyan-50 transition hover:bg-cyan-300/[0.14]"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Load as new blueprint
+                  </button>
+                </div>
+              ))}
+            </div>
+          </aside>
+
           {strategyBuilderSections.map((section, index) => {
             const selectedId = draft.selections[section.id];
 

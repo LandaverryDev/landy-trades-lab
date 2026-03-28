@@ -3,9 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { strategyBuilderSections } from "@/data/strategy-builder";
+import type { StrategyBuilderTemplate } from "@/data/strategy-builder-templates";
 import {
   createDefaultStrategyBuilderWorkspace,
   createStrategyDraftEntry,
+  createStrategyDraftFromTemplate as createStrategyDraftFromTemplateState,
   deleteStrategyDraftEntry,
   getActiveStrategyDraft,
   migrateStrategyBuilderWorkspace,
@@ -97,6 +99,10 @@ export function createStrategyDraft(duplicateActive = false) {
       duplicateActive,
     }),
   );
+}
+
+export function createStrategyDraftFromTemplate(template: StrategyBuilderTemplate) {
+  return updateStoredStrategyBuilderWorkspace((state) => createStrategyDraftFromTemplateState(state, template));
 }
 
 export function setActiveStrategyDraft(draftId: string) {

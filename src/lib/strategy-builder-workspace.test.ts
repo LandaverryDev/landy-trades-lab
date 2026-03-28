@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+import { strategyBuilderTemplates } from "@/data/strategy-builder-templates";
 import {
   createDefaultStrategyBuilderWorkspace,
   createStrategyDraftEntry,
+  createStrategyDraftFromTemplate,
   deleteStrategyDraftEntry,
   getActiveStrategyDraft,
   migrateStrategyBuilderWorkspace,
@@ -53,5 +55,17 @@ describe("strategy builder workspace", () => {
 
     expect(workspace.drafts).toHaveLength(1);
     expect(workspace.activeDraftId).toBe("strategy-2");
+  });
+
+  it("creates a new draft directly from a guided template", () => {
+    const workspace = createStrategyDraftFromTemplate(
+      createDefaultStrategyBuilderWorkspace(),
+      strategyBuilderTemplates[0],
+    );
+    const activeDraft = getActiveStrategyDraft(workspace);
+
+    expect(workspace.drafts).toHaveLength(2);
+    expect(activeDraft.draft.strategyName).toBe("Equity Breakout Retest");
+    expect(activeDraft.draft.selections.guardrails).toBe("state-machine");
   });
 });

@@ -1,3 +1,4 @@
+import type { StrategyBuilderTemplate } from "@/data/strategy-builder-templates";
 import type { StoredStrategyBuilderDraft } from "@/types/trading";
 
 export interface StoredStrategyBuilderDraftEntry {
@@ -150,6 +151,26 @@ export function createStrategyDraftEntry(
     draft: {
       strategyName: duplicateActive ? `${baseDraft.strategyName} Copy` : `Strategy ${workspace.drafts.length + 1}`,
       selections: { ...baseDraft.selections },
+      updatedAt: new Date().toISOString(),
+    },
+  };
+
+  return {
+    activeDraftId: nextEntry.id,
+    drafts: [...workspace.drafts, nextEntry],
+  };
+}
+
+export function createStrategyDraftFromTemplate(
+  workspace: StoredStrategyBuilderWorkspace,
+  template: StrategyBuilderTemplate,
+): StoredStrategyBuilderWorkspace {
+  const nextId = getNextDraftId(workspace);
+  const nextEntry: StoredStrategyBuilderDraftEntry = {
+    id: nextId,
+    draft: {
+      ...template.draft,
+      selections: { ...template.draft.selections },
       updatedAt: new Date().toISOString(),
     },
   };
