@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
 import { getModuleBySlug } from "@/lib/course";
-import { recordQuizCompletion, useLearningProgress } from "@/lib/learning-progress";
+import { describeDueLabel, recordQuizCompletion, useLearningProgress } from "@/lib/learning-progress";
 import type { Quiz } from "@/types/trading";
 
 export function QuizPlayer({ quiz }: { quiz: Quiz }) {
@@ -14,6 +14,7 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [nextReviewLabel, setNextReviewLabel] = useState<string | null>(null);
 
   const learningModule = getModuleBySlug(quiz.moduleSlug);
   const { raw } = useLearningProgress();
@@ -38,7 +39,8 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
   function handleNext() {
     if (currentIndex === quiz.questions.length - 1) {
       const percent = Math.round((correctCount / quiz.questions.length) * 100);
-      recordQuizCompletion(quiz.slug, percent);
+      const nextState = recordQuizCompletion(quiz.slug, percent);
+      setNextReviewLabel(describeDueLabel(nextState.reviewStates[`quiz:${quiz.slug}`]?.dueDate ?? null));
       setCompleted(true);
       return;
     }
@@ -54,6 +56,7 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
     setSubmitted(false);
     setCorrectCount(0);
     setCompleted(false);
+    setNextReviewLabel(null);
   }
 
   if (completed) {
@@ -69,10 +72,11 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
             You cleared the checkpoint for {quiz.title}. The goal is not memorization. The goal is making the market
             logic feel natural under light pressure.
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <SummaryStat label="Correct" value={`${correctCount}/${quiz.questions.length}`} />
             <SummaryStat label="XP Earned" value={`${quiz.xpReward}`} />
             <SummaryStat label="Best Local Score" value={`${nextBest}%`} />
+            <SummaryStat label="Next Review" value={nextReviewLabel ?? "Due soon"} />
           </div>
         </section>
 

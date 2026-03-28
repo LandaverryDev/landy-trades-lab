@@ -15,7 +15,9 @@ import type {
   Achievement,
   DerivedModuleProgress,
   ProgressSnapshot,
+  ReviewKind,
   ReviewQueueItem,
+  StoredReviewState,
   StoredLearningProgress,
 } from "@/types/trading";
 
@@ -31,6 +33,7 @@ export const defaultLearningProgress: StoredLearningProgress = {
   quizBestScores: {},
   drillBestScores: {},
   chartBestScores: {},
+  reviewStates: {},
   streakDays: 0,
   lastActiveDate: null,
 };
@@ -48,6 +51,101 @@ function dayDiff(from: string, to: string) {
   const start = new Date(`${from}T00:00:00`);
   const end = new Date(`${to}T00:00:00`);
   return Math.round((end.getTime() - start.getTime()) / 86_400_000);
+}
+
+function addDays(dateString: string, days: number) {
+  const value = new Date(`${dateString}T00:00:00`);
+  value.setDate(value.getDate() + days);
+
+  const year = value.getFullYear();
+  const month = `${value.getMonth() + 1}`.padStart(2, "0");
+  const day = `${value.getDate()}`.padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function getReviewKey(kind: ReviewKind, slug: string) {
+  return `${kind}:${slug}`;
+}
+
+function getNextIntervalDays(score: number, previous?: StoredReviewState) {
+  if (score < 70) {
+    return 1;
+  }
+
+  if (score < 85) {
+    return 2;
+  }
+
+  if (score < 93) {
+    return Math.min(Math.max(previous?.intervalDays ? previous.intervalDays * 2 : 3, 3), 14);
+  }
+
+  return Math.min(Math.max(previous?.intervalDays ? previous.intervalDays * 2 : 5, 5), 21);
+}
+
+function buildReviewState(
+  currentStates: Record<string, StoredReviewState>,
+  kind: ReviewKind,
+  slug: string,
+  score: number,
+) {
+  const key = getReviewKey(kind, slug);
+  const previous = currentStates[key];
+  const lastReviewedDate = todayString();
+  const intervalDays = getNextIntervalDays(score, previous);
+
+  return {
+    ...currentStates,
+    [key]: {
+      kind,
+      slug,
+      lastScore: score,
+      lastReviewedDate,
+      dueDate: addDays(lastReviewedDate, intervalDays),
+      intervalDays,
+      attempts: (previous?.attempts ?? 0) + 1,
+    },
+  };
+}
+
+export function describeDueLabel(dueDate: string | null) {
+  if (!dueDate) {
+    return "Start now";
+  }
+
+  const today = todayString();
+  const difference = dayDiff(today, dueDate);
+
+  if (difference <= 0) {
+    return difference === 0 ? "Due today" : "Overdue";
+  }
+
+  if (difference === 1) {
+    return "Due tomorrow";
+  }
+
+  return `Due in ${difference} days`;
+}
+
+function describeMasteryLabel(reviewState?: StoredReviewState) {
+  if (!reviewState) {
+    return "First pass";
+  }
+
+  if (reviewState.intervalDays >= 14) {
+    return "Long-term retention";
+  }
+
+  if (reviewState.intervalDays >= 7) {
+    return "Strong recall";
+  }
+
+  if (reviewState.intervalDays >= 3) {
+    return "Building recall";
+  }
+
+  return "Needs tighter repetition";
 }
 
 function applyActivity(state: StoredLearningProgress) {
@@ -99,6 +197,7 @@ export function readStoredLearningProgress(): StoredLearningProgress {
       quizBestScores: parsed.quizBestScores ?? {},
       drillBestScores: parsed.drillBestScores ?? {},
       chartBestScores: parsed.chartBestScores ?? {},
+      reviewStates: parsed.reviewStates ?? {},
     };
   } catch {
     return defaultLearningProgress;
@@ -149,6 +248,7 @@ export function recordQuizCompletion(quizSlug: string, score: number) {
         ...state.quizBestScores,
         [quizSlug]: Math.max(state.quizBestScores[quizSlug] ?? 0, score),
       },
+      reviewStates: buildReviewState(state.reviewStates, "quiz", quizSlug, score),
     }),
   );
 }
@@ -162,6 +262,7 @@ export function recordDrillCompletion(drillSlug: string, score: number) {
         ...state.drillBestScores,
         [drillSlug]: Math.max(state.drillBestScores[drillSlug] ?? 0, score),
       },
+      reviewStates: buildReviewState(state.reviewStates, "drill", drillSlug, score),
     }),
   );
 }
@@ -175,6 +276,7 @@ export function recordChartChallengeCompletion(challengeSlug: string, score: num
         ...state.chartBestScores,
         [challengeSlug]: Math.max(state.chartBestScores[challengeSlug] ?? 0, score),
       },
+      reviewStates: buildReviewState(state.reviewStates, "chart", challengeSlug, score),
     }),
   );
 }
@@ -262,6 +364,7 @@ function buildReviewQueue(
   challengeLookup: Map<string, (typeof chartChallenges)[number]>,
 ) {
   const queue: ReviewQueueItem[] = [];
+  const today = todayString();
 
   modules.forEach((module) => {
     if (!module.unlocked) {
@@ -269,7 +372,8 @@ function buildReviewQueue(
     }
 
     if (module.quizSlug) {
-      const score = state.quizBestScores[module.quizSlug] ?? null;
+      const reviewState = state.reviewStates[getReviewKey("quiz", module.quizSlug)];
+      const score = reviewState?.lastScore ?? state.quizBestScores[module.quizSlug] ?? null;
       const completed = state.completedQuizSlugs.includes(module.quizSlug);
 
       if (!completed) {
@@ -284,6 +388,10 @@ function buildReviewQueue(
           score,
           reason: "Unfinished quiz checkpoint",
           priority: 0,
+          dueDate: null,
+          dueLabel: "Start now",
+          dueState: "new",
+          masteryLabel: "First pass",
         });
       } else if ((score ?? 0) < 80) {
         queue.push({
@@ -295,14 +403,40 @@ function buildReviewQueue(
           title: quizLookup.get(module.quizSlug)?.title ?? "Module Quiz",
           href: `/quiz/${module.quizSlug}`,
           score,
-          reason: `Reinforce quiz score at ${score ?? 0}%`,
+          reason: `Reinforce quiz score at ${score ?? 0}% before spacing it wider`,
           priority: 1,
+          dueDate: reviewState?.dueDate ?? today,
+          dueLabel: describeDueLabel(reviewState?.dueDate ?? today),
+          dueState: "weak",
+          masteryLabel: describeMasteryLabel(reviewState),
         });
+      } else if (reviewState) {
+        const dueGap = dayDiff(today, reviewState.dueDate);
+
+        if (dueGap <= 0 || dueGap <= 2) {
+          queue.push({
+            id: `quiz:${module.quizSlug}`,
+            kind: "quiz",
+            slug: module.quizSlug,
+            moduleSlug: module.slug,
+            moduleTitle: module.title,
+            title: quizLookup.get(module.quizSlug)?.title ?? "Module Quiz",
+            href: `/quiz/${module.quizSlug}`,
+            score,
+            reason: dueGap <= 0 ? "Quiz memory refresh is due now" : "Quiz refresh is coming up soon",
+            priority: dueGap <= 0 ? 2 : 4,
+            dueDate: reviewState.dueDate,
+            dueLabel: describeDueLabel(reviewState.dueDate),
+            dueState: dueGap <= 0 ? "due" : "upcoming",
+            masteryLabel: describeMasteryLabel(reviewState),
+          });
+        }
       }
     }
 
     if (module.drillSlug) {
-      const score = state.drillBestScores[module.drillSlug] ?? null;
+      const reviewState = state.reviewStates[getReviewKey("drill", module.drillSlug)];
+      const score = reviewState?.lastScore ?? state.drillBestScores[module.drillSlug] ?? null;
       const completed = state.completedDrillSlugs.includes(module.drillSlug);
 
       if (!completed) {
@@ -317,6 +451,10 @@ function buildReviewQueue(
           score,
           reason: "Unfinished rapid review loop",
           priority: 0,
+          dueDate: null,
+          dueLabel: "Start now",
+          dueState: "new",
+          masteryLabel: "First pass",
         });
       } else if ((score ?? 0) < 85) {
         queue.push({
@@ -328,14 +466,40 @@ function buildReviewQueue(
           title: drillLookup.get(module.drillSlug)?.title ?? "Rapid Review",
           href: `/drill/${module.drillSlug}`,
           score,
-          reason: `Sharpen drill recall from ${score ?? 0}%`,
+          reason: `Sharpen drill recall from ${score ?? 0}% before moving it wider`,
           priority: 1,
+          dueDate: reviewState?.dueDate ?? today,
+          dueLabel: describeDueLabel(reviewState?.dueDate ?? today),
+          dueState: "weak",
+          masteryLabel: describeMasteryLabel(reviewState),
         });
+      } else if (reviewState) {
+        const dueGap = dayDiff(today, reviewState.dueDate);
+
+        if (dueGap <= 0 || dueGap <= 2) {
+          queue.push({
+            id: `drill:${module.drillSlug}`,
+            kind: "drill",
+            slug: module.drillSlug,
+            moduleSlug: module.slug,
+            moduleTitle: module.title,
+            title: drillLookup.get(module.drillSlug)?.title ?? "Rapid Review",
+            href: `/drill/${module.drillSlug}`,
+            score,
+            reason: dueGap <= 0 ? "Rapid review is due again now" : "Rapid review comes due soon",
+            priority: dueGap <= 0 ? 2 : 4,
+            dueDate: reviewState.dueDate,
+            dueLabel: describeDueLabel(reviewState.dueDate),
+            dueState: dueGap <= 0 ? "due" : "upcoming",
+            masteryLabel: describeMasteryLabel(reviewState),
+          });
+        }
       }
     }
 
     if (module.chartChallengeSlug) {
-      const score = state.chartBestScores[module.chartChallengeSlug] ?? null;
+      const reviewState = state.reviewStates[getReviewKey("chart", module.chartChallengeSlug)];
+      const score = reviewState?.lastScore ?? state.chartBestScores[module.chartChallengeSlug] ?? null;
       const completed = state.completedChartChallengeSlugs.includes(module.chartChallengeSlug);
 
       if (!completed) {
@@ -350,6 +514,10 @@ function buildReviewQueue(
           score,
           reason: "Unfinished chart drill",
           priority: 0,
+          dueDate: null,
+          dueLabel: "Start now",
+          dueState: "new",
+          masteryLabel: "First pass",
         });
       } else if ((score ?? 0) < 80) {
         queue.push({
@@ -361,15 +529,41 @@ function buildReviewQueue(
           title: challengeLookup.get(module.chartChallengeSlug)?.title ?? "Chart Challenge",
           href: `/chart-challenge/${module.chartChallengeSlug}`,
           score,
-          reason: `Improve chart accuracy from ${score ?? 0}%`,
+          reason: `Improve chart accuracy from ${score ?? 0}% before spacing it wider`,
           priority: 1,
+          dueDate: reviewState?.dueDate ?? today,
+          dueLabel: describeDueLabel(reviewState?.dueDate ?? today),
+          dueState: "weak",
+          masteryLabel: describeMasteryLabel(reviewState),
         });
+      } else if (reviewState) {
+        const dueGap = dayDiff(today, reviewState.dueDate);
+
+        if (dueGap <= 0 || dueGap <= 2) {
+          queue.push({
+            id: `chart:${module.chartChallengeSlug}`,
+            kind: "chart",
+            slug: module.chartChallengeSlug,
+            moduleSlug: module.slug,
+            moduleTitle: module.title,
+            title: challengeLookup.get(module.chartChallengeSlug)?.title ?? "Chart Challenge",
+            href: `/chart-challenge/${module.chartChallengeSlug}`,
+            score,
+            reason: dueGap <= 0 ? "Chart read is due for another pass" : "Chart read refresh is coming up soon",
+            priority: dueGap <= 0 ? 2 : 4,
+            dueDate: reviewState.dueDate,
+            dueLabel: describeDueLabel(reviewState.dueDate),
+            dueState: dueGap <= 0 ? "due" : "upcoming",
+            masteryLabel: describeMasteryLabel(reviewState),
+          });
+        }
       }
     }
 
     module.reviewChartChallengeSlugs?.forEach((challengeSlug) => {
       const challenge = challengeLookup.get(challengeSlug);
-      const score = state.chartBestScores[challengeSlug] ?? null;
+      const reviewState = state.reviewStates[getReviewKey("chart", challengeSlug)];
+      const score = reviewState?.lastScore ?? state.chartBestScores[challengeSlug] ?? null;
       const completed = state.completedChartChallengeSlugs.includes(challengeSlug);
 
       if (!completed) {
@@ -384,6 +578,10 @@ function buildReviewQueue(
           score,
           reason: "Unopened review chart pack",
           priority: 1,
+          dueDate: null,
+          dueLabel: "Start now",
+          dueState: "new",
+          masteryLabel: "First pass",
         });
       } else if ((score ?? 0) < 82) {
         queue.push({
@@ -395,9 +593,34 @@ function buildReviewQueue(
           title: challenge?.title ?? "Review Chart Pack",
           href: `/chart-challenge/${challengeSlug}`,
           score,
-          reason: `Tighten review chart accuracy from ${score ?? 0}%`,
+          reason: `Tighten review chart accuracy from ${score ?? 0}% before widening the interval`,
           priority: 2,
+          dueDate: reviewState?.dueDate ?? today,
+          dueLabel: describeDueLabel(reviewState?.dueDate ?? today),
+          dueState: "weak",
+          masteryLabel: describeMasteryLabel(reviewState),
         });
+      } else if (reviewState) {
+        const dueGap = dayDiff(today, reviewState.dueDate);
+
+        if (dueGap <= 0 || dueGap <= 2) {
+          queue.push({
+            id: `chart-review:${challengeSlug}`,
+            kind: "chart",
+            slug: challengeSlug,
+            moduleSlug: module.slug,
+            moduleTitle: module.title,
+            title: challenge?.title ?? "Review Chart Pack",
+            href: `/chart-challenge/${challengeSlug}`,
+            score,
+            reason: dueGap <= 0 ? "Optional chart pack is due for refresh" : "Optional chart pack comes due soon",
+            priority: dueGap <= 0 ? 3 : 5,
+            dueDate: reviewState.dueDate,
+            dueLabel: describeDueLabel(reviewState.dueDate),
+            dueState: dueGap <= 0 ? "due" : "upcoming",
+            masteryLabel: describeMasteryLabel(reviewState),
+          });
+        }
       }
     });
   });
@@ -405,6 +628,13 @@ function buildReviewQueue(
   return queue.sort((left, right) => {
     if (left.priority !== right.priority) {
       return left.priority - right.priority;
+    }
+
+    const leftDueWeight = left.dueDate ? dayDiff(today, left.dueDate) : -999;
+    const rightDueWeight = right.dueDate ? dayDiff(today, right.dueDate) : -999;
+
+    if (leftDueWeight !== rightDueWeight) {
+      return leftDueWeight - rightDueWeight;
     }
 
     if ((left.score ?? -1) !== (right.score ?? -1)) {
@@ -521,6 +751,8 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
   const drillAccuracy = average(Object.values(state.drillBestScores));
   const chartAccuracy = average(Object.values(state.chartBestScores));
   const reviewQueue = buildReviewQueue(modules, state, quizLookup, drillLookup, challengeLookup);
+  const reviewDueCount = reviewQueue.filter((item) => item.dueState !== "upcoming").length;
+  const upcomingReviewCount = reviewQueue.filter((item) => item.dueState === "upcoming").length;
   const totalContentItems = modules.reduce((sum, module) => sum + module.totalItems, 0);
   const totalCompletedItems = modules.reduce((sum, module) => sum + module.completedItems, 0);
 
@@ -538,6 +770,8 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
     chartAccuracy,
     overallProgressPercent:
       totalContentItems === 0 ? 0 : Math.round((totalCompletedItems / totalContentItems) * 100),
+    reviewDueCount,
+    upcomingReviewCount,
     achievements: buildAchievements(state),
   };
 

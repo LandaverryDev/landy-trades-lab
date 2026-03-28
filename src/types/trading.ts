@@ -1,5 +1,7 @@
 export type TierSlug = "beginner" | "intermediate" | "advanced";
 export type ModuleStatus = "active" | "locked" | "completed";
+export type ReviewKind = "quiz" | "drill" | "chart";
+export type ReviewDueState = "new" | "weak" | "due" | "upcoming";
 export type QuestionType =
   | "multiple-choice"
   | "true-false"
@@ -237,9 +239,19 @@ export interface Achievement {
   detail: string;
 }
 
+export interface StoredReviewState {
+  kind: ReviewKind;
+  slug: string;
+  lastScore: number;
+  lastReviewedDate: string;
+  dueDate: string;
+  intervalDays: number;
+  attempts: number;
+}
+
 export interface ReviewQueueItem {
   id: string;
-  kind: "quiz" | "drill" | "chart";
+  kind: ReviewKind;
   slug: string;
   moduleSlug: string;
   moduleTitle: string;
@@ -248,6 +260,10 @@ export interface ReviewQueueItem {
   score: number | null;
   reason: string;
   priority: number;
+  dueDate: string | null;
+  dueLabel: string;
+  dueState: ReviewDueState;
+  masteryLabel: string;
 }
 
 export interface ProgressSnapshot {
@@ -263,6 +279,8 @@ export interface ProgressSnapshot {
   drillAccuracy: number;
   chartAccuracy: number;
   overallProgressPercent: number;
+  reviewDueCount: number;
+  upcomingReviewCount: number;
   achievements: Achievement[];
 }
 
@@ -275,6 +293,7 @@ export interface StoredLearningProgress {
   quizBestScores: Record<string, number>;
   drillBestScores: Record<string, number>;
   chartBestScores: Record<string, number>;
+  reviewStates: Record<string, StoredReviewState>;
   streakDays: number;
   lastActiveDate: string | null;
 }

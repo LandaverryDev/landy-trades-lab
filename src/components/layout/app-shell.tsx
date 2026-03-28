@@ -17,7 +17,7 @@ const navItems = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const { activeModule, progress, reviewQueue, upcomingLesson } = useLearningProgress();
+  const { activeModule, progress, upcomingLesson } = useLearningProgress();
   const resumeHref = upcomingLesson
     ? `/lesson/${upcomingLesson.slug}`
     : activeModule?.drillSlug
@@ -25,7 +25,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       : activeModule
         ? `/module/${activeModule.slug}`
         : "/learn";
-  const reviewCount = reviewQueue.length;
+  const reviewCount = progress.reviewDueCount;
 
   return (
     <div className="app-canvas relative min-h-screen overflow-hidden">

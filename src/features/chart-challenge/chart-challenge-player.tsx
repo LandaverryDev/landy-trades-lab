@@ -6,7 +6,11 @@ import { ArrowRight, RotateCcw } from "lucide-react";
 
 import { CandlestickChart } from "@/components/ui/candlestick-chart";
 import { getModuleBySlug } from "@/lib/course";
-import { recordChartChallengeCompletion, useLearningProgress } from "@/lib/learning-progress";
+import {
+  describeDueLabel,
+  recordChartChallengeCompletion,
+  useLearningProgress,
+} from "@/lib/learning-progress";
 import type { ChartChallenge } from "@/types/trading";
 
 export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge }) {
@@ -26,6 +30,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [nextReviewLabel, setNextReviewLabel] = useState<string | null>(null);
 
   const question = challenge.questions[currentIndex];
   const learningModule = getModuleBySlug(challenge.moduleSlug);
@@ -142,7 +147,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   function handleNext() {
     if (currentIndex === challenge.questions.length - 1) {
       const percent = Math.round((correctCount / challenge.questions.length) * 100);
-      recordChartChallengeCompletion(challenge.slug, percent);
+      const nextState = recordChartChallengeCompletion(challenge.slug, percent);
+      setNextReviewLabel(describeDueLabel(nextState.reviewStates[`chart:${challenge.slug}`]?.dueDate ?? null));
       setCompleted(true);
       return;
     }
@@ -174,6 +180,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setSubmitted(false);
     setCorrectCount(0);
     setCompleted(false);
+    setNextReviewLabel(null);
   }
 
   if (completed) {
@@ -189,10 +196,11 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
             You completed a chart drill that mixed directional reading, direct level placement, zone marking,
             candle-range selection, and setup-quality decisions on the chart itself.
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <SummaryStat label="Correct" value={`${correctCount}/${challenge.questions.length}`} />
             <SummaryStat label="XP Earned" value={`${challenge.xpReward}`} />
             <SummaryStat label="Best Local Score" value={`${nextBest}%`} />
+            <SummaryStat label="Next Review" value={nextReviewLabel ?? "Due soon"} />
           </div>
         </section>
 

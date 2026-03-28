@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ArrowRight, RotateCcw, Zap } from "lucide-react";
 
 import { getModuleBySlug } from "@/lib/course";
-import { recordDrillCompletion, useLearningProgress } from "@/lib/learning-progress";
+import { describeDueLabel, recordDrillCompletion, useLearningProgress } from "@/lib/learning-progress";
 import type { DrillSet } from "@/types/trading";
 
 function buildQuestionOrder(length: number) {
@@ -26,6 +26,7 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [nextReviewLabel, setNextReviewLabel] = useState<string | null>(null);
 
   const learningModule = getModuleBySlug(drill.moduleSlug);
   const { raw } = useLearningProgress();
@@ -50,7 +51,8 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
   function handleNext() {
     if (currentIndex === drill.questions.length - 1) {
       const percent = Math.round((correctCount / drill.questions.length) * 100);
-      recordDrillCompletion(drill.slug, percent);
+      const nextState = recordDrillCompletion(drill.slug, percent);
+      setNextReviewLabel(describeDueLabel(nextState.reviewStates[`drill:${drill.slug}`]?.dueDate ?? null));
       setCompleted(true);
       return;
     }
@@ -67,6 +69,7 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
     setSubmitted(false);
     setCorrectCount(0);
     setCompleted(false);
+    setNextReviewLabel(null);
   }
 
   if (completed) {
@@ -82,10 +85,11 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
             You finished {drill.title}. This loop is built for repetition, so replaying it later should feel sharper,
             faster, and more automatic.
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <SummaryStat label="Correct" value={`${correctCount}/${drill.questions.length}`} />
             <SummaryStat label="XP Earned" value={`${drill.xpReward}`} />
             <SummaryStat label="Best Local Score" value={`${nextBest}%`} />
+            <SummaryStat label="Next Review" value={nextReviewLabel ?? "Due soon"} />
           </div>
         </section>
 

@@ -30,6 +30,7 @@ export function ProgressView() {
             <MetricCard label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
             <MetricCard label="Drill Accuracy" value={`${progress.drillAccuracy}%`} />
             <MetricCard label="Chart Accuracy" value={`${progress.chartAccuracy}%`} />
+            <MetricCard label="Due Reviews" value={`${progress.reviewDueCount}`} />
           </div>
         </div>
       </section>
@@ -39,8 +40,9 @@ export function ProgressView() {
           <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Rank Progression</p>
           <h2 className="mt-3 text-3xl font-semibold text-white">{progress.title}</h2>
           <p className="mt-2 text-sm leading-6 text-slate-300">
-            You are currently in the beginner tier, building the chart language and discipline needed for future playbook
-            and automation modules.
+            {progress.reviewDueCount > 0
+              ? `${progress.reviewDueCount} items are due for review now, with ${progress.upcomingReviewCount} more coming up soon.`
+              : `No reviews are due right now. ${progress.upcomingReviewCount} upcoming reps are already scheduled off your latest scores.`}
           </p>
           <div className="mt-6 space-y-5">
             <ProgressBar
@@ -73,10 +75,18 @@ export function ProgressView() {
                       className="block rounded-2xl border border-white/8 bg-white/[0.03] p-3 transition hover:bg-white/[0.05]"
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm font-semibold text-white">
-                          {item.moduleTitle} · {item.title}
-                        </p>
-                        <span className="text-xs text-slate-400">{item.score !== null ? `${item.score}%` : "New"}</span>
+                        <div>
+                          <p className="text-sm font-semibold text-white">
+                            {item.moduleTitle} · {item.title}
+                          </p>
+                          <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-cyan-200/70">
+                            {item.masteryLabel}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs text-slate-400">{item.score !== null ? `${item.score}%` : "New"}</span>
+                          <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-slate-500">{item.dueLabel}</p>
+                        </div>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-slate-300">{item.reason}</p>
                     </Link>

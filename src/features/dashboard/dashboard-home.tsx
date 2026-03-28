@@ -95,11 +95,13 @@ export function DashboardHome() {
 
           <div className="course-card-raised rounded-[28px] p-5">
             <p className="eyebrow-label">Progress Snapshot</p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               <MetricCard label="Total XP" value={`${progress.totalXp}`} />
               <MetricCard label="Streak" value={`${progress.streakDays}d`} />
               <MetricCard label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
               <MetricCard label="Drill Accuracy" value={`${progress.drillAccuracy}%`} />
+              <MetricCard label="Chart Accuracy" value={`${progress.chartAccuracy}%`} />
+              <MetricCard label="Due Now" value={`${progress.reviewDueCount}`} />
             </div>
             <div className="mt-5">
               <ProgressBar
@@ -110,8 +112,9 @@ export function DashboardHome() {
             <div className="course-inset mt-5 rounded-[24px] p-4">
               <p className="text-sm font-semibold text-white">{progress.title}</p>
               <p className="mt-2 text-sm leading-7 text-slate-300">
-                Keep moving through the path in order. Lessons, drills, charts, and simulators all feed the same growth
-                loop.
+                {progress.reviewDueCount > 0
+                  ? `${progress.reviewDueCount} review items are due now. Clear the weakest reps first, then continue forward.`
+                  : "No spaced reviews are due right now. Keep moving forward and the next reps will surface automatically."}
               </p>
             </div>
           </div>
@@ -226,12 +229,16 @@ function ReviewQueueCard({
                 <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-300">
                   {item.kind}
                 </span>
-                <span className="text-xs text-slate-400">{item.score !== null ? `${item.score}%` : "New"}</span>
+                <div className="text-right">
+                  <p className="text-xs text-slate-300">{item.score !== null ? `${item.score}%` : "New"}</p>
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-slate-500">{item.dueLabel}</p>
+                </div>
               </div>
               <p className="mt-3 text-base font-semibold text-white">
                 {item.moduleTitle} · {item.title}
               </p>
               <p className="mt-2 text-sm leading-7 text-slate-300">{item.reason}</p>
+              <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-cyan-200/70">{item.masteryLabel}</p>
             </Link>
           ))}
         </div>
