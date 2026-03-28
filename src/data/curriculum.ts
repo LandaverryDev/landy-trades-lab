@@ -2399,6 +2399,18 @@ export const chartChallenges: ChartChallenge[] = [
           },
         ],
       },
+      {
+        id: "breakout-leg-read",
+        type: "candle-range",
+        prompt: "Mark the breakout impulse leg before the retest begins.",
+        instruction: "Click the first breakout candle, then the last candle before the pullback starts.",
+        explanation:
+          "The breakout impulse leg is the initial escape sequence that clears the range and extends before price pulls back to retest. On this chart, that leg runs through the two strong breakout candles before the retracement starts.",
+        coaching: "Separating the impulse leg from the retest helps you reason about escape, acceptance, and where late chasing begins.",
+        correctCandleStart: 5,
+        correctCandleEnd: 6,
+        selectionLabel: "Breakout leg",
+      },
     ],
     coachDebrief: [
       "A clean breakout usually gives you two jobs: judge acceptance, then judge the retest.",

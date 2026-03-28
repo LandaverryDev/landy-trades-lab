@@ -16,6 +16,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [zoneDraftPrice, setZoneDraftPrice] = useState<number | null>(null);
   const [selectedZone, setSelectedZone] = useState<{ low: number; high: number } | null>(null);
+  const [candleRangeDraftIndex, setCandleRangeDraftIndex] = useState<number | null>(null);
+  const [selectedCandleRange, setSelectedCandleRange] = useState<{ start: number; end: number } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -39,13 +41,21 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           ? selectedPrice !== null &&
             question.correctPrice !== undefined &&
             Math.abs(selectedPrice - question.correctPrice) <= (question.tolerance ?? 0.25)
-          : selectedZone !== null &&
-            question.correctZoneLow !== undefined &&
-            question.correctZoneHigh !== undefined &&
-            Math.abs(selectedZone.low - Math.min(question.correctZoneLow, question.correctZoneHigh)) <=
-              (question.tolerance ?? 0.25) &&
-            Math.abs(selectedZone.high - Math.max(question.correctZoneLow, question.correctZoneHigh)) <=
-              (question.tolerance ?? 0.25);
+          : question.type === "price-zone"
+            ? selectedZone !== null &&
+              question.correctZoneLow !== undefined &&
+              question.correctZoneHigh !== undefined &&
+              Math.abs(selectedZone.low - Math.min(question.correctZoneLow, question.correctZoneHigh)) <=
+                (question.tolerance ?? 0.25) &&
+              Math.abs(selectedZone.high - Math.max(question.correctZoneLow, question.correctZoneHigh)) <=
+                (question.tolerance ?? 0.25)
+            : selectedCandleRange !== null &&
+              question.correctCandleStart !== undefined &&
+              question.correctCandleEnd !== undefined &&
+              Math.min(selectedCandleRange.start, selectedCandleRange.end) ===
+                Math.min(question.correctCandleStart, question.correctCandleEnd) &&
+              Math.max(selectedCandleRange.start, selectedCandleRange.end) ===
+                Math.max(question.correctCandleStart, question.correctCandleEnd);
 
   function handleSubmit() {
     if (submitted) {
@@ -65,6 +75,10 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     }
 
     if (question.type === "price-zone" && !selectedZone) {
+      return;
+    }
+
+    if (question.type === "candle-range" && !selectedCandleRange) {
       return;
     }
 
@@ -89,6 +103,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setSelectedPrice(null);
     setZoneDraftPrice(null);
     setSelectedZone(null);
+    setCandleRangeDraftIndex(null);
+    setSelectedCandleRange(null);
     setSubmitted(false);
   }
 
@@ -99,6 +115,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setSelectedPrice(null);
     setZoneDraftPrice(null);
     setSelectedZone(null);
+    setCandleRangeDraftIndex(null);
+    setSelectedCandleRange(null);
     setSubmitted(false);
     setCorrectCount(0);
     setCompleted(false);
@@ -114,8 +132,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           <p className="text-sm uppercase tracking-[0.28em] text-fuchsia-300">Chart Challenge Complete</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{percent}% chart accuracy</h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">
-            You completed a chart drill that mixed directional reading, direct level placement, zone marking, and
-            setup-quality decisions on the chart itself.
+            You completed a chart drill that mixed directional reading, direct level placement, zone marking,
+            candle-range selection, and setup-quality decisions on the chart itself.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             <SummaryStat label="Correct" value={`${correctCount}/${challenge.questions.length}`} />
@@ -214,6 +232,24 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
             onZoneDraftSelect={question.type === "price-zone" && !submitted ? setZoneDraftPrice : undefined}
             onZoneSelect={question.type === "price-zone" && !submitted ? setSelectedZone : undefined}
             zoneSelectionLabel={question.selectionLabel}
+            selectedCandleRange={question.type === "candle-range" ? selectedCandleRange : null}
+            correctCandleRange={
+              question.type === "candle-range" &&
+              question.correctCandleStart !== undefined &&
+              question.correctCandleEnd !== undefined
+                ? {
+                    start: question.correctCandleStart,
+                    end: question.correctCandleEnd,
+                  }
+                : null
+            }
+            candleRangeDraftIndex={question.type === "candle-range" ? candleRangeDraftIndex : null}
+            revealCandleRangeAnswer={question.type === "candle-range" ? submitted : false}
+            onCandleRangeDraftSelect={
+              question.type === "candle-range" && !submitted ? setCandleRangeDraftIndex : undefined
+            }
+            onCandleRangeSelect={question.type === "candle-range" && !submitted ? setSelectedCandleRange : undefined}
+            candleRangeSelectionLabel={question.selectionLabel}
           />
 
           {question.type === "multiple-choice" ? (
@@ -288,6 +324,34 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
               ) : null}
             </div>
           ) : null}
+
+          {question.type === "candle-range" ? (
+            <div className="rounded-[24px] border border-emerald-400/12 bg-emerald-400/[0.05] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-emerald-100/70">Leg Markup</p>
+              <p className="mt-3 text-sm leading-6 text-slate-200">
+                Click the first candle in the move, then click the last candle to mark the full leg.
+              </p>
+              <p className="mt-3 text-sm text-slate-300">
+                {selectedCandleRange
+                  ? `${question.selectionLabel ?? "Selected candle range"}: ${Math.min(selectedCandleRange.start, selectedCandleRange.end) + 1}-${Math.max(selectedCandleRange.start, selectedCandleRange.end) + 1}`
+                  : candleRangeDraftIndex !== null
+                    ? `First candle set at ${candleRangeDraftIndex + 1}. Click again to complete the range.`
+                    : "No candle range marked yet."}
+              </p>
+              {(selectedCandleRange || candleRangeDraftIndex !== null) && !submitted ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCandleRangeDraftIndex(null);
+                    setSelectedCandleRange(null);
+                  }}
+                  className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/[0.05]"
+                >
+                  Reset range
+                </button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-5">
@@ -301,7 +365,9 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                     ? "Click a highlighted zone on the chart, then reveal the answer."
                     : question.type === "price-line"
                       ? "Place a line directly on the chart where you believe the key level belongs."
-                      : "Mark the full support or resistance band by placing both edges directly on the chart."}
+                      : question.type === "price-zone"
+                        ? "Mark the full support or resistance band by placing both edges directly on the chart."
+                        : "Mark the full candle range of the breakout leg or swing move directly on the chart."}
               </p>
             ) : (
               <>
@@ -329,7 +395,9 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                       ? !selectedHotspotId
                       : question.type === "price-line"
                         ? selectedPrice === null
-                        : selectedZone === null
+                        : question.type === "price-zone"
+                          ? selectedZone === null
+                          : selectedCandleRange === null
                 }
                 onClick={handleSubmit}
                 className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"

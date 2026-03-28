@@ -9,6 +9,11 @@ interface PriceZoneSelection {
   high: number;
 }
 
+interface CandleRangeSelection {
+  start: number;
+  end: number;
+}
+
 interface CandlestickChartProps {
   candles: Candle[];
   hotspots?: ChartHotspot[];
@@ -29,6 +34,13 @@ interface CandlestickChartProps {
   onZoneDraftSelect?: (price: number) => void;
   onZoneSelect?: (zone: PriceZoneSelection) => void;
   zoneSelectionLabel?: string;
+  selectedCandleRange?: CandleRangeSelection | null;
+  correctCandleRange?: CandleRangeSelection | null;
+  candleRangeDraftIndex?: number | null;
+  revealCandleRangeAnswer?: boolean;
+  onCandleRangeDraftSelect?: (index: number) => void;
+  onCandleRangeSelect?: (range: CandleRangeSelection) => void;
+  candleRangeSelectionLabel?: string;
   height?: number;
 }
 
@@ -52,9 +64,17 @@ export function CandlestickChart({
   onZoneDraftSelect,
   onZoneSelect,
   zoneSelectionLabel = "Selected zone",
+  selectedCandleRange,
+  correctCandleRange,
+  candleRangeDraftIndex,
+  revealCandleRangeAnswer = false,
+  onCandleRangeDraftSelect,
+  onCandleRangeSelect,
+  candleRangeSelectionLabel = "Selected candle range",
   height = 360,
 }: CandlestickChartProps) {
   const [hoverPrice, setHoverPrice] = useState<number | null>(null);
+  const [hoverCandleIndex, setHoverCandleIndex] = useState<number | null>(null);
   const width = 920;
   const paddingX = 48;
   const paddingY = 30;
@@ -72,11 +92,14 @@ export function CandlestickChart({
     maxPrice - ((y - paddingY) / (height - paddingY * 2)) * priceRange;
 
   const candleToX = (index: number) => paddingX + index * candleSlot + candleSlot / 2;
+  const xToCandleIndex = (x: number) =>
+    clamp(Math.floor((x - paddingX) / candleSlot), 0, candles.length - 1);
   const plotWidth = width - paddingX * 2;
   const plotHeight = height - paddingY * 2;
 
   const guidePrices = Array.from({ length: 5 }, (_, index) => minPrice + (priceRange / 4) * index);
   const zoneSelectionActive = Boolean(onZoneDraftSelect || onZoneSelect);
+  const candleRangeSelectionActive = Boolean(onCandleRangeDraftSelect || onCandleRangeSelect);
   const selectedPriceCorrect =
     selectedPrice !== null &&
     selectedPrice !== undefined &&
@@ -115,6 +138,30 @@ export function CandlestickChart({
     normalizedCorrectZone &&
     Math.abs(normalizedSelectedZone.low - normalizedCorrectZone.low) <= zoneTolerance &&
     Math.abs(normalizedSelectedZone.high - normalizedCorrectZone.high) <= zoneTolerance;
+  const normalizedSelectedCandleRange = selectedCandleRange
+    ? {
+        start: Math.min(selectedCandleRange.start, selectedCandleRange.end),
+        end: Math.max(selectedCandleRange.start, selectedCandleRange.end),
+      }
+    : null;
+  const normalizedCorrectCandleRange = correctCandleRange
+    ? {
+        start: Math.min(correctCandleRange.start, correctCandleRange.end),
+        end: Math.max(correctCandleRange.start, correctCandleRange.end),
+      }
+    : null;
+  const draftCandleRange =
+    candleRangeDraftIndex !== null && candleRangeDraftIndex !== undefined && hoverCandleIndex !== null
+      ? {
+          start: Math.min(candleRangeDraftIndex, hoverCandleIndex),
+          end: Math.max(candleRangeDraftIndex, hoverCandleIndex),
+        }
+      : null;
+  const selectedCandleRangeCorrect =
+    normalizedSelectedCandleRange &&
+    normalizedCorrectCandleRange &&
+    normalizedSelectedCandleRange.start === normalizedCorrectCandleRange.start &&
+    normalizedSelectedCandleRange.end === normalizedCorrectCandleRange.end;
 
   function clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
@@ -132,21 +179,30 @@ export function CandlestickChart({
   }
 
   function handlePricePointerMove(event: React.PointerEvent<SVGRectElement>) {
-    if (!onPriceSelect && !zoneSelectionActive) {
+    if (!onPriceSelect && !zoneSelectionActive && !candleRangeSelectionActive) {
       return;
     }
 
     const point = resolveSvgPoint(event);
-    setHoverPrice(Number(yToPrice(point.y).toFixed(2)));
+
+    if (onPriceSelect || zoneSelectionActive) {
+      setHoverPrice(Number(yToPrice(point.y).toFixed(2)));
+    }
+
+    if (candleRangeSelectionActive) {
+      setHoverCandleIndex(xToCandleIndex(point.x));
+    }
   }
 
   function handlePricePointerLeave() {
     setHoverPrice(null);
+    setHoverCandleIndex(null);
   }
 
   function handlePriceSelect(event: React.PointerEvent<SVGRectElement>) {
     const point = resolveSvgPoint(event);
     const price = Number(yToPrice(point.y).toFixed(2));
+    const candleIndex = xToCandleIndex(point.x);
 
     if (onPriceSelect) {
       onPriceSelect(price);
@@ -161,7 +217,20 @@ export function CandlestickChart({
       return;
     }
 
-    onZoneDraftSelect?.(price);
+    if (zoneSelectionActive) {
+      onZoneDraftSelect?.(price);
+      return;
+    }
+
+    if (onCandleRangeSelect && candleRangeDraftIndex !== null && candleRangeDraftIndex !== undefined) {
+      onCandleRangeSelect({
+        start: Math.min(candleRangeDraftIndex, candleIndex),
+        end: Math.max(candleRangeDraftIndex, candleIndex),
+      });
+      return;
+    }
+
+    onCandleRangeDraftSelect?.(candleIndex);
   }
 
   return (
@@ -209,7 +278,7 @@ export function CandlestickChart({
           );
         })}
 
-        {onPriceSelect || zoneSelectionActive ? (
+        {onPriceSelect || zoneSelectionActive || candleRangeSelectionActive ? (
           <rect
             x={paddingX}
             y={paddingY}
@@ -221,6 +290,19 @@ export function CandlestickChart({
             onPointerMove={handlePricePointerMove}
             onPointerLeave={handlePricePointerLeave}
             onClick={handlePriceSelect}
+          />
+        ) : null}
+
+        {revealCandleRangeAnswer && normalizedCorrectCandleRange ? (
+          <rect
+            x={candleToX(normalizedCorrectCandleRange.start) - candleSlot / 2}
+            y={paddingY}
+            width={(normalizedCorrectCandleRange.end - normalizedCorrectCandleRange.start + 1) * candleSlot}
+            height={plotHeight}
+            fill="rgba(34,197,94,0.08)"
+            stroke="rgba(34,197,94,0.38)"
+            strokeDasharray="10 8"
+            rx="18"
           />
         ) : null}
 
@@ -245,6 +327,19 @@ export function CandlestickChart({
             height={Math.max(priceToY(draftZone.low) - priceToY(draftZone.high), 8)}
             fill="rgba(56,189,248,0.08)"
             stroke="rgba(56,189,248,0.45)"
+            strokeDasharray="8 8"
+            rx="18"
+          />
+        ) : null}
+
+        {draftCandleRange ? (
+          <rect
+            x={candleToX(draftCandleRange.start) - candleSlot / 2}
+            y={paddingY}
+            width={(draftCandleRange.end - draftCandleRange.start + 1) * candleSlot}
+            height={plotHeight}
+            fill="rgba(56,189,248,0.08)"
+            stroke="rgba(56,189,248,0.4)"
             strokeDasharray="8 8"
             rx="18"
           />
@@ -317,6 +412,29 @@ export function CandlestickChart({
               fontSize="14"
             >
               Hover {hoverPrice.toFixed(2)}
+            </text>
+          </g>
+        ) : null}
+
+        {hoverCandleIndex !== null && candleRangeSelectionActive ? (
+          <g pointerEvents="none">
+            <rect
+              x={candleToX(hoverCandleIndex) - candleSlot / 2}
+              y={paddingY}
+              width={candleSlot}
+              height={plotHeight}
+              fill="rgba(56,189,248,0.06)"
+              stroke="rgba(56,189,248,0.24)"
+              rx="14"
+            />
+            <text
+              x={candleToX(hoverCandleIndex)}
+              y={paddingY - 6}
+              textAnchor="middle"
+              fill="rgba(125,211,252,0.9)"
+              fontSize="14"
+            >
+              Candle {hoverCandleIndex + 1}
             </text>
           </g>
         ) : null}
@@ -451,6 +569,48 @@ export function CandlestickChart({
           </g>
         ) : null}
 
+        {normalizedSelectedCandleRange ? (
+          <g pointerEvents="none">
+            <rect
+              x={candleToX(normalizedSelectedCandleRange.start) - candleSlot / 2}
+              y={paddingY}
+              width={(normalizedSelectedCandleRange.end - normalizedSelectedCandleRange.start + 1) * candleSlot}
+              height={plotHeight}
+              fill={
+                revealCandleRangeAnswer
+                  ? selectedCandleRangeCorrect
+                    ? "rgba(34,197,94,0.1)"
+                    : "rgba(251,113,133,0.1)"
+                  : "rgba(56,189,248,0.1)"
+              }
+              stroke={
+                revealCandleRangeAnswer
+                  ? selectedCandleRangeCorrect
+                    ? "rgba(34,197,94,0.95)"
+                    : "rgba(251,113,133,0.95)"
+                  : "rgba(56,189,248,0.95)"
+              }
+              strokeWidth="2"
+              rx="18"
+            />
+            <text
+              x={candleToX(normalizedSelectedCandleRange.start)}
+              y={height - 8}
+              fill={
+                revealCandleRangeAnswer
+                  ? selectedCandleRangeCorrect
+                    ? "rgba(187,247,208,0.95)"
+                    : "rgba(254,205,211,0.95)"
+                  : "rgba(186,230,253,0.95)"
+              }
+              fontSize="14"
+              fontWeight="600"
+            >
+              {candleRangeSelectionLabel} {normalizedSelectedCandleRange.start + 1}-{normalizedSelectedCandleRange.end + 1}
+            </text>
+          </g>
+        ) : null}
+
         {revealZoneAnswer && normalizedCorrectZone ? (
           <text
             x={width - paddingX - 8}
@@ -461,6 +621,19 @@ export function CandlestickChart({
             fontWeight="600"
           >
             Answer zone {normalizedCorrectZone.low.toFixed(2)} - {normalizedCorrectZone.high.toFixed(2)}
+          </text>
+        ) : null}
+
+        {revealCandleRangeAnswer && normalizedCorrectCandleRange ? (
+          <text
+            x={candleToX(normalizedCorrectCandleRange.end)}
+            y={paddingY - 6}
+            textAnchor="end"
+            fill="rgba(187,247,208,0.95)"
+            fontSize="14"
+            fontWeight="600"
+          >
+            Answer candles {normalizedCorrectCandleRange.start + 1}-{normalizedCorrectCandleRange.end + 1}
           </text>
         ) : null}
 
