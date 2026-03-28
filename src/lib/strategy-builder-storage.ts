@@ -3,46 +3,44 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { strategyBuilderSections } from "@/data/strategy-builder";
-import type { StoredStrategyBuilderDraft, StrategyBuilderOption } from "@/types/trading";
+import {
+  createDefaultStrategyBuilderWorkspace,
+  createStrategyDraftEntry,
+  deleteStrategyDraftEntry,
+  getActiveStrategyDraft,
+  migrateStrategyBuilderWorkspace,
+  setActiveStrategyDraftId,
+  updateActiveStrategyDraft,
+  type StoredStrategyBuilderWorkspace,
+} from "@/lib/strategy-builder-workspace";
+import type { StrategyBuilderOption } from "@/types/trading";
 
 const STORAGE_KEY = "landy-trades-lab:strategy-builder";
 const CHANGE_EVENT = "landy-trades-lab:strategy-builder-change";
-
-export const defaultStrategyBuilderDraft: StoredStrategyBuilderDraft = {
-  strategyName: "My First System",
-  selections: {},
-  updatedAt: null,
-};
 
 function nowString() {
   return new Date().toISOString();
 }
 
-export function readStoredStrategyBuilderDraft(): StoredStrategyBuilderDraft {
+export function readStoredStrategyBuilderWorkspace(): StoredStrategyBuilderWorkspace {
   if (typeof window === "undefined") {
-    return defaultStrategyBuilderDraft;
+    return createDefaultStrategyBuilderWorkspace();
   }
 
   const rawValue = window.localStorage.getItem(STORAGE_KEY);
 
   if (!rawValue) {
-    return defaultStrategyBuilderDraft;
+    return createDefaultStrategyBuilderWorkspace();
   }
 
   try {
-    const parsed = JSON.parse(rawValue) as Partial<StoredStrategyBuilderDraft>;
-
-    return {
-      ...defaultStrategyBuilderDraft,
-      ...parsed,
-      selections: parsed.selections ?? {},
-    };
+    return migrateStrategyBuilderWorkspace(JSON.parse(rawValue));
   } catch {
-    return defaultStrategyBuilderDraft;
+    return createDefaultStrategyBuilderWorkspace();
   }
 }
 
-export function writeStoredStrategyBuilderDraft(nextState: StoredStrategyBuilderDraft) {
+export function writeStoredStrategyBuilderWorkspace(nextState: StoredStrategyBuilderWorkspace) {
   if (typeof window === "undefined") {
     return;
   }
@@ -51,64 +49,84 @@ export function writeStoredStrategyBuilderDraft(nextState: StoredStrategyBuilder
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
-export function resetStoredStrategyBuilderDraft() {
-  writeStoredStrategyBuilderDraft(defaultStrategyBuilderDraft);
-}
-
-export function updateStoredStrategyBuilderDraft(
-  updater: (state: StoredStrategyBuilderDraft) => StoredStrategyBuilderDraft,
+export function updateStoredStrategyBuilderWorkspace(
+  updater: (state: StoredStrategyBuilderWorkspace) => StoredStrategyBuilderWorkspace,
 ) {
-  const current = readStoredStrategyBuilderDraft();
+  const current = readStoredStrategyBuilderWorkspace();
   const next = updater(current);
-  writeStoredStrategyBuilderDraft(next);
+  writeStoredStrategyBuilderWorkspace(next);
   return next;
 }
 
 export function setStrategyName(strategyName: string) {
-  return updateStoredStrategyBuilderDraft((state) => ({
-    ...state,
-    strategyName,
-    updatedAt: nowString(),
-  }));
+  return updateStoredStrategyBuilderWorkspace((state) =>
+    updateActiveStrategyDraft(state, (draft) => ({
+      ...draft,
+      strategyName,
+      updatedAt: nowString(),
+    })),
+  );
 }
 
 export function setStrategySelection(sectionId: string, optionId: string) {
-  return updateStoredStrategyBuilderDraft((state) => ({
-    ...state,
-    selections: {
-      ...state.selections,
-      [sectionId]: optionId,
-    },
-    updatedAt: nowString(),
-  }));
+  return updateStoredStrategyBuilderWorkspace((state) =>
+    updateActiveStrategyDraft(state, (draft) => ({
+      ...draft,
+      selections: {
+        ...draft.selections,
+        [sectionId]: optionId,
+      },
+      updatedAt: nowString(),
+    })),
+  );
 }
 
 export function clearStrategySelections() {
-  return updateStoredStrategyBuilderDraft((state) => ({
-    ...state,
-    selections: {},
-    updatedAt: nowString(),
-  }));
+  return updateStoredStrategyBuilderWorkspace((state) =>
+    updateActiveStrategyDraft(state, (draft) => ({
+      ...draft,
+      selections: {},
+      updatedAt: nowString(),
+    })),
+  );
+}
+
+export function createStrategyDraft(duplicateActive = false) {
+  return updateStoredStrategyBuilderWorkspace((state) =>
+    createStrategyDraftEntry(state, {
+      duplicateActive,
+    }),
+  );
+}
+
+export function setActiveStrategyDraft(draftId: string) {
+  return updateStoredStrategyBuilderWorkspace((state) => setActiveStrategyDraftId(state, draftId));
+}
+
+export function deleteStrategyDraft(draftId: string) {
+  return updateStoredStrategyBuilderWorkspace((state) => deleteStrategyDraftEntry(state, draftId));
 }
 
 export function useStrategyBuilderDraft() {
-  const [draft, setDraft] = useState<StoredStrategyBuilderDraft>(() => readStoredStrategyBuilderDraft());
+  const [workspace, setWorkspace] = useState<StoredStrategyBuilderWorkspace>(() => readStoredStrategyBuilderWorkspace());
 
   useEffect(() => {
-    function syncDraft() {
-      setDraft(readStoredStrategyBuilderDraft());
+    function syncWorkspace() {
+      setWorkspace(readStoredStrategyBuilderWorkspace());
     }
 
-    window.addEventListener(CHANGE_EVENT, syncDraft);
-    window.addEventListener("storage", syncDraft);
+    window.addEventListener(CHANGE_EVENT, syncWorkspace);
+    window.addEventListener("storage", syncWorkspace);
 
     return () => {
-      window.removeEventListener(CHANGE_EVENT, syncDraft);
-      window.removeEventListener("storage", syncDraft);
+      window.removeEventListener(CHANGE_EVENT, syncWorkspace);
+      window.removeEventListener("storage", syncWorkspace);
     };
   }, []);
 
   return useMemo(() => {
+    const activeEntry = getActiveStrategyDraft(workspace);
+    const draft = activeEntry.draft;
     const selectedOptions = strategyBuilderSections
       .map((section) => {
         const optionId = draft.selections[section.id];
@@ -127,11 +145,22 @@ export function useStrategyBuilderDraft() {
     const completionPercent = Math.round((selectedOptions.length / strategyBuilderSections.length) * 100);
 
     return {
+      workspace,
+      draftId: activeEntry.id,
       draft,
+      drafts: workspace.drafts.map((entry) => ({
+        id: entry.id,
+        strategyName: entry.draft.strategyName,
+        updatedAt: entry.draft.updatedAt,
+        completionPercent:
+          Math.round(
+            (Object.keys(entry.draft.selections).length / strategyBuilderSections.length) * 100,
+          ) || 0,
+      })),
       selectedOptions,
       completionPercent,
       completedSections: selectedOptions.length,
       totalSections: strategyBuilderSections.length,
     };
-  }, [draft]);
+  }, [workspace]);
 }

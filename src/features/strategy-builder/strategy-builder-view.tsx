@@ -1,19 +1,22 @@
 "use client";
 
-import { AlertTriangle, Bot, ChevronRight, RotateCcw, ShieldCheck, Sparkles, Target } from "lucide-react";
+import { AlertTriangle, Bot, ChevronRight, Copy, Plus, RotateCcw, ShieldCheck, Sparkles, Target, Trash2 } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { strategyBuilderSections } from "@/data/strategy-builder";
 import { deriveStrategyBlueprintSpec } from "@/lib/strategy-builder-spec";
 import {
   clearStrategySelections,
+  createStrategyDraft,
+  deleteStrategyDraft,
+  setActiveStrategyDraft,
   setStrategyName,
   setStrategySelection,
   useStrategyBuilderDraft,
 } from "@/lib/strategy-builder-storage";
 
 export function StrategyBuilderView() {
-  const { draft, selectedOptions, completionPercent, completedSections, totalSections } = useStrategyBuilderDraft();
+  const { draft, draftId, drafts, selectedOptions, completionPercent, completedSections, totalSections } = useStrategyBuilderDraft();
   const spec = deriveStrategyBlueprintSpec(draft, selectedOptions);
   const readinessLabel =
     selectedOptions.length === 0
@@ -68,14 +71,32 @@ export function StrategyBuilderView() {
                 <BuilderStat label="Automation score" value={`${spec.automationReadinessPercent}%`} />
                 <BuilderStat label="Open findings" value={`${spec.validationFindings.length}`} />
               </div>
-              <button
-                type="button"
-                onClick={clearStrategySelections}
-                className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/[0.05]"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Reset blueprint
-              </button>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => createStrategyDraft(false)}
+                  className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-cyan-300/18 bg-cyan-300/[0.08] px-4 py-3 text-sm text-cyan-50 transition hover:bg-cyan-300/[0.14]"
+                >
+                  <Plus className="h-4 w-4" />
+                  New blueprint
+                </button>
+                <button
+                  type="button"
+                  onClick={() => createStrategyDraft(true)}
+                  className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/[0.05]"
+                >
+                  <Copy className="h-4 w-4" />
+                  Duplicate active
+                </button>
+                <button
+                  type="button"
+                  onClick={clearStrategySelections}
+                  className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/[0.05]"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Reset blueprint
+                </button>
+              </div>
               {selectedOptions.length ? (
                 <div className="flex flex-wrap gap-3">
                   <button
@@ -165,6 +186,67 @@ export function StrategyBuilderView() {
         </div>
 
         <div className="space-y-6">
+          <aside className="course-card rounded-[30px] p-6">
+            <div className="flex items-center gap-3">
+              <Bot className="h-5 w-5 text-cyan-300" />
+              <div>
+                <p className="eyebrow-label">Blueprint Library</p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">Switch between system drafts</h2>
+              </div>
+            </div>
+            <div className="mt-5 space-y-3">
+              {drafts.map((item) => {
+                const active = item.id === draftId;
+
+                return (
+                  <div
+                    key={item.id}
+                    className={`rounded-[24px] border px-4 py-4 ${
+                      active ? "border-cyan-300/22 bg-cyan-300/[0.08]" : "border-white/10 bg-white/[0.03]"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="truncate text-base font-semibold text-white">{item.strategyName}</p>
+                        <p className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">
+                          {item.completionPercent}% complete
+                          {item.updatedAt ? ` • updated ${formatTimestamp(item.updatedAt)}` : " • not edited yet"}
+                        </p>
+                      </div>
+                      {active ? (
+                        <span className="rounded-full border border-cyan-300/18 bg-cyan-300/[0.12] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-cyan-50">
+                          Active
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      {!active ? (
+                        <button
+                          type="button"
+                          onClick={() => setActiveStrategyDraft(item.id)}
+                          className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/[0.05]"
+                        >
+                          Open
+                        </button>
+                      ) : null}
+                      {drafts.length > 1 ? (
+                        <button
+                          type="button"
+                          onClick={() => deleteStrategyDraft(item.id)}
+                          className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-rose-300/16 px-4 py-2 text-sm text-rose-100 transition hover:bg-rose-300/[0.08]"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Delete
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </aside>
+
           <aside className="course-card-raised rounded-[30px] p-6">
             <div className="flex items-center gap-3">
               <Bot className="h-5 w-5 text-cyan-300" />
@@ -332,4 +414,17 @@ function BuilderStat({ label, value }: { label: string; value: string }) {
       <p className="mt-3 text-lg font-semibold text-white">{value}</p>
     </div>
   );
+}
+
+function formatTimestamp(value: string) {
+  const timestamp = new Date(value);
+
+  if (Number.isNaN(timestamp.getTime())) {
+    return "recently";
+  }
+
+  return timestamp.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
 }
