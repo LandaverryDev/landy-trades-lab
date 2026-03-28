@@ -84,6 +84,62 @@ export const learningModules: LearningModule[] = [
   },
   {
     id: "module-03",
+    slug: "market-vehicles-and-instruments",
+    tier: "beginner",
+    level: 1,
+    order: 3,
+    status: "locked",
+    title: "Markets, Instruments, and Vehicles",
+    summary:
+      "Understand what stocks, ETFs, options, futures, forex, and crypto actually are before trying to trade them.",
+    xpReward: 360,
+    lessonCount: 4,
+    estimatedMinutes: 36,
+    progressPercent: 0,
+    focusAreas: ["Stocks", "Options", "Futures", "Forex", "Crypto"],
+    botBuilderHook:
+      "Every market has different leverage, liquidity, hours, and contract logic. Strategy design starts by respecting those constraints.",
+    unlockRule: "Unlock after Levels, Trends, and Risk",
+    lessonSlugs: [
+      "stocks-and-etfs-basics",
+      "options-basics",
+      "futures-and-forex-basics",
+      "crypto-market-basics",
+    ],
+    quizSlug: "instrument-market-quiz",
+    chartChallengeSlug: "volatility-and-market-fit-challenge",
+    simulatorSlug: "instrument-selection-simulator",
+  },
+  {
+    id: "module-04",
+    slug: "orders-sessions-and-execution",
+    tier: "beginner",
+    level: 1,
+    order: 4,
+    status: "locked",
+    title: "Orders, Sessions, and Execution",
+    summary:
+      "Learn how market, limit, and stop orders work, why bid/ask matters, and how sessions and slippage affect real fills.",
+    xpReward: 380,
+    lessonCount: 4,
+    estimatedMinutes: 38,
+    progressPercent: 0,
+    focusAreas: ["Order types", "Bid/ask", "Sessions", "Slippage"],
+    botBuilderHook:
+      "Execution quality is part of system design. A strategy can look good on paper and still fail if order logic is sloppy.",
+    unlockRule: "Unlock after Markets, Instruments, and Vehicles",
+    lessonSlugs: [
+      "order-types-basics",
+      "bid-ask-and-spread",
+      "sessions-and-market-hours",
+      "slippage-and-execution-quality",
+    ],
+    quizSlug: "execution-mechanics-quiz",
+    chartChallengeSlug: "spread-and-session-challenge",
+    simulatorSlug: "execution-quality-simulator",
+  },
+  {
+    id: "module-05",
     slug: "structure-and-execution",
     tier: "intermediate",
     level: 2,
@@ -99,7 +155,7 @@ export const learningModules: LearningModule[] = [
     focusAreas: ["Breakouts", "Pullbacks", "Entries", "Exits"],
     botBuilderHook:
       "This is where chart ideas become triggers, filters, and management rules.",
-    unlockRule: "Unlock after Levels, Trends, and Risk",
+    unlockRule: "Unlock after Orders, Sessions, and Execution",
     lessonSlugs: [
       "breakout-basics",
       "pullback-entries",
@@ -111,7 +167,7 @@ export const learningModules: LearningModule[] = [
     simulatorSlug: "breakout-retest-simulator",
   },
   {
-    id: "module-04",
+    id: "module-06",
     slug: "psychology-and-discipline",
     tier: "advanced",
     level: 3,
@@ -139,7 +195,7 @@ export const learningModules: LearningModule[] = [
     simulatorSlug: "revenge-trade-reset-simulator",
   },
   {
-    id: "module-05",
+    id: "module-07",
     slug: "strategy-systems-and-bots",
     tier: "advanced",
     level: 3,
@@ -771,6 +827,622 @@ export const lessons: Lesson[] = [
       "A strong risk engine is what keeps strategy logic alive over time.",
     ],
     botBuilderSignals: ["Risk budget", "Stop distance", "Size formula", "Reward-to-risk filter"],
+    nextLessonSlug: "stocks-and-etfs-basics",
+  },
+  {
+    slug: "stocks-and-etfs-basics",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Stocks and ETFs Basics",
+    summary:
+      "Learn what a stock share represents, how ETFs differ, and why many beginners start with liquid stock products first.",
+    objective: "Understand the basic structure, use case, and risk profile of stocks and ETFs.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Share", "ETF", "Float", "Liquidity"],
+    sections: [
+      {
+        id: "shares-and-baskets",
+        eyebrow: "Instrument Basics",
+        title: "A stock is a share in one company. An ETF is a basket.",
+        summary: "That difference matters because one tracks a single name while the other spreads exposure across many holdings.",
+        blocks: [
+          {
+            id: "shares-and-baskets-text",
+            type: "text",
+            body:
+              "Stocks move on company-specific news, earnings, and sentiment. ETFs bundle many holdings together, which usually makes them broader and less dependent on one company alone.",
+            bullets: [
+              "A stock can be very volatile if one company event changes everything.",
+              "An ETF often spreads that risk across a sector, theme, or index.",
+              "Liquid large-cap stocks and major ETFs are usually easier for beginners to execute cleanly.",
+            ],
+          },
+          {
+            id: "shares-and-baskets-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Beginner bias",
+            body: "Starting with liquid stocks or ETFs is usually easier than jumping straight into leveraged instruments.",
+          },
+        ],
+      },
+      {
+        id: "why-liquidity-matters",
+        eyebrow: "Execution Lens",
+        title: "Liquidity matters as much as the chart",
+        summary: "Thin stocks can move violently and fill poorly, even if the setup looked fine.",
+        blocks: [
+          {
+            id: "why-liquidity-matters-diagram",
+            type: "diagram",
+            title: "What makes a stock easier to trade",
+            caption: "These qualities usually make execution cleaner for learning.",
+            items: [
+              {
+                label: "Volume",
+                value: "Active tape",
+                detail: "Higher average volume usually means easier entry and exit.",
+              },
+              {
+                label: "Spread",
+                value: "Tighter bid/ask",
+                detail: "Smaller spreads reduce execution friction and accidental slippage.",
+              },
+              {
+                label: "Behavior",
+                value: "Cleaner structure",
+                detail: "Some products move in a more orderly way than others.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Stocks and ETFs are not the same thing, even if both trade on an exchange.",
+      "Liquidity and spread quality matter before you even think about the setup.",
+      "Many beginners should learn with liquid products before touching heavily leveraged ones.",
+    ],
+    botBuilderSignals: ["Liquidity filter", "Spread filter", "Product universe", "Single-name risk"],
+    nextLessonSlug: "options-basics",
+  },
+  {
+    slug: "options-basics",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Options Basics",
+    summary:
+      "Options give you the right, but not the obligation, to buy or sell something later. They add leverage, time, and complexity fast.",
+    objective: "Understand the core structure of calls and puts and why options are not just 'faster stocks'.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Call", "Put", "Premium", "Expiration"],
+    sections: [
+      {
+        id: "what-an-option-is",
+        eyebrow: "Contract Logic",
+        title: "Options are contracts with time built into them",
+        summary: "That time component is why they behave differently from owning shares directly.",
+        blocks: [
+          {
+            id: "what-an-option-is-text",
+            type: "text",
+            body:
+              "A call generally benefits if the underlying goes up. A put generally benefits if it goes down. But the contract also loses or gains value based on time, volatility, and strike selection, not just direction.",
+            bullets: [
+              "Direction matters, but it is not the only driver.",
+              "Time decay means being correct too late can still lose money.",
+              "Leverage can amplify both speed and mistakes.",
+            ],
+          },
+          {
+            id: "what-an-option-is-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Common beginner mistake",
+            body: "Many beginners buy options because they look cheaper than stock shares. Cheap premium does not mean lower risk.",
+          },
+        ],
+      },
+      {
+        id: "why-options-are-harder",
+        eyebrow: "Complexity Layer",
+        title: "Options add extra variables that beginners often underestimate",
+        summary: "You need a view on direction, timing, volatility, and contract structure at the same time.",
+        blocks: [
+          {
+            id: "why-options-are-harder-diagram",
+            type: "diagram",
+            title: "Why options can punish weak planning",
+            caption: "You are trading more than a price chart.",
+            items: [
+              {
+                label: "Direction",
+                value: "Need the move",
+                detail: "The underlying still needs to go the right way.",
+              },
+              {
+                label: "Timing",
+                value: "Need it soon enough",
+                detail: "Expiration changes the pressure on your idea.",
+              },
+              {
+                label: "Contract",
+                value: "Need the right structure",
+                detail: "Strike and premium quality affect the trade outcome heavily.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Options are contracts, not just cheaper substitutes for shares.",
+      "Time decay and volatility make options harder than plain direction calls.",
+      "They can wait until your market foundation and risk discipline are strong.",
+    ],
+    botBuilderSignals: ["Expiration filter", "Premium selection", "Volatility input", "Direction plus timing"],
+    nextLessonSlug: "futures-and-forex-basics",
+  },
+  {
+    slug: "futures-and-forex-basics",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Futures and Forex Basics",
+    summary:
+      "Futures and forex are margin-driven markets where leverage and contract mechanics matter immediately.",
+    objective: "Understand what makes futures and forex powerful but potentially dangerous for underprepared traders.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Contract", "Tick value", "Margin", "Currency pair"],
+    sections: [
+      {
+        id: "futures-contracts",
+        eyebrow: "Instrument Structure",
+        title: "Futures trade standardized contracts, not company shares",
+        summary: "Each contract has its own tick size, tick value, and margin requirements.",
+        blocks: [
+          {
+            id: "futures-contracts-text",
+            type: "text",
+            body:
+              "Futures are often used for indices, commodities, rates, and more. A small move can mean a lot because each contract has a defined monetary value per tick.",
+            bullets: [
+              "You need to know what one tick is worth before placing size.",
+              "Margin makes futures efficient, but also unforgiving if size is careless.",
+              "Session behavior can differ between contracts.",
+            ],
+          },
+          {
+            id: "forex-basics-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "Forex note",
+            body: "Forex trades currency pairs, so your chart is always one currency relative to another, not an isolated asset.",
+          },
+        ],
+      },
+      {
+        id: "leverage-discipline",
+        eyebrow: "Risk Reality",
+        title: "Leverage does not create edge. It only magnifies whatever decision quality already exists.",
+        summary: "That is why undertrained traders often damage themselves faster in these markets.",
+        blocks: [
+          {
+            id: "leverage-discipline-diagram",
+            type: "diagram",
+            title: "What to respect in leveraged markets",
+            caption: "The mechanics matter before the setup does.",
+            items: [
+              {
+                label: "Tick value",
+                value: "Know the math",
+                detail: "You need to know the dollar impact of movement immediately.",
+              },
+              {
+                label: "Margin",
+                value: "Borrowed power",
+                detail: "Leverage increases speed in both directions.",
+              },
+              {
+                label: "Size discipline",
+                value: "Non-negotiable",
+                detail: "A sloppy size choice can ruin an otherwise reasonable read quickly.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Futures and forex are contract and margin markets, not simple share ownership.",
+      "Tick value and leverage matter before the trade begins.",
+      "These markets demand stronger math and risk discipline than many beginners expect.",
+    ],
+    botBuilderSignals: ["Tick value", "Margin rule", "Contract selection", "Pair filter"],
+    nextLessonSlug: "crypto-market-basics",
+  },
+  {
+    slug: "crypto-market-basics",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Crypto Market Basics",
+    summary:
+      "Crypto trades nearly around the clock, behaves differently across exchanges, and can combine real trend opportunity with serious structural risk.",
+    objective: "Understand the practical differences between crypto and traditional exchange-traded markets.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["24/7 market", "Exchange risk", "Funding", "Fragmentation"],
+    sections: [
+      {
+        id: "always-on-market",
+        eyebrow: "Market Structure",
+        title: "Crypto does not close the way stocks do",
+        summary: "That changes how gaps, weekends, and overnight conditions feel.",
+        blocks: [
+          {
+            id: "always-on-market-text",
+            type: "text",
+            body:
+              "Crypto often trades through nights and weekends, which means price discovery never fully pauses. That creates opportunity, but it also means you cannot rely on the same session structure you see in stocks.",
+            bullets: [
+              "There is less of a clean open/close rhythm in many crypto products.",
+              "Exchange quality and liquidity can vary a lot.",
+              "Volatility can expand quickly when the market gets thin.",
+            ],
+          },
+          {
+            id: "always-on-market-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Structural risk",
+            body: "Crypto adds exchange and custody risk on top of chart risk. That is different from simply reading candles.",
+          },
+        ],
+      },
+      {
+        id: "crypto-selection-framework",
+        eyebrow: "Practical Filter",
+        title: "Not every coin or exchange deserves your attention",
+        summary: "Selection quality matters more in fragmented markets.",
+        blocks: [
+          {
+            id: "crypto-selection-framework-diagram",
+            type: "diagram",
+            title: "What to filter first in crypto",
+            caption: "Start with market quality before setup quality.",
+            items: [
+              {
+                label: "Exchange quality",
+                value: "Trust and liquidity",
+                detail: "Execution quality and counterparty safety both matter.",
+              },
+              {
+                label: "Product quality",
+                value: "Major vs thin altcoin",
+                detail: "Thin products can look exciting but trade poorly.",
+              },
+              {
+                label: "Volatility profile",
+                value: "Respect movement",
+                detail: "Continuous trading does not mean continuous quality.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Crypto is structurally different because it trades nearly 24/7 and can be fragmented across venues.",
+      "Exchange and product selection matter alongside chart quality.",
+      "Continuous trading does not remove risk. It often changes where the risk lives.",
+    ],
+    botBuilderSignals: ["Exchange filter", "Liquidity venue", "24/7 regime", "Fragmentation risk"],
+    nextLessonSlug: "order-types-basics",
+  },
+  {
+    slug: "order-types-basics",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Order Types Basics",
+    summary:
+      "Market, limit, and stop orders all solve different execution problems. Using the wrong one can break a good trade idea.",
+    objective: "Understand the practical tradeoffs between the main order types before using them under pressure.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Market order", "Limit order", "Stop order", "Fill quality"],
+    sections: [
+      {
+        id: "order-type-map",
+        eyebrow: "Execution Basics",
+        title: "Order types are tools, not random buttons",
+        summary: "Each one changes how much price control you keep versus how much execution certainty you get.",
+        blocks: [
+          {
+            id: "order-type-map-text",
+            type: "text",
+            body:
+              "A market order prioritizes immediate execution. A limit order prioritizes price control. A stop order activates when a level is reached. Each one has a place, but the wrong one in the wrong condition creates avoidable damage.",
+            bullets: [
+              "Market order: highest execution certainty, lower price control.",
+              "Limit order: higher price control, lower certainty of getting filled.",
+              "Stop order: conditional tool often used for entries or exits at trigger levels.",
+            ],
+          },
+          {
+            id: "order-type-map-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Fast rule",
+            body: "Before pressing buy or sell, know whether your priority is speed, price, or conditional trigger behavior.",
+          },
+        ],
+      },
+      {
+        id: "order-type-errors",
+        eyebrow: "Execution Risk",
+        title: "A good setup can still be damaged by bad order choice",
+        summary: "Execution is part of the strategy, not an afterthought.",
+        blocks: [
+          {
+            id: "order-type-errors-diagram",
+            type: "diagram",
+            title: "When order choice goes wrong",
+            caption: "The same setup behaves differently depending on the tool you use.",
+            items: [
+              {
+                label: "Too aggressive",
+                value: "Market order in thin tape",
+                detail: "You may get filled much worse than expected.",
+              },
+              {
+                label: "Too passive",
+                value: "Limit order too far away",
+                detail: "The move may leave without you and the plan never activates.",
+              },
+              {
+                label: "Wrong trigger",
+                value: "Stop used carelessly",
+                detail: "A stop can fire into noise if the level logic is weak.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Order types change how your trade gets filled, not just whether it gets filled.",
+      "Execution quality is part of the trade plan.",
+      "The right order depends on speed, price control, and market condition.",
+    ],
+    botBuilderSignals: ["Order type rule", "Limit offset", "Stop trigger", "Execution constraint"],
+    nextLessonSlug: "bid-ask-and-spread",
+  },
+  {
+    slug: "bid-ask-and-spread",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Bid, Ask, and Spread",
+    summary:
+      "The spread is the first execution cost you face. If you ignore it, your fill quality can get worse before the trade even starts.",
+    objective: "Understand how bid/ask mechanics affect entry, exit, and slippage risk.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Bid", "Ask", "Spread", "Slippage"],
+    sections: [
+      {
+        id: "spread-basics",
+        eyebrow: "Tape Mechanics",
+        title: "The spread is the gap between where buyers bid and sellers offer",
+        summary: "Tighter spreads usually mean cleaner execution.",
+        blocks: [
+          {
+            id: "spread-basics-text",
+            type: "text",
+            body:
+              "When a market is liquid, the spread is often narrow. When liquidity dries up, spreads can widen and make even small entries or exits more expensive.",
+            bullets: [
+              "Tight spread usually means lower friction.",
+              "Wide spread often signals caution or thinner participation.",
+              "Aggressive entries in wide spreads can distort real trade risk.",
+            ],
+          },
+          {
+            id: "spread-basics-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Hidden damage",
+            body: "A trader can be right on direction and still lose edge if they pay bad spreads repeatedly.",
+          },
+        ],
+      },
+      {
+        id: "spread-filter",
+        eyebrow: "Practical Filter",
+        title: "Spread quality is part of trade selection",
+        summary: "If the product trades poorly, a pretty chart is not enough.",
+        blocks: [
+          {
+            id: "spread-filter-diagram",
+            type: "diagram",
+            title: "How spread changes the plan",
+            caption: "Execution friction changes whether a setup is worth taking.",
+            items: [
+              {
+                label: "Entry cost",
+                value: "Paying the spread",
+                detail: "You may start the trade with immediate friction.",
+              },
+              {
+                label: "Stop quality",
+                value: "Noisier fills",
+                detail: "Wider spreads can hit stops less cleanly than expected.",
+              },
+              {
+                label: "Skip decision",
+                value: "Sometimes best",
+                detail: "A wide spread can be enough reason to avoid the trade.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "The spread is real execution cost, not background noise.",
+      "Wide spreads can damage setup quality and stop efficiency.",
+      "Execution filters should include spread and liquidity, not just chart structure.",
+    ],
+    botBuilderSignals: ["Spread filter", "Liquidity threshold", "Skip if wide", "Fill-quality rule"],
+    nextLessonSlug: "sessions-and-market-hours",
+  },
+  {
+    slug: "sessions-and-market-hours",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Sessions and Market Hours",
+    summary:
+      "Market behavior changes by session. Open, midday, close, overnight, and weekend conditions can all trade differently.",
+    objective: "Understand why time-of-day and market session matter for setup quality and execution.",
+    estimatedMinutes: 10,
+    xpReward: 90,
+    keyTerms: ["Market open", "Midday", "Close", "Overnight"],
+    sections: [
+      {
+        id: "session-personality",
+        eyebrow: "Behavior Map",
+        title: "Different sessions have different personalities",
+        summary: "A setup that works at the open may behave differently at midday.",
+        blocks: [
+          {
+            id: "session-personality-text",
+            type: "text",
+            body:
+              "The opening period can bring volatility and fast moves. Midday often cools off. The close can bring fresh volume again. In 24-hour markets, you still need to know when meaningful participation is actually present.",
+            bullets: [
+              "The open can be fast and noisy.",
+              "Midday often compresses and trades more slowly.",
+              "Time filters can improve strategy consistency.",
+            ],
+          },
+          {
+            id: "session-personality-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "Practical edge",
+            body: "Many strategies improve more from a time filter than from adding more pattern complexity.",
+          },
+        ],
+      },
+      {
+        id: "session-risk-map",
+        eyebrow: "Execution Context",
+        title: "Session awareness helps you know when to press and when to back off",
+        summary: "Market quality is not constant across the whole day.",
+        blocks: [
+          {
+            id: "session-risk-map-diagram",
+            type: "diagram",
+            title: "Session decision map",
+            caption: "The same setup can deserve different treatment by time window.",
+            items: [
+              {
+                label: "Open",
+                value: "Fast and liquid",
+                detail: "Good for movement, but only if your plan handles volatility.",
+              },
+              {
+                label: "Midday",
+                value: "Slower and thinner",
+                detail: "Good setups often need more patience or may deserve a skip.",
+              },
+              {
+                label: "Close",
+                value: "Active again",
+                detail: "Participation can rise, but so can end-of-day emotion.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Time is part of market context, not background detail.",
+      "Session filters can improve both execution and setup quality.",
+      "You should know when your market is most trustworthy for the style you trade.",
+    ],
+    botBuilderSignals: ["Session filter", "Open window", "Midday skip", "Close behavior"],
+    nextLessonSlug: "slippage-and-execution-quality",
+  },
+  {
+    slug: "slippage-and-execution-quality",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Slippage and Execution Quality",
+    summary:
+      "Slippage is the gap between your expected fill and the fill you actually get. Serious traders respect it because it changes real expectancy.",
+    objective: "Understand how slippage happens and how to reduce avoidable execution damage.",
+    estimatedMinutes: 10,
+    xpReward: 90,
+    keyTerms: ["Slippage", "Fill", "Execution quality", "Expectancy"],
+    sections: [
+      {
+        id: "what-slippage-is",
+        eyebrow: "Reality Check",
+        title: "The backtest price and the real fill price are not always the same",
+        summary: "That difference can quietly degrade the whole strategy.",
+        blocks: [
+          {
+            id: "what-slippage-is-text",
+            type: "text",
+            body:
+              "Slippage often appears in fast markets, thin liquidity, or poor order choice. It can hit entries, exits, and stops, and it matters because even small repeated friction changes your real results.",
+            bullets: [
+              "Fast movement can outrun your expected price.",
+              "Thin conditions can fill worse than planned.",
+              "Repeated slippage changes expectancy over time.",
+            ],
+          },
+          {
+            id: "what-slippage-is-callout",
+            type: "callout",
+            tone: "bot",
+            title: "System design lens",
+            body: "A serious strategy should model slippage assumptions instead of pretending fills are perfect.",
+          },
+        ],
+      },
+      {
+        id: "reduce-execution-damage",
+        eyebrow: "Practical Defense",
+        title: "You cannot remove all slippage, but you can avoid a lot of unnecessary damage",
+        summary: "Cleaner product selection and order discipline matter.",
+        blocks: [
+          {
+            id: "reduce-execution-damage-diagram",
+            type: "diagram",
+            title: "Ways to reduce execution damage",
+            caption: "Small improvements in execution compound over time.",
+            items: [
+              {
+                label: "Trade liquid products",
+                value: "Cleaner fills",
+                detail: "Good markets are easier to enter and exit consistently.",
+              },
+              {
+                label: "Use the right order",
+                value: "Better control",
+                detail: "Order choice should match the environment and urgency.",
+              },
+              {
+                label: "Respect timing",
+                value: "Avoid worst conditions",
+                detail: "Some sessions are far more slippage-prone than others.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Slippage changes real trade expectancy and should be respected early.",
+      "Execution quality is part of edge, not separate from it.",
+      "Product selection, session choice, and order logic all affect fill quality.",
+    ],
+    botBuilderSignals: ["Slippage model", "Liquidity filter", "Execution assumption", "Fill-quality guardrail"],
     nextLessonSlug: "breakout-basics",
   },
   {
@@ -1980,6 +2652,136 @@ export const quizzes: Quiz[] = [
     ],
   },
   {
+    slug: "instrument-market-quiz",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Markets and Instruments Quiz",
+    summary:
+      "Check whether you can distinguish the major market vehicles and understand what makes each one structurally different.",
+    xpReward: 105,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What is the main difference between a stock and an ETF?",
+        choices: [
+          { id: "a", label: "A stock is one company share, while an ETF is a basket of holdings." },
+          { id: "b", label: "A stock expires, while an ETF never does." },
+          { id: "c", label: "A stock uses leverage automatically, while an ETF does not." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A stock is one company exposure. An ETF is typically a packaged basket like an index, sector, or theme.",
+        coaching: "Start by knowing what instrument you are actually exposed to before worrying about the setup.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: being right on direction is the only thing that matters in an options trade.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "false",
+        explanation:
+          "Options also depend on time, contract choice, and volatility, not just direction.",
+        coaching: "Options add more variables than shares, which is why they are harder than they first appear.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which market type most directly requires you to understand tick value and contract specifications?",
+        choices: [
+          { id: "a", label: "Futures" },
+          { id: "b", label: "ETF investing only" },
+          { id: "c", label: "Owning one common stock share" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Futures contracts have explicit tick values and contract-specific mechanics that change the math immediately.",
+        coaching: "If the market uses contracts, learn the contract math before touching size.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "Which market most commonly forces you to think about exchange quality and nearly continuous trading?",
+        choices: [
+          { id: "a", label: "Crypto" },
+          { id: "b", label: "Only regular-hours equities" },
+          { id: "c", label: "Paper trading in a static simulator" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Crypto often trades nearly 24/7 and can vary significantly by venue and liquidity quality.",
+        coaching: "Venue quality matters more in fragmented markets.",
+      },
+    ],
+  },
+  {
+    slug: "execution-mechanics-quiz",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Execution Mechanics Quiz",
+    summary:
+      "Check whether you understand order types, spread risk, session differences, and slippage.",
+    xpReward: 110,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "Which order type usually gives you the most price control?",
+        choices: [
+          { id: "a", label: "Limit order" },
+          { id: "b", label: "Market order" },
+          { id: "c", label: "Random order choice based on urgency" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A limit order prioritizes price control, though it may reduce certainty of immediate fill.",
+        coaching: "Execution quality is always a tradeoff between control and certainty.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: a wide spread can change the real quality of an otherwise attractive setup.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Spread is execution friction. Paying it repeatedly can reduce or destroy the edge.",
+        coaching: "Execution cost belongs inside the setup evaluation.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which session often becomes slower and less liquid for many equity-style intraday traders?",
+        choices: [
+          { id: "a", label: "Midday" },
+          { id: "b", label: "The open only" },
+          { id: "c", label: "No session ever changes market behavior" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Midday often compresses and trades more slowly than the open or close.",
+        coaching: "Time filters are often simpler and more useful than people expect.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "What does slippage do to a strategy over time if it is ignored?",
+        choices: [
+          { id: "a", label: "It can reduce real expectancy even if the chart logic looked good." },
+          { id: "b", label: "It has no effect if you were directionally right." },
+          { id: "c", label: "It only matters on losing trades, not winning ones." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Slippage changes real results over many trades because fills are rarely perfect in the wild.",
+        coaching: "The closer your strategy lives to real execution assumptions, the more trustworthy it becomes.",
+      },
+    ],
+  },
+  {
     slug: "structure-execution-quiz",
     moduleSlug: "structure-and-execution",
     title: "Structure and Execution Quiz",
@@ -2260,6 +3062,114 @@ export const chartChallenges: ChartChallenge[] = [
       "The best beginner chart reads start broad: direction first, then location.",
       "Support is more meaningful when it aligns with a recent reaction area instead of a random line.",
       "This same logic later becomes code: trend filter, zone detection, retest condition, and risk placement.",
+    ],
+  },
+  {
+    slug: "volatility-and-market-fit-challenge",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Volatility and Market Fit Challenge",
+    summary:
+      "Use a simple chart to identify the highest-volatility expansion leg and connect that read to instrument selection.",
+    xpReward: 110,
+    candles: [
+      { open: 51.2, high: 51.6, low: 50.9, close: 51.4 },
+      { open: 51.4, high: 51.9, low: 51.2, close: 51.8 },
+      { open: 51.8, high: 52.0, low: 51.4, close: 51.6 },
+      { open: 51.6, high: 52.4, low: 51.5, close: 52.2 },
+      { open: 52.2, high: 53.1, low: 52.0, close: 52.9 },
+      { open: 52.9, high: 54.0, low: 52.7, close: 53.8 },
+      { open: 53.8, high: 54.2, low: 53.1, close: 53.4 },
+      { open: 53.4, high: 53.7, low: 52.8, close: 53.0 },
+      { open: 53.0, high: 53.5, low: 52.7, close: 53.3 },
+      { open: 53.3, high: 53.8, low: 53.0, close: 53.6 },
+    ],
+    questions: [
+      {
+        id: "volatility-leg",
+        type: "candle-range",
+        prompt: "Mark the fastest expansion leg where volatility clearly increased.",
+        instruction: "Click the first candle in the expansion, then the last candle before the move cools off.",
+        explanation:
+          "The cleanest expansion leg is the three-candle push where range size and speed increased sharply before the chart began to cool.",
+        coaching: "When volatility expands, leverage and product choice matter more because mistakes compound faster.",
+        correctCandleStart: 3,
+        correctCandleEnd: 5,
+        selectionLabel: "Volatility leg",
+      },
+      {
+        id: "market-fit-read",
+        type: "multiple-choice",
+        prompt: "Given this kind of sharp expansion, which market type usually demands the most respect for contract math and leverage first?",
+        instruction: "Choose the market where movement-per-tick and leverage discipline become critical immediately.",
+        explanation:
+          "Futures usually require the strongest respect for tick value, contract specs, and leverage math right away.",
+        coaching: "The more leveraged the product, the less room you have for sloppy size or vague risk.",
+        choices: [
+          { id: "futures", label: "Futures contracts" },
+          { id: "liquid-etf", label: "A broad, liquid ETF only" },
+          { id: "none", label: "No market type changes the importance of execution math" },
+        ],
+        correctChoiceId: "futures",
+      },
+    ],
+    coachDebrief: [
+      "Instrument choice is not separate from chart reading. The same chart can behave very differently depending on contract structure and leverage.",
+      "Volatility expansion should change how much caution you bring to product selection and sizing.",
+      "This is the bridge between reading price and choosing where you should, or should not, express that idea.",
+    ],
+  },
+  {
+    slug: "spread-and-session-challenge",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Spread and Session Challenge",
+    summary:
+      "Read where the chart cools off, identify the lower-quality session window, and connect that to execution decisions.",
+    xpReward: 115,
+    candles: [
+      { open: 74.4, high: 75.3, low: 74.2, close: 75.0 },
+      { open: 75.0, high: 75.8, low: 74.8, close: 75.6 },
+      { open: 75.6, high: 76.1, low: 75.3, close: 75.9 },
+      { open: 75.9, high: 76.0, low: 75.5, close: 75.7 },
+      { open: 75.7, high: 75.9, low: 75.4, close: 75.6 },
+      { open: 75.6, high: 75.8, low: 75.3, close: 75.5 },
+      { open: 75.5, high: 75.7, low: 75.2, close: 75.4 },
+      { open: 75.4, high: 75.9, low: 75.2, close: 75.8 },
+      { open: 75.8, high: 76.4, low: 75.7, close: 76.2 },
+      { open: 76.2, high: 76.8, low: 76.0, close: 76.6 },
+    ],
+    questions: [
+      {
+        id: "session-lull",
+        type: "candle-range",
+        prompt: "Mark the slower, lower-quality session lull before participation returns.",
+        instruction: "Click the first candle where the tape cools off, then the last candle before the move wakes up again.",
+        explanation:
+          "The middle section is the lull. Range compresses, momentum cools, and the market stops offering the same quality as the opening push or late-session re-expansion.",
+        coaching: "Time-of-day matters because not every candle deserves the same execution confidence.",
+        correctCandleStart: 3,
+        correctCandleEnd: 6,
+        selectionLabel: "Session lull",
+      },
+      {
+        id: "order-choice-read",
+        type: "multiple-choice",
+        prompt: "If spread quality is worse during that lull, which order choice usually protects price better?",
+        instruction: "Choose the tool that favors price control when execution quality is degrading.",
+        explanation:
+          "A limit order usually gives better price control when the tape is thinner and spread quality matters more.",
+        coaching: "When the tape degrades, execution discipline should usually get tighter, not looser.",
+        choices: [
+          { id: "limit", label: "Limit order" },
+          { id: "market", label: "Market order, no matter what" },
+          { id: "none", label: "Order type never matters if the chart still looks okay" },
+        ],
+        correctChoiceId: "limit",
+      },
+    ],
+    coachDebrief: [
+      "Session quality affects whether the setup is worth taking and how aggressively it should be executed.",
+      "Execution mechanics are not trivia. They directly affect real fill quality and expectancy.",
+      "This is the part many beginners skip, and it costs them even when their chart read was reasonable.",
     ],
   },
   {
@@ -2662,6 +3572,176 @@ export const scenarios: Scenario[] = [
       "The best trades often become clearer after confirmation, not before it.",
       "A good setup is a chain of if-then decisions, not one giant prediction.",
       "This replay mirrors system design: detect state, confirm trigger, define risk, manage outcome.",
+    ],
+  },
+  {
+    slug: "instrument-selection-simulator",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Instrument Selection Simulator",
+    summary:
+      "Practice choosing the right market vehicle for a trading idea instead of reaching for the most exciting product by default.",
+    xpReward: 120,
+    setup:
+      "You have a beginner-sized account, limited screen time, and a chart idea you want to express without adding unnecessary complexity.",
+    steps: [
+      {
+        id: "vehicle-step-1",
+        title: "Choosing the product",
+        marketContext:
+          "The underlying idea is simple directional exposure on a liquid trend, but you do not yet have strong experience with contract math or time decay.",
+        tapeRead: [
+          "The chart idea itself is still basic.",
+          "Execution simplicity matters for learning.",
+          "Adding leverage or contract complexity too early may distract from the real skill-building goal.",
+        ],
+        riskCallout: "A complex product can magnify confusion faster than it magnifies opportunity.",
+        actions: [
+          {
+            id: "liquid-stock-or-etf",
+            label: "Choose a liquid stock or ETF product first",
+            rationale: "Keep the instrument simple while the chart and risk process are still developing.",
+          },
+          {
+            id: "short-dated-options",
+            label: "Jump into short-dated options because they look cheaper",
+            rationale: "The lower premium seems easier on the account.",
+          },
+          {
+            id: "leveraged-contract",
+            label: "Use a highly leveraged futures contract immediately",
+            rationale: "A stronger product means faster progress.",
+          },
+        ],
+        correctActionId: "liquid-stock-or-etf",
+        feedback:
+          "That is the cleaner choice. You are keeping the instrument simple enough that your chart reading and risk discipline can improve without contract noise overwhelming the lesson.",
+        outcome:
+          "You keep the focus on chart structure and execution basics instead of introducing extra layers of leverage and decay.",
+      },
+      {
+        id: "vehicle-step-2",
+        title: "Matching structure to market",
+        marketContext:
+          "Another idea appears in a continuous, fast-moving market over the weekend, and you are tempted to treat it exactly like a weekday stock setup.",
+        tapeRead: [
+          "The market is active outside normal stock hours.",
+          "Venue quality and continuous trading now matter more.",
+          "The product structure is not identical to a regular-hours stock chart.",
+        ],
+        riskCallout: "Different market structure means different rules for when, where, and how to act.",
+        actions: [
+          {
+            id: "respect-crypto-structure",
+            label: "Treat it as a different market structure with venue and session filters",
+            rationale: "Adjust the plan to the market, not just to the chart shape.",
+          },
+          {
+            id: "same-as-equities",
+            label: "Trade it exactly like a normal stock open setup",
+            rationale: "Charts are charts, so the market type does not matter.",
+          },
+          {
+            id: "ignore-product-choice",
+            label: "Ignore the instrument and focus only on candle color",
+            rationale: "Product structure just overcomplicates the decision.",
+          },
+        ],
+        correctActionId: "respect-crypto-structure",
+        feedback:
+          "That is the right read. Market structure changes how execution risk, session quality, and venue choice should be handled.",
+        outcome:
+          "You avoid blindly forcing one product's playbook onto another market with different structural behavior.",
+      },
+    ],
+    closingNotes: [
+      "The right chart idea in the wrong instrument can still be a bad trade decision.",
+      "Instrument selection is part of trading skill, not a separate topic.",
+      "This directly supports later automation work because system logic must know what product constraints it is operating inside.",
+    ],
+  },
+  {
+    slug: "execution-quality-simulator",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Execution Quality Simulator",
+    summary:
+      "Practice choosing order behavior and execution caution based on spread, session quality, and fill risk.",
+    xpReward: 125,
+    setup:
+      "A setup appears in a market that looked good earlier, but the tape is now slower and spread quality has started to worsen.",
+    steps: [
+      {
+        id: "execution-step-1",
+        title: "Spread is widening",
+        marketContext:
+          "The setup still exists, but price is moving more slowly and fills look less clean than they did earlier.",
+        tapeRead: [
+          "The market is not as liquid as it was during the stronger session window.",
+          "Execution quality now matters more than pure chart shape.",
+          "Paying poor spread repeatedly can reduce edge quickly.",
+        ],
+        riskCallout: "A pretty chart does not cancel out poor execution conditions.",
+        actions: [
+          {
+            id: "tighten-order-choice",
+            label: "Use a more controlled order choice and respect the worse execution environment",
+            rationale: "Execution behavior should adapt when liquidity changes.",
+          },
+          {
+            id: "always-market-order",
+            label: "Use a market order no matter what because speed is always best",
+            rationale: "The setup matters more than the spread.",
+          },
+          {
+            id: "ignore-spread",
+            label: "Ignore the spread completely and focus only on direction",
+            rationale: "Execution friction never changes the trade meaningfully.",
+          },
+        ],
+        correctActionId: "tighten-order-choice",
+        feedback:
+          "That is the disciplined choice. When liquidity degrades, order behavior and price control matter more, not less.",
+        outcome:
+          "You reduce the chance of turning a decent setup into a poor fill.",
+      },
+      {
+        id: "execution-step-2",
+        title: "Session quality drops",
+        marketContext:
+          "The session is sliding into a slower period and the next move no longer has the same participation behind it.",
+        tapeRead: [
+          "The setup may still look valid on paper.",
+          "The current time window offers lower-quality movement.",
+          "Skipping a weaker execution window can be a high-quality decision.",
+        ],
+        riskCallout: "Not every valid setup should be taken in every session condition.",
+        actions: [
+          {
+            id: "skip-lower-quality-window",
+            label: "Skip or reduce aggression because session quality has degraded",
+            rationale: "Time filters are part of edge protection.",
+          },
+          {
+            id: "same-aggression",
+            label: "Trade it with the same aggression as the strongest session window",
+            rationale: "The clock should not matter if the setup still exists.",
+          },
+          {
+            id: "remove-limits",
+            label: "Remove execution filters to avoid missing the move",
+            rationale: "Missing a trade is worse than paying worse fills.",
+          },
+        ],
+        correctActionId: "skip-lower-quality-window",
+        feedback:
+          "That is the mature answer. Session quality is part of the setup, and lower-quality execution windows deserve more caution or a full skip.",
+        outcome:
+          "You protect real expectancy by refusing to treat every time window like the best one.",
+      },
+    ],
+    closingNotes: [
+      "Execution quality is a first-class skill, not a side detail.",
+      "Spread, order type, and session filters all belong inside the real trade decision.",
+      "This is also what separates toy backtests from strategies that can survive live markets.",
     ],
   },
   {

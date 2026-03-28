@@ -18,15 +18,15 @@ export function LearningPathView() {
         <div className="mt-4 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              First complete beginner flow: trading basics, market basics, then candles.
+              Zero-to-system path: foundations, instruments, execution, psychology, then automation.
             </h1>
             <p className="mt-4 text-base leading-7 text-slate-300">
-              This MVP now centers the first true learning sequence. Each lesson is short, visual, and connected to a
-              quiz or chart drill so the experience feels like training, not reading.
+              The curriculum now covers the early beginner stack more seriously: trading basics, chart structure,
+              instrument selection, order mechanics, execution quality, psychology, and the first strategy-system layer.
             </p>
           </div>
           <div className="rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Current beginner progress</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Current path progress</p>
             <p className="mt-2 font-mono text-3xl text-white">{progress.overallProgressPercent}%</p>
             <p className="mt-2 text-sm text-slate-300">XP, quiz, and chart drills feed the same track.</p>
           </div>
