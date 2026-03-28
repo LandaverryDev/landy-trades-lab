@@ -53,6 +53,7 @@ export const learningModules: LearningModule[] = [
     unlockRule: "Available now",
     lessonSlugs: ["what-is-trading", "basic-market-concepts", "candlestick-basics"],
     quizSlug: "beginner-foundations-quiz",
+    drillSlug: "beginner-foundations-rapid-review",
     chartChallengeSlug: "trend-and-support-challenge",
     reviewChartChallengeSlugs: ["candle-context-review-challenge"],
     simulatorSlug: "open-drive-pullback",
@@ -82,6 +83,7 @@ export const learningModules: LearningModule[] = [
       "position-sizing-basics",
     ],
     quizSlug: "levels-trends-risk-quiz",
+    drillSlug: "levels-trends-risk-rapid-review",
     chartChallengeSlug: "trend-level-and-stop-challenge",
     reviewChartChallengeSlugs: ["role-reversal-review-challenge"],
   },
@@ -110,6 +112,7 @@ export const learningModules: LearningModule[] = [
       "crypto-market-basics",
     ],
     quizSlug: "instrument-market-quiz",
+    drillSlug: "market-vehicles-rapid-review",
     chartChallengeSlug: "volatility-and-market-fit-challenge",
     simulatorSlug: "instrument-selection-simulator",
   },
@@ -138,6 +141,7 @@ export const learningModules: LearningModule[] = [
       "slippage-and-execution-quality",
     ],
     quizSlug: "execution-mechanics-quiz",
+    drillSlug: "execution-mechanics-rapid-review",
     chartChallengeSlug: "spread-and-session-challenge",
     reviewChartChallengeSlugs: ["session-lull-review-challenge"],
     simulatorSlug: "execution-quality-simulator",
@@ -167,6 +171,7 @@ export const learningModules: LearningModule[] = [
       "volume-and-confirmation",
     ],
     quizSlug: "structure-execution-quiz",
+    drillSlug: "structure-execution-rapid-review",
     chartChallengeSlug: "breakout-or-fakeout-challenge",
     reviewChartChallengeSlugs: ["pullback-location-review-challenge"],
     simulatorSlug: "breakout-retest-simulator",
@@ -4029,6 +4034,334 @@ export const quizzes: Quiz[] = [
 ];
 
 export const drillSets: DrillSet[] = [
+  {
+    slug: "beginner-foundations-rapid-review",
+    moduleSlug: "market-bootcamp",
+    title: "Beginner Foundations Rapid Review",
+    summary:
+      "A short repetition loop on trade structure, market basics, and candle-reading language.",
+    xpReward: 85,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What makes a trade idea structured instead of random?",
+        choices: [
+          { id: "a", label: "It has a setup, a trigger, and a clear invalidation point." },
+          { id: "b", label: "It feels urgent enough to click quickly." },
+          { id: "c", label: "It came from someone else's confidence online." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A structured trade has logic and boundaries. You know what should happen and what would prove the idea failed.",
+        coaching: "If there is no invalidation, there is no real trade plan yet.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: liquidity affects how easily a trader can enter and exit.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Liquidity shapes tradeability. Better liquidity usually means easier fills and less friction.",
+        coaching: "A chart can look great and still be a poor trading vehicle if liquidity is weak.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "What does a long upper wick usually suggest first?",
+        choices: [
+          { id: "a", label: "Buyers pushed higher but could not fully hold those levels into the close." },
+          { id: "b", label: "The chart must reverse immediately." },
+          { id: "c", label: "The candle body stops mattering." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A long upper wick often signals rejection or hesitation near higher prices. Context decides how important it is.",
+        coaching: "Read wicks as clues, not as automatic trading commands.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "Why does candle context matter more than candle names?",
+        choices: [
+          { id: "a", label: "Because the same candle can mean different things depending on location and sequence." },
+          { id: "b", label: "Because candle names are enough by themselves." },
+          { id: "c", label: "Because strong-looking candles are always immediate entries." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Candles only become meaningful when you place them inside the surrounding structure and story.",
+        coaching: "The sequence around the candle is where the real read comes from.",
+      },
+    ],
+  },
+  {
+    slug: "levels-trends-risk-rapid-review",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Levels, Trends, and Risk Rapid Review",
+    summary:
+      "A short repetition loop on support/resistance, trend sequence, stops, and sizing logic.",
+    xpReward: 90,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What makes a support or resistance area more meaningful?",
+        choices: [
+          { id: "a", label: "Price has reacted there clearly and traders can recognize it as a decision zone." },
+          { id: "b", label: "It is exactly one perfect pixel wide." },
+          { id: "c", label: "It only appears after extreme zooming." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Good levels usually come from repeated reaction and obvious visual relevance, not fantasy precision.",
+        coaching: "Think in defended zones, not perfect lines.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: an uptrend is usually built from higher highs and higher lows.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Trend direction comes from repeated sequence, not from opinion about one candle.",
+        coaching: "Always read the swing sequence first.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Where should a long stop usually go if the setup depends on support holding?",
+        choices: [
+          { id: "a", label: "Just under the support or invalidation zone, with a small buffer." },
+          { id: "b", label: "At a random dollar amount that feels comfortable." },
+          { id: "c", label: "Nowhere, if the setup looked strong." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "The stop belongs where the chart idea fails, not where the trader feels better emotionally.",
+        coaching: "The chart defines the stop; position size adapts to that location.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "If your stop gets wider but your max dollar risk stays fixed, what usually happens to your position size?",
+        choices: [
+          { id: "a", label: "It usually needs to get smaller." },
+          { id: "b", label: "It should get larger because the trade needs more room." },
+          { id: "c", label: "It stays exactly the same." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "With fixed risk, a wider stop means more risk per share or contract, so the size normally shrinks.",
+        coaching: "Size follows stop distance and risk budget, not confidence.",
+      },
+    ],
+  },
+  {
+    slug: "market-vehicles-rapid-review",
+    moduleSlug: "market-vehicles-and-instruments",
+    title: "Markets and Instruments Rapid Review",
+    summary:
+      "A short repetition loop on stocks, options, futures, forex, and crypto market structure.",
+    xpReward: 90,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What is the clearest difference between a stock and an ETF?",
+        choices: [
+          { id: "a", label: "A stock is one company exposure, while an ETF is a basket of holdings." },
+          { id: "b", label: "A stock expires, while an ETF does not." },
+          { id: "c", label: "A stock automatically uses leverage." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "The main structural difference is that a stock is single-name exposure and an ETF is packaged basket exposure.",
+        coaching: "Know what instrument you are actually trading before worrying about pattern details.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: options depend on time and contract choice, not just direction.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Options add time decay, expiration, and structure choices on top of directional bias.",
+        coaching: "Options are contracts, not just faster shares.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which market most directly forces you to understand tick value and contract specs first?",
+        choices: [
+          { id: "a", label: "Futures" },
+          { id: "b", label: "Only broad ETFs" },
+          { id: "c", label: "Owning one common stock share" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Futures contracts have explicit tick values and contract math that change the risk immediately.",
+        coaching: "In contract markets, the math is part of the trade idea.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "Which market most often forces you to think about venue quality and nearly continuous trading?",
+        choices: [
+          { id: "a", label: "Crypto" },
+          { id: "b", label: "Regular-hours equities only" },
+          { id: "c", label: "Paper charts with no live market" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Crypto often trades nearly 24/7 and can vary significantly by venue and liquidity quality.",
+        coaching: "Venue quality matters most when the market is fragmented.",
+      },
+    ],
+  },
+  {
+    slug: "execution-mechanics-rapid-review",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Execution Mechanics Rapid Review",
+    summary:
+      "A short repetition loop on order types, spread quality, session windows, and slippage.",
+    xpReward: 95,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "Which order type usually gives the most price control?",
+        choices: [
+          { id: "a", label: "Limit order" },
+          { id: "b", label: "Market order" },
+          { id: "c", label: "Randomly choosing based on emotion" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Limit orders prioritize price control, even though they may reduce certainty of immediate fill.",
+        coaching: "Execution quality is always a tradeoff between control and certainty.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: a wide spread can weaken an otherwise attractive setup.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Spread is real friction. Paying it repeatedly can reduce or destroy the edge.",
+        coaching: "Execution cost belongs inside setup selection.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which session often becomes slower and less liquid for many equity intraday traders?",
+        choices: [
+          { id: "a", label: "Midday" },
+          { id: "b", label: "Only the open" },
+          { id: "c", label: "No session changes market behavior" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Midday often compresses and trades more slowly than the open or close.",
+        coaching: "Time filters are simpler and more useful than many beginners expect.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "What happens to a strategy over time if slippage is ignored?",
+        choices: [
+          { id: "a", label: "Real expectancy can degrade even if the chart logic looked good." },
+          { id: "b", label: "It has no effect if you were right on direction." },
+          { id: "c", label: "It only matters on losing trades." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Repeated fill damage changes real outcomes over many trades because live execution is never perfect.",
+        coaching: "A believable strategy respects how it will actually get filled.",
+      },
+    ],
+  },
+  {
+    slug: "structure-execution-rapid-review",
+    moduleSlug: "structure-and-execution",
+    title: "Structure and Execution Rapid Review",
+    summary:
+      "A short repetition loop on breakouts, pullbacks, triggers, exits, and participation confirmation.",
+    xpReward: 95,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What makes a breakout more trustworthy?",
+        choices: [
+          {
+            id: "a",
+            label: "It clears a meaningful level, closes with strength, and holds above the breakout zone.",
+          },
+          { id: "b", label: "It only pokes slightly above resistance before collapsing." },
+          { id: "c", label: "It feels exciting enough to chase immediately." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A stronger breakout usually clears a real level and shows acceptance above it instead of instant rejection.",
+        coaching: "Acceptance matters more than the first poke through the line.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: a controlled pullback can improve entry location and clarify the stop.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "A healthy retest often turns a fast move into a cleaner trade with better structure and risk definition.",
+        coaching: "Patience often improves the trade more than speed does.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which statement best matches a good entry trigger?",
+        choices: [
+          { id: "a", label: "A specific planned event like a reclaim, breakout close, or strong response candle." },
+          { id: "b", label: "Any moment the chart feels ready to move." },
+          { id: "c", label: "Only entering once the move is already extremely extended." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A trigger has to be specific enough that you could describe it clearly before the trade starts.",
+        coaching: "If you cannot define the trigger, the setup is still too vague.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "Why is volume most useful in this module?",
+        choices: [
+          { id: "a", label: "It helps confirm whether the price action has participation behind it." },
+          { id: "b", label: "It can replace levels, triggers, and structure entirely." },
+          { id: "c", label: "It guarantees a breakout will not fail." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Volume is most useful when it supports the structure and trigger you already see, not when it replaces them.",
+        coaching: "Use volume as confirmation, not as a shortcut.",
+      },
+    ],
+  },
   {
     slug: "equity-rapid-review",
     moduleSlug: "stocks-and-equity-playbooks",
