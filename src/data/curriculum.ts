@@ -57,6 +57,7 @@ export const learningModules: LearningModule[] = [
     chartChallengeSlug: "trend-and-support-challenge",
     reviewChartChallengeSlugs: ["candle-context-review-challenge"],
     simulatorSlug: "open-drive-pullback",
+    reviewScenarioSlugs: ["first-pullback-or-chase-simulator"],
   },
   {
     id: "module-02",
@@ -86,6 +87,7 @@ export const learningModules: LearningModule[] = [
     drillSlug: "levels-trends-risk-rapid-review",
     chartChallengeSlug: "trend-level-and-stop-challenge",
     reviewChartChallengeSlugs: ["role-reversal-review-challenge"],
+    reviewScenarioSlugs: ["support-failure-risk-simulator"],
   },
   {
     id: "module-03",
@@ -145,6 +147,7 @@ export const learningModules: LearningModule[] = [
     chartChallengeSlug: "spread-and-session-challenge",
     reviewChartChallengeSlugs: ["session-lull-review-challenge"],
     simulatorSlug: "execution-quality-simulator",
+    reviewScenarioSlugs: ["limit-order-patience-simulator"],
   },
   {
     id: "module-05",
@@ -175,6 +178,7 @@ export const learningModules: LearningModule[] = [
     chartChallengeSlug: "breakout-or-fakeout-challenge",
     reviewChartChallengeSlugs: ["pullback-location-review-challenge"],
     simulatorSlug: "breakout-retest-simulator",
+    reviewScenarioSlugs: ["pullback-continuation-simulator"],
   },
   {
     id: "module-06",
@@ -288,6 +292,7 @@ export const learningModules: LearningModule[] = [
     chartChallengeSlug: "a-plus-or-skip-challenge",
     reviewChartChallengeSlugs: ["discipline-filter-review-challenge"],
     simulatorSlug: "revenge-trade-reset-simulator",
+    reviewScenarioSlugs: ["discipline-after-win-simulator"],
   },
   {
     id: "module-10",
@@ -6394,6 +6399,431 @@ export const scenarios: Scenario[] = [
       "Discipline is often invisible because it shows up as a trade you did not take.",
       "Good process can still include losses. Bad process can still include winners. Judge the decision first.",
       "This simulator is also system design training: define emotional guardrails, skip conditions, and recovery rules clearly.",
+    ],
+  },
+  {
+    slug: "first-pullback-or-chase-simulator",
+    moduleSlug: "market-bootcamp",
+    title: "First Pullback Or Chase Simulator",
+    summary:
+      "Practice the first beginner decision that matters: chase strength blindly or wait for a cleaner location with defined risk.",
+    xpReward: 110,
+    setup:
+      "A stock gaps and runs in the first few minutes, but you arrive late enough that the move is already extended from the nearest clean support area.",
+    steps: [
+      {
+        id: "bootcamp-review-step-1",
+        title: "You notice the move late",
+        marketContext:
+          "The stock is clearly moving up, but your first view comes after several green candles in a row.",
+        tapeRead: [
+          "Momentum is real, but the current location is stretched.",
+          "There is no clean stop directly beneath the current price.",
+          "Missing the first move does not mean the next click should be immediate.",
+        ],
+        riskCallout: "A good idea can still be a poor entry if the price is already extended.",
+        actions: [
+          {
+            id: "buy-late-anyway",
+            label: "Buy now so you do not miss the rest of the move",
+            rationale: "Any delay risks being left behind.",
+          },
+          {
+            id: "wait-for-first-pullback",
+            label: "Wait for the first controlled pullback toward support",
+            rationale: "A pullback can improve location and define risk.",
+          },
+          {
+            id: "short-because-extended",
+            label: "Short because the move looks overdone",
+            rationale: "Price has already moved too far too fast.",
+          },
+        ],
+        correctActionId: "wait-for-first-pullback",
+        feedback:
+          "Waiting is the mature beginner decision. Strong direction is useful, but location and invalidation still matter more than urgency.",
+        outcome:
+          "Price dips into the prior launch area, slows down, and shows the first sign that buyers may defend the zone.",
+      },
+      {
+        id: "bootcamp-review-step-2",
+        title: "Pullback reaches support",
+        marketContext:
+          "The stock touches the prior support area, wicks briefly below it, and closes back inside the launch zone.",
+        tapeRead: [
+          "Buyers are trying to defend the first support area.",
+          "The stop can now sit below a real level instead of beneath random air.",
+          "The setup is still simple: trend, pullback, response, risk point.",
+        ],
+        riskCallout: "Simple setups are often best when the stop ties directly to structure.",
+        actions: [
+          {
+            id: "enter-on-response",
+            label: "Enter on the response and place the stop below support",
+            rationale: "The idea is now tied to a visible level and a cleaner invalidation point.",
+          },
+          {
+            id: "enter-no-stop-after-pullback",
+            label: "Enter now but skip the stop because the support already proved itself",
+            rationale: "The level holding once is enough protection.",
+          },
+          {
+            id: "skip-all-pullbacks",
+            label: "Skip because any pullback means the trend is no longer strong",
+            rationale: "A real move should never retrace.",
+          },
+        ],
+        correctActionId: "enter-on-response",
+        feedback:
+          "This is the better entry. The support test gives you a structure-based stop and turns a fast market into a readable decision.",
+        outcome:
+          "The stock rotates back toward the intraday high, giving a cleaner continuation than the original chase entry would have offered.",
+      },
+    ],
+    closingNotes: [
+      "Direction alone is not enough. Entry location changes the quality of the trade.",
+      "The first beginner edge is often patience, not prediction.",
+      "This replay reinforces the lesson loop: identify the move, wait for structure, define risk, then act.",
+    ],
+  },
+  {
+    slug: "support-failure-risk-simulator",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Support Failure Risk Simulator",
+    summary:
+      "Practice what to do when a level that looked solid starts to fail and your stop logic needs to stay objective.",
+    xpReward: 115,
+    setup:
+      "A stock had been bouncing from a clear support zone, but the latest retest is weaker and the response candle is not convincing.",
+    steps: [
+      {
+        id: "risk-review-step-1",
+        title: "Level is touched again",
+        marketContext:
+          "Price is back at support, but the bounce is smaller than the last one and volume is not improving.",
+        tapeRead: [
+          "Support still exists, but the defense is weaker than before.",
+          "Repeated tests can weaken a level over time.",
+          "The key question is whether risk still makes sense here.",
+        ],
+        riskCallout: "A level that keeps getting tested deserves more caution, not blind confidence.",
+        actions: [
+          {
+            id: "buy-because-support-always-holds",
+            label: "Buy immediately because support worked before",
+            rationale: "A proven level should keep working until it fully breaks.",
+          },
+          {
+            id: "wait-for-stronger-defense",
+            label: "Wait for a stronger defense or skip if it never appears",
+            rationale: "A weaker bounce may not justify the same trade plan.",
+          },
+          {
+            id: "widen-stop-randomly",
+            label: "Enter now and give it extra room with a much wider stop",
+            rationale: "If the level is shaky, more space should solve it.",
+          },
+        ],
+        correctActionId: "wait-for-stronger-defense",
+        feedback:
+          "That is the cleaner read. A weakening level should tighten your standards, not make you more casual with risk.",
+        outcome:
+          "Price chops around the zone and fails to produce the kind of response candle that would justify entry.",
+      },
+      {
+        id: "risk-review-step-2",
+        title: "The level finally slips",
+        marketContext:
+          "Price closes below support and does not reclaim it quickly on the next candle.",
+        tapeRead: [
+          "The invalidation point has been reached.",
+          "The old support is no longer acting like support.",
+          "Holding and hoping now changes the trade from planned risk to emotional risk.",
+        ],
+        riskCallout: "A stop exists to answer the question quickly when the setup is no longer valid.",
+        actions: [
+          {
+            id: "accept-stop-and-reset",
+            label: "Accept the failed level and reset the trade idea",
+            rationale: "The setup changed, so the trade plan must change too.",
+          },
+          {
+            id: "hold-because-it-might-come-back",
+            label: "Hold because the price could reclaim support later",
+            rationale: "A temporary breakdown is not worth respecting yet.",
+          },
+          {
+            id: "double-down-lower",
+            label: "Add more because the lower price is a better deal",
+            rationale: "The same thesis is cheaper now.",
+          },
+        ],
+        correctActionId: "accept-stop-and-reset",
+        feedback:
+          "This is the disciplined risk-management answer. Once the support is lost and not reclaimed, the original setup is gone.",
+        outcome:
+          "Price continues lower before stabilizing much later, proving that protecting the stop mattered more than arguing with the chart.",
+      },
+    ],
+    closingNotes: [
+      "Levels matter most when they clearly separate valid from invalid trade logic.",
+      "Risk discipline means accepting when the chart disproves the idea.",
+      "A stop is not a punishment. It is the rule that keeps one idea from becoming a bigger problem.",
+    ],
+  },
+  {
+    slug: "limit-order-patience-simulator",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Limit Order Patience Simulator",
+    summary:
+      "Practice choosing between better execution and impulsive fills when the market is moving, but not cleanly enough to justify sloppy entries.",
+    xpReward: 120,
+    setup:
+      "A setup is still valid, but the spread has widened and the current candle is not moving with enough urgency to justify paying up blindly.",
+    steps: [
+      {
+        id: "execution-review-step-1",
+        title: "Entry is available, but not clean",
+        marketContext:
+          "The chart still supports the idea, yet the inside market is wide enough that a market order would give up meaningful price improvement.",
+        tapeRead: [
+          "The opportunity still exists.",
+          "Spread cost now matters more than it did during the most liquid window.",
+          "Execution choice can change expectancy even when the setup is still valid.",
+        ],
+        riskCallout: "A good read can still be damaged by lazy execution.",
+        actions: [
+          {
+            id: "use-patient-limit",
+            label: "Use a patient limit approach inside the acceptable entry zone",
+            rationale: "Keep the trade aligned with both the setup and the fill quality.",
+          },
+          {
+            id: "slam-market-order",
+            label: "Send a market order because the setup matters more than the spread",
+            rationale: "Paying up is always worth it if the direction is right.",
+          },
+          {
+            id: "cancel-all-execution-rules",
+            label: "Ignore the order choice and worry only about the chart shape",
+            rationale: "Execution is too small to matter compared to the setup.",
+          },
+        ],
+        correctActionId: "use-patient-limit",
+        feedback:
+          "That is the better execution answer. You are still taking the idea seriously, but not giving away unnecessary price improvement.",
+        outcome:
+          "Your order gets a cleaner fill near the planned area instead of lifting the worst price in the spread.",
+      },
+      {
+        id: "execution-review-step-2",
+        title: "The order does not fill immediately",
+        marketContext:
+          "The market starts moving away slightly and you feel the urge to cancel discipline and chase the order.",
+        tapeRead: [
+          "The setup is still present, but the current fill is getting worse.",
+          "Missing one trade is often cheaper than forcing poor execution repeatedly.",
+          "The process must decide whether the trade is still worth taking at the worse price.",
+        ],
+        riskCallout: "Chasing fills can quietly destroy reward-to-risk.",
+        actions: [
+          {
+            id: "cancel-and-reassess",
+            label: "Cancel the patient order and reassess whether the worse entry still fits the plan",
+            rationale: "Do not assume the same setup is still valid at any price.",
+          },
+          {
+            id: "cross-spread-immediately",
+            label: "Cross the spread immediately so you do not miss the move",
+            rationale: "Participation is more important than price quality now.",
+          },
+          {
+            id: "increase-size-for-missed-fill",
+            label: "Increase size if you do get filled later to make up for the delay",
+            rationale: "The late fill needs more size to stay worth it.",
+          },
+        ],
+        correctActionId: "cancel-and-reassess",
+        feedback:
+          "That is the disciplined follow-through. Execution quality includes knowing when a now-worse fill no longer belongs in the original plan.",
+        outcome:
+          "The market keeps moving, then retraces later. By reassessing instead of chasing, you avoid teaching yourself to pay up automatically.",
+      },
+    ],
+    closingNotes: [
+      "Execution quality is not only about getting filled. It is about getting filled on terms that still fit the setup.",
+      "Patience in order handling can preserve a good idea far better than speed alone.",
+      "This replay builds the habit of treating spread and fill quality as part of the trade plan.",
+    ],
+  },
+  {
+    slug: "pullback-continuation-simulator",
+    moduleSlug: "structure-and-execution",
+    title: "Pullback Continuation Simulator",
+    summary:
+      "Practice judging whether a pullback is healthy continuation structure or the first sign that the trend is starting to break down.",
+    xpReward: 125,
+    setup:
+      "An intraday uptrend has already put in one clean move. Price is now retracing into the trend after losing short-term momentum.",
+    steps: [
+      {
+        id: "pullback-review-step-1",
+        title: "The retrace begins",
+        marketContext:
+          "The pullback is retracing toward a prior demand area, but it has not yet shown a clear response candle.",
+        tapeRead: [
+          "The broader trend is still up.",
+          "The pullback has not yet confirmed that buyers are stepping back in.",
+          "A continuation setup still needs an actual trigger, not just a favorite bias.",
+        ],
+        riskCallout: "Calling every pullback an entry turns trend trading into guesswork.",
+        actions: [
+          {
+            id: "buy-first-red-retrace",
+            label: "Buy the first red retrace because pullbacks are always entries",
+            rationale: "The trend alone is enough.",
+          },
+          {
+            id: "wait-for-continuation-trigger",
+            label: "Wait for a continuation trigger near the demand area",
+            rationale: "The trend bias helps, but the actual response still matters.",
+          },
+          {
+            id: "assume-full-reversal",
+            label: "Assume the trend is over just because the retrace is underway",
+            rationale: "Any pullback means the move has failed.",
+          },
+        ],
+        correctActionId: "wait-for-continuation-trigger",
+        feedback:
+          "That is the cleaner structural read. The trend bias matters, but a continuation entry still needs timing and confirmation.",
+        outcome:
+          "Price slows down into the prior demand zone and prints a strong reclaim candle near the end of the retrace.",
+      },
+      {
+        id: "pullback-review-step-2",
+        title: "Continuation trigger appears",
+        marketContext:
+          "The reclaim candle closes strong from the pullback area, and the low of the retrace now provides a clear invalidation level.",
+        tapeRead: [
+          "The pullback respected the trend structure.",
+          "The trigger now separates continuation from failure.",
+          "The stop can sit under the retrace low instead of floating randomly.",
+        ],
+        riskCallout: "The trend earns your attention, but the trigger earns your entry.",
+        actions: [
+          {
+            id: "enter-trend-continuation",
+            label: "Enter on the continuation trigger with a structure-based stop",
+            rationale: "The trend, location, and trigger are finally aligned.",
+          },
+          {
+            id: "enter-oversized-runner",
+            label: "Enter oversized because continuation trades should work fast",
+            rationale: "The confirmation is strong enough to ignore normal sizing.",
+          },
+          {
+            id: "hold-off-no-plan",
+            label: "Enter only if it keeps moving, with no real stop plan",
+            rationale: "If it is strong, the trade should manage itself.",
+          },
+        ],
+        correctActionId: "enter-trend-continuation",
+        feedback:
+          "This is the high-quality continuation entry. The structure held, the trigger appeared, and the stop belongs to the chart rather than to emotion.",
+        outcome:
+          "Price continues higher and gives a cleaner trend-following result than an earlier blind pullback entry would have.",
+      },
+    ],
+    closingNotes: [
+      "A pullback becomes tradable only after structure and trigger align.",
+      "Continuation trading is still rule-based trading, not just trend optimism.",
+      "This replay helps separate healthy retraces from weak guesses inside a trend.",
+    ],
+  },
+  {
+    slug: "discipline-after-win-simulator",
+    moduleSlug: "psychology-and-discipline",
+    title: "Discipline After Win Simulator",
+    summary:
+      "Practice protecting process after a good trade so confidence does not quietly turn into overtrading or sloppy risk decisions.",
+    xpReward: 130,
+    setup:
+      "You just finished a clean winner. The next chart looks active, but it is not actually one of your best setups and the emotional pressure now comes from confidence instead of frustration.",
+    steps: [
+      {
+        id: "discipline-win-step-1",
+        title: "Confidence rises after a winner",
+        marketContext:
+          "The market still feels active and you are tempted to keep pressing while you feel sharp.",
+        tapeRead: [
+          "You are no longer reacting to loss, but the process can still drift.",
+          "The next chart is active without being truly high quality.",
+          "Confidence can lower standards just as easily as frustration can.",
+        ],
+        riskCallout: "Good emotions can still damage discipline if they weaken selectivity.",
+        actions: [
+          {
+            id: "recheck-criteria",
+            label: "Recheck the setup criteria before assuming the next trade is justified",
+            rationale: "A prior win does not automatically qualify the next chart.",
+          },
+          {
+            id: "press-because-hot",
+            label: "Press another trade quickly because you are reading the market well",
+            rationale: "Momentum in your decision-making should be used while it is there.",
+          },
+          {
+            id: "size-up-after-win",
+            label: "Increase size because recent success proves stronger edge today",
+            rationale: "A green streak justifies more aggression.",
+          },
+        ],
+        correctActionId: "recheck-criteria",
+        feedback:
+          "That is the disciplined response. The best way to protect a good win is to make the next trade re-earn its place through the checklist.",
+        outcome:
+          "The next chart looks active but still does not cleanly match the quality threshold you planned before the session.",
+      },
+      {
+        id: "discipline-win-step-2",
+        title: "The next setup is only mediocre",
+        marketContext:
+          "The chart has movement, but the entry is awkward, the stop is wider than normal, and the risk-reward profile is not one of your best.",
+        tapeRead: [
+          "It is tradable in theory, but not clean enough to be a top-tier setup.",
+          "Overtrading often starts with a trade that is almost good enough.",
+          "Protecting the process sometimes means leaving easy excitement alone.",
+        ],
+        riskCallout: "Most discipline leaks start with one unnecessary trade, not a huge dramatic mistake.",
+        actions: [
+          {
+            id: "skip-middling-setup",
+            label: "Skip the middling setup and protect the quality standard",
+            rationale: "A recent win should not lower the entry bar for the next trade.",
+          },
+          {
+            id: "take-it-because-green",
+            label: "Take it because you are already trading well today",
+            rationale: "A good day means you should keep taking decent opportunities.",
+          },
+          {
+            id: "take-half-plan-half-impulse",
+            label: "Take it with vague rules and improvise the rest live",
+            rationale: "Your feel for the market is enough after a winner.",
+          },
+        ],
+        correctActionId: "skip-middling-setup",
+        feedback:
+          "This is the mature answer. Discipline after a win is still discipline. The next trade must qualify on setup quality, not on mood.",
+        outcome:
+          "The chart moves around but never develops into a clean trade. By skipping it, you protect both capital and decision quality.",
+      },
+    ],
+    closingNotes: [
+      "Discipline must survive good emotions as well as bad ones.",
+      "One clean winner should improve confidence, not weaken standards.",
+      "This replay teaches the less obvious side of psychology: protecting process when things feel easy.",
     ],
   },
   {

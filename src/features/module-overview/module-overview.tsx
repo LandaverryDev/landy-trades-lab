@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { ArrowRight, BrainCircuit, ChartCandlestick, Lock, PlayCircle, Trophy } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { getChartChallengeBySlug, getModuleBySlug, getModuleLessons } from "@/lib/course";
+import { getChartChallengeBySlug, getModuleBySlug, getModuleLessons, getScenarioBySlug } from "@/lib/course";
 import { useLearningProgress } from "@/lib/learning-progress";
 
 export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
@@ -16,6 +16,9 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
   const reviewCharts = (baseModule?.reviewChartChallengeSlugs ?? [])
     .map((slug) => getChartChallengeBySlug(slug))
     .filter((challenge): challenge is NonNullable<typeof challenge> => Boolean(challenge));
+  const reviewScenarios = (baseModule?.reviewScenarioSlugs ?? [])
+    .map((slug) => getScenarioBySlug(slug))
+    .filter((scenario): scenario is NonNullable<typeof scenario> => Boolean(scenario));
 
   if (!baseModule || !liveModule) {
     return null;
@@ -205,6 +208,38 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                       done={done}
                       meta={done ? `Best ${bestScore ?? 0}%` : "Optional chart pack"}
                       icon={<ChartCandlestick className="h-4 w-4 text-cyan-300" />}
+                    />
+                  );
+                })}
+              </div>
+            </aside>
+          ) : null}
+
+          {reviewScenarios.length ? (
+            <aside className="course-card rounded-[32px] p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="eyebrow-label">Optional Replay</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-white">Extra decision reps</h2>
+                </div>
+                <p className="text-sm text-slate-400">Use these to deepen pattern recognition and discipline</p>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {reviewScenarios.map((scenario) => {
+                  const done = raw.completedScenarioSlugs.includes(scenario.slug);
+                  const bestScore = raw.scenarioBestScores[scenario.slug];
+
+                  return (
+                    <SequenceRow
+                      key={scenario.slug}
+                      step="RS"
+                      title={scenario.title}
+                      description={scenario.summary}
+                      href={`/simulator/${scenario.slug}`}
+                      done={done}
+                      meta={done ? `Best ${bestScore ?? 0}%` : "Optional replay"}
+                      icon={<PlayCircle className="h-4 w-4 text-emerald-300" />}
                     />
                   );
                 })}

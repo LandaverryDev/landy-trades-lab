@@ -51,6 +51,7 @@ export interface LearningModule {
   chartChallengeSlug?: string;
   reviewChartChallengeSlugs?: string[];
   simulatorSlug?: string;
+  reviewScenarioSlugs?: string[];
 }
 
 export interface LessonTextBlock {

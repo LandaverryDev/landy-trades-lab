@@ -640,6 +640,70 @@ function buildReviewQueue(
       }
     }
 
+    module.reviewScenarioSlugs?.forEach((scenarioSlug) => {
+      const scenario = scenarioLookup.get(scenarioSlug);
+      const reviewState = state.reviewStates[getReviewKey("simulator", scenarioSlug)];
+      const score = reviewState?.lastScore ?? state.scenarioBestScores[scenarioSlug] ?? null;
+      const completed = state.completedScenarioSlugs.includes(scenarioSlug);
+
+      if (!completed) {
+        queue.push({
+          id: `simulator-review:${scenarioSlug}`,
+          kind: "simulator",
+          slug: scenarioSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: scenario?.title ?? "Replay Scenario",
+          href: `/simulator/${scenarioSlug}`,
+          score,
+          reason: "Optional replay scenario not started yet",
+          priority: 2,
+          dueDate: null,
+          dueLabel: "Start now",
+          dueState: "new",
+          masteryLabel: "First pass",
+        });
+      } else if ((score ?? 0) < 82) {
+        queue.push({
+          id: `simulator-review:${scenarioSlug}`,
+          kind: "simulator",
+          slug: scenarioSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: scenario?.title ?? "Replay Scenario",
+          href: `/simulator/${scenarioSlug}`,
+          score,
+          reason: `Optional replay decision quality is still ${score ?? 0}%. Tighten it before widening the interval`,
+          priority: 2,
+          dueDate: reviewState?.dueDate ?? today,
+          dueLabel: describeDueLabel(reviewState?.dueDate ?? today),
+          dueState: "weak",
+          masteryLabel: describeMasteryLabel(reviewState),
+        });
+      } else if (reviewState) {
+        const dueGap = dayDiff(today, reviewState.dueDate);
+
+        if (dueGap <= 0 || dueGap <= 2) {
+          queue.push({
+            id: `simulator-review:${scenarioSlug}`,
+            kind: "simulator",
+            slug: scenarioSlug,
+            moduleSlug: module.slug,
+            moduleTitle: module.title,
+            title: scenario?.title ?? "Replay Scenario",
+            href: `/simulator/${scenarioSlug}`,
+            score,
+            reason: dueGap <= 0 ? "Optional replay is due for another pass" : "Optional replay comes due soon",
+            priority: dueGap <= 0 ? 3 : 5,
+            dueDate: reviewState.dueDate,
+            dueLabel: describeDueLabel(reviewState.dueDate),
+            dueState: dueGap <= 0 ? "due" : "upcoming",
+            masteryLabel: describeMasteryLabel(reviewState),
+          });
+        }
+      }
+    });
+
     module.reviewChartChallengeSlugs?.forEach((challengeSlug) => {
       const challenge = challengeLookup.get(challengeSlug);
       const reviewState = state.reviewStates[getReviewKey("chart", challengeSlug)];
