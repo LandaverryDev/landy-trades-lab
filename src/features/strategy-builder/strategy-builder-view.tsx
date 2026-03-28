@@ -1,9 +1,10 @@
 "use client";
 
-import { Bot, ChevronRight, RotateCcw, ShieldCheck, Target } from "lucide-react";
+import { AlertTriangle, Bot, ChevronRight, RotateCcw, ShieldCheck, Sparkles, Target } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { strategyBuilderSections } from "@/data/strategy-builder";
+import { deriveStrategyBlueprintSpec } from "@/lib/strategy-builder-spec";
 import {
   clearStrategySelections,
   setStrategyName,
@@ -13,16 +14,21 @@ import {
 
 export function StrategyBuilderView() {
   const { draft, selectedOptions, completionPercent, completedSections, totalSections } = useStrategyBuilderDraft();
-  const selectedWarnings = selectedOptions
-    .map((item) => item.option.warning)
-    .filter((value): value is string => Boolean(value));
-  const referencedLessons = Array.from(new Set(selectedOptions.flatMap((item) => item.option.lessonRefs)));
+  const spec = deriveStrategyBlueprintSpec(draft, selectedOptions);
   const readinessLabel =
-    completionPercent >= 100
-      ? "System blueprint ready"
-      : completionPercent >= 70
-        ? "Good draft, missing a few controls"
-        : "Still incomplete";
+    selectedOptions.length === 0
+      ? "Choose the first rule blocks"
+      : spec.automationReadinessLabel;
+
+  function downloadFile(filename: string, contents: string, mimeType: string) {
+    const blob = new Blob([contents], { type: mimeType });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
 
   return (
     <div className="space-y-8">
@@ -59,6 +65,8 @@ export function StrategyBuilderView() {
               <div className="grid gap-3 sm:grid-cols-2">
                 <BuilderStat label="Sections chosen" value={`${completedSections}/${totalSections}`} />
                 <BuilderStat label="Readiness" value={readinessLabel} />
+                <BuilderStat label="Automation score" value={`${spec.automationReadinessPercent}%`} />
+                <BuilderStat label="Open findings" value={`${spec.validationFindings.length}`} />
               </div>
               <button
                 type="button"
@@ -68,6 +76,36 @@ export function StrategyBuilderView() {
                 <RotateCcw className="h-4 w-4" />
                 Reset blueprint
               </button>
+              {selectedOptions.length ? (
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      downloadFile(
+                        `${draft.strategyName || "strategy-blueprint"}.json`,
+                        JSON.stringify(spec.jsonSpec, null, 2),
+                        "application/json",
+                      )
+                    }
+                    className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/[0.05]"
+                  >
+                    Download JSON
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      downloadFile(
+                        `${draft.strategyName || "strategy-blueprint"}.md`,
+                        spec.markdownSpec,
+                        "text/markdown",
+                      )
+                    }
+                    className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/[0.05]"
+                  >
+                    Download Markdown
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -138,11 +176,11 @@ export function StrategyBuilderView() {
 
             {selectedOptions.length ? (
               <div className="mt-5 space-y-4">
-                {selectedOptions.map((item) => (
+                {spec.humanRules.map((item) => (
                   <div key={item.sectionId} className="course-inset rounded-[24px] p-4">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400">{item.sectionTitle}</p>
-                    <p className="mt-2 text-base font-semibold text-white">{item.option.label}</p>
-                    <p className="mt-3 text-sm leading-7 text-slate-300">{item.option.ruleText}</p>
+                    <p className="mt-2 text-base font-semibold text-white">{item.label}</p>
+                    <p className="mt-3 text-sm leading-7 text-slate-300">{item.ruleText}</p>
                   </div>
                 ))}
               </div>
@@ -162,10 +200,43 @@ export function StrategyBuilderView() {
               </div>
             </div>
             <div className="mt-5 space-y-3">
-              {selectedWarnings.length ? (
-                selectedWarnings.map((warning) => (
-                  <div key={warning} className="rounded-2xl border border-amber-300/12 bg-amber-300/[0.06] px-4 py-3 text-sm leading-7 text-amber-50">
-                    {warning}
+              <div className="course-inset rounded-[24px] p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400">Automation readiness</p>
+                    <p className="mt-2 text-2xl font-semibold text-white">{spec.automationReadinessPercent}%</p>
+                  </div>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs uppercase tracking-[0.18em] text-slate-200">
+                    {spec.automationReadinessLabel}
+                  </span>
+                </div>
+              </div>
+              {spec.validationFindings.length ? (
+                spec.validationFindings.map((finding) => (
+                  <div
+                    key={finding.id}
+                    className={`rounded-2xl border px-4 py-3 text-sm leading-7 ${
+                      finding.severity === "blocker"
+                        ? "border-rose-300/16 bg-rose-300/[0.08] text-rose-50"
+                        : finding.severity === "warning"
+                          ? "border-amber-300/12 bg-amber-300/[0.06] text-amber-50"
+                          : "border-cyan-300/12 bg-cyan-300/[0.06] text-cyan-50"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {finding.severity === "blocker" ? (
+                        <AlertTriangle className="mt-1 h-4 w-4 shrink-0" />
+                      ) : finding.severity === "warning" ? (
+                        <ShieldCheck className="mt-1 h-4 w-4 shrink-0" />
+                      ) : (
+                        <Sparkles className="mt-1 h-4 w-4 shrink-0" />
+                      )}
+                      <div>
+                        <p className="font-semibold text-current">{finding.title}</p>
+                        <p className="mt-2 text-current/90">{finding.detail}</p>
+                        <p className="mt-2 text-current/80">Next action: {finding.action}</p>
+                      </div>
+                    </div>
                   </div>
                 ))
               ) : (
@@ -177,6 +248,16 @@ export function StrategyBuilderView() {
                 If a rule cannot be stated clearly here, it will be hard to execute consistently and even harder to
                 automate later.
               </div>
+              {spec.missingSections.length ? (
+                <div className="course-inset rounded-2xl px-4 py-3 text-sm leading-7 text-slate-300">
+                  Missing sections: {spec.missingSections.join(", ")}
+                </div>
+              ) : null}
+              {spec.nextStepLabels.length ? (
+                <div className="course-inset rounded-2xl px-4 py-3 text-sm leading-7 text-slate-300">
+                  Next build steps: {spec.nextStepLabels.join(" • ")}
+                </div>
+              ) : null}
             </div>
           </aside>
 
@@ -189,8 +270,8 @@ export function StrategyBuilderView() {
               </div>
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
-              {referencedLessons.length ? (
-                referencedLessons.map((lessonSlug) => (
+              {spec.lessonRefs.length ? (
+                spec.lessonRefs.map((lessonSlug) => (
                   <span key={lessonSlug} className="course-pill text-sm text-slate-200">
                     {lessonSlug}
                   </span>
@@ -200,6 +281,42 @@ export function StrategyBuilderView() {
                   Select a few rule blocks and the supporting lesson references will appear here.
                 </div>
               )}
+            </div>
+          </aside>
+
+          <aside className="course-card rounded-[30px] p-6">
+            <div className="flex items-center gap-3">
+              <Bot className="h-5 w-5 text-cyan-300" />
+              <div>
+                <p className="eyebrow-label">Bot-Ready Spec</p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">Pseudocode and structured output</h2>
+              </div>
+            </div>
+            <div className="mt-5 space-y-4">
+              <div className="course-inset rounded-[24px] p-4">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400">Checklist</p>
+                <div className="mt-3 space-y-2">
+                  {spec.checklist.map((item) => (
+                    <div key={item} className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm leading-7 text-slate-200">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="course-inset rounded-[24px] p-4">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400">Pseudocode</p>
+                <pre className="mt-3 overflow-x-auto rounded-2xl border border-white/8 bg-slate-950/80 p-4 text-xs leading-6 text-slate-200">
+                  <code>{spec.pseudocode.join("\n")}</code>
+                </pre>
+              </div>
+
+              <div className="course-inset rounded-[24px] p-4">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400">Structured JSON</p>
+                <pre className="mt-3 overflow-x-auto rounded-2xl border border-white/8 bg-slate-950/80 p-4 text-xs leading-6 text-slate-200">
+                  <code>{JSON.stringify(spec.jsonSpec, null, 2)}</code>
+                </pre>
+              </div>
             </div>
           </aside>
         </div>
