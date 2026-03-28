@@ -23,6 +23,7 @@ A personal trading education web app built as a premium, interactive learning pr
 
 - `/` dashboard / landing experience
 - `/learn` learning path overview
+- `/module/[moduleSlug]` guided module overview and sequence
 - `/lesson/[lessonSlug]` lesson view
 - `/quiz/[quizSlug]` interactive quiz
 - `/chart-challenge/[challengeSlug]` chart drill
@@ -42,6 +43,7 @@ src/
     dashboard/
     learning-path/
     lesson/
+    module-overview/
     chart-challenge/
     progress/
     quiz/

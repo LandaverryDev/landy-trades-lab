@@ -69,27 +69,27 @@ export function LearningPathView() {
 
             {activeModule.quizSlug ? (
               <Link
-                href={`/quiz/${activeModule.quizSlug}`}
+                href={`/module/${activeModule.slug}`}
                 className="rounded-[28px] border border-cyan-400/12 bg-cyan-400/[0.05] p-5 transition hover:-translate-y-0.5"
               >
                 <p className="font-mono text-sm text-cyan-300">04</p>
-                <h3 className="mt-4 text-xl font-semibold text-white">Quiz Checkpoint</h3>
+                <h3 className="mt-4 text-xl font-semibold text-white">Module Overview</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Instant feedback on the first three lessons with local score tracking.
+                  Open the guided sequence for lessons, quiz, chart drill, and next actions.
                 </p>
-                <div className="mt-4 text-sm text-cyan-100/80">Assessment step</div>
+                <div className="mt-4 text-sm text-cyan-100/80">Guided module flow</div>
               </Link>
             ) : null}
 
             {activeModule.chartChallengeSlug ? (
               <Link
-                href={`/chart-challenge/${activeModule.chartChallengeSlug}`}
+                href={`/module/${activeModule.slug}`}
                 className="rounded-[28px] border border-fuchsia-400/12 bg-fuchsia-400/[0.05] p-5 transition hover:-translate-y-0.5"
               >
                 <p className="font-mono text-sm text-fuchsia-300">05</p>
-                <h3 className="mt-4 text-xl font-semibold text-white">Chart Challenge</h3>
+                <h3 className="mt-4 text-xl font-semibold text-white">Assessment Flow</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Read the trend first, then click where support is most meaningful.
+                  Resume the module and move into the next required assessment.
                 </p>
                 <div className="mt-4 text-sm text-fuchsia-100/80">Visual application step</div>
               </Link>
@@ -118,7 +118,7 @@ export function LearningPathView() {
               <div className="mt-6 grid gap-5 xl:grid-cols-2">
                 {tierModules.map((module) => {
                   const locked = !module.unlocked;
-                  const href = module.lessonSlugs[0] ? `/lesson/${module.lessonSlugs[0]}` : "/learn";
+                  const href = `/module/${module.slug}`;
 
                   return (
                     <div

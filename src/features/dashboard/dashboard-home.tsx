@@ -57,10 +57,10 @@ export function DashboardHome() {
                     </div>
                   </div>
                   <Link
-                    href={`/lesson/${upcomingLesson?.slug ?? activeModule.lessonSlugs[0]}`}
+                    href={`/module/${activeModule.slug}`}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-5 py-3 text-sm font-semibold text-slate-950 transition hover:scale-[1.01]"
                   >
-                    Resume Training
+                    Open Module
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -163,19 +163,19 @@ export function DashboardHome() {
               step="01"
               title={upcomingLesson?.title ?? "Start here"}
               detail={upcomingLesson?.summary ?? "Move through the next short visual lesson."}
-              href={upcomingLesson ? `/lesson/${upcomingLesson.slug}` : "/learn"}
+              href={activeModule ? `/module/${activeModule.slug}` : "/learn"}
             />
             <SequenceCard
               step="02"
-              title="Foundations Quiz"
-              detail="Rapid-fire checks with immediate feedback and reinforcement."
-              href={`/quiz/${activeModule?.quizSlug ?? "beginner-foundations-quiz"}`}
+              title="Module Sequence"
+              detail="See every lesson and assessment in the correct order before you jump in."
+              href={activeModule ? `/module/${activeModule.slug}` : "/learn"}
             />
             <SequenceCard
               step="03"
-              title="Trend + Support Drill"
-              detail="Read the direction first, then click the best support zone."
-              href={`/chart-challenge/${activeModule?.chartChallengeSlug ?? "trend-and-support-challenge"}`}
+              title="Next Assessment"
+              detail="Move from lesson understanding into quizzes, chart drills, and replay training."
+              href={activeModule ? `/module/${activeModule.slug}` : "/learn"}
             />
           </div>
         </div>
