@@ -11,7 +11,7 @@ export function ProgressView() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 sm:p-8">
+      <section className="course-hero rounded-[32px] p-6 sm:p-8">
         <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Progress</p>
         <div className="mt-4 grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <div>
@@ -19,8 +19,8 @@ export function ProgressView() {
               Momentum, mastery, and what unlocks next.
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
-              The progression model is designed to make trading education feel earned. Lessons, rapid-review loops,
-              quizzes, chart reads, and scenario drills all feed a single growth loop instead of living in separate silos.
+              The progression model is designed to make learning feel earned. Lessons, review loops, quizzes, visual
+              practice, and scenario drills all feed one connected study system.
             </p>
           </div>
 
@@ -80,7 +80,7 @@ export function ProgressView() {
                           <p className="text-sm font-semibold text-white">
                             {item.moduleTitle} · {item.title}
                           </p>
-                          <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-cyan-200/70">
+                          <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-slate-300/80">
                             {item.masteryLabel}
                           </p>
                         </div>
@@ -102,7 +102,7 @@ export function ProgressView() {
           </div>
         </div>
 
-        <div className="rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(12,20,34,0.88),rgba(10,14,23,0.95))] p-6">
+        <div className="course-card-raised rounded-[32px] p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Unlock Map</p>
@@ -135,7 +135,7 @@ export function ProgressView() {
                 <div key={tier.slug} className="rounded-[28px] border border-white/8 bg-slate-950/65 p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm text-cyan-300">{tier.label}</p>
+                      <p className="text-sm text-slate-300">{tier.label}</p>
                       <h3 className="mt-1 text-2xl font-semibold text-white">{tier.tagline}</h3>
                     </div>
                     <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-slate-400">
@@ -154,8 +154,8 @@ export function ProgressView() {
                           <span
                             className={`rounded-full px-3 py-1 text-xs uppercase tracking-[0.24em] ${
                               module.liveStatus === "active"
-                                ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-                                : "border border-white/10 bg-white/[0.03] text-slate-400"
+                                ? "course-chip-success"
+                                : "course-chip-muted"
                             }`}
                           >
                             {module.liveStatus}

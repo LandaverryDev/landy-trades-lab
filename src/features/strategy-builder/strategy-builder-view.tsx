@@ -40,8 +40,8 @@ export function StrategyBuilderView() {
       <section className="course-hero rounded-[32px] p-6 sm:p-8">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)]">
           <div>
-            <p className="eyebrow-label text-cyan-200/80">Strategy Builder</p>
-            <h1 className="section-title mt-3">Turn the course into an actual trading rule set.</h1>
+            <p className="eyebrow-label">Strategy Builder</p>
+            <h1 className="section-title mt-3">Turn the course into a clear learning blueprint.</h1>
             <p className="section-copy mt-4 max-w-3xl text-base">
               This is the bridge from learning concepts to building a real discretionary or automated system. Pick the
               market, setup, trigger, filters, risk engine, management logic, and bot guardrails, then inspect the
@@ -77,7 +77,7 @@ export function StrategyBuilderView() {
                 <button
                   type="button"
                   onClick={() => createStrategyDraft(false)}
-                  className="focus-visible-ring inline-flex items-center gap-2 rounded-full border border-cyan-300/18 bg-cyan-300/[0.08] px-4 py-3 text-sm text-cyan-50 transition hover:bg-cyan-300/[0.14]"
+                  className="course-button-primary focus-visible-ring px-4 py-3 text-sm"
                 >
                   <Plus className="h-4 w-4" />
                   New blueprint
@@ -138,7 +138,7 @@ export function StrategyBuilderView() {
         <div className="space-y-6">
           <aside className="course-card rounded-[30px] p-6">
             <div className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-cyan-300" />
+              <Sparkles className="h-5 w-5 text-slate-300" />
               <div>
                 <p className="eyebrow-label">Guided Templates</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Start from a real playbook shape</h2>
@@ -149,13 +149,13 @@ export function StrategyBuilderView() {
                 <div key={template.id} className="rounded-[24px] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-base font-semibold text-white">{template.title}</p>
                   <p className="mt-2 text-sm leading-7 text-slate-300">{template.summary}</p>
-                  <div className="mt-3 rounded-2xl border border-cyan-300/10 bg-cyan-300/[0.05] px-4 py-3 text-sm leading-7 text-cyan-50">
+                  <div className="course-accent-panel mt-3 rounded-2xl px-4 py-3 text-sm leading-7 text-slate-100">
                     {template.coachNote}
                   </div>
                   <button
                     type="button"
                     onClick={() => createStrategyDraftFromTemplate(template)}
-                    className="focus-visible-ring mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/18 bg-cyan-300/[0.08] px-4 py-2 text-sm text-cyan-50 transition hover:bg-cyan-300/[0.14]"
+                    className="course-button-primary focus-visible-ring mt-4 px-4 py-2 text-sm"
                   >
                     <Plus className="h-4 w-4" />
                     Load as new blueprint
@@ -171,7 +171,7 @@ export function StrategyBuilderView() {
             return (
               <article key={section.id} className="course-card rounded-[30px] p-6">
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="font-mono text-sm text-cyan-300">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="font-mono text-sm text-slate-300">{String(index + 1).padStart(2, "0")}</span>
                   <span className="text-xs uppercase tracking-[0.24em] text-slate-400">{section.title}</span>
                 </div>
                 <h2 className="mt-3 text-2xl font-semibold text-white">{section.prompt}</h2>
@@ -188,7 +188,7 @@ export function StrategyBuilderView() {
                         onClick={() => setStrategySelection(section.id, option.id)}
                         className={`focus-visible-ring rounded-[26px] border px-5 py-4 text-left transition ${
                           selected
-                            ? "border-cyan-300/28 bg-cyan-300/[0.09]"
+                            ? "border-[var(--accent-border)] bg-[var(--accent)]"
                             : "border-white/10 bg-slate-950/70 hover:bg-slate-950"
                         }`}
                       >
@@ -197,7 +197,7 @@ export function StrategyBuilderView() {
                             <p className="text-base font-semibold text-white">{option.label}</p>
                             <p className="mt-2 text-sm leading-7 text-slate-300">{option.summary}</p>
                           </div>
-                          <ChevronRight className={`h-5 w-5 ${selected ? "text-cyan-200" : "text-slate-500"}`} />
+                          <ChevronRight className={`h-5 w-5 ${selected ? "text-slate-100" : "text-slate-500"}`} />
                         </div>
                         <div className="mt-4 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm leading-7 text-slate-200">
                           {option.ruleText}
@@ -219,7 +219,7 @@ export function StrategyBuilderView() {
         <div className="space-y-6">
           <aside className="course-card rounded-[30px] p-6">
             <div className="flex items-center gap-3">
-              <Bot className="h-5 w-5 text-cyan-300" />
+              <Bot className="h-5 w-5 text-slate-300" />
               <div>
                 <p className="eyebrow-label">Blueprint Library</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Switch between system drafts</h2>
@@ -233,7 +233,7 @@ export function StrategyBuilderView() {
                   <div
                     key={item.id}
                     className={`rounded-[24px] border px-4 py-4 ${
-                      active ? "border-cyan-300/22 bg-cyan-300/[0.08]" : "border-white/10 bg-white/[0.03]"
+                      active ? "border-[var(--accent-border)] bg-[var(--accent)]" : "border-white/10 bg-white/[0.03]"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-4">
@@ -245,7 +245,7 @@ export function StrategyBuilderView() {
                         </p>
                       </div>
                       {active ? (
-                        <span className="rounded-full border border-cyan-300/18 bg-cyan-300/[0.12] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-cyan-50">
+                        <span className="course-chip-accent rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.2em]">
                           Active
                         </span>
                       ) : null}
@@ -280,7 +280,7 @@ export function StrategyBuilderView() {
 
           <aside className="course-card-raised rounded-[30px] p-6">
             <div className="flex items-center gap-3">
-              <Bot className="h-5 w-5 text-cyan-300" />
+              <Bot className="h-5 w-5 text-slate-300" />
               <div>
                 <p className="eyebrow-label">System Output</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">{draft.strategyName}</h2>
@@ -306,7 +306,7 @@ export function StrategyBuilderView() {
 
           <aside className="course-card rounded-[30px] p-6">
             <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-emerald-300" />
+              <ShieldCheck className="h-5 w-5 text-slate-300" />
               <div>
                 <p className="eyebrow-label">Review Notes</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Risk and build checks</h2>
@@ -333,7 +333,7 @@ export function StrategyBuilderView() {
                         ? "border-rose-300/16 bg-rose-300/[0.08] text-rose-50"
                         : finding.severity === "warning"
                           ? "border-amber-300/12 bg-amber-300/[0.06] text-amber-50"
-                          : "border-cyan-300/12 bg-cyan-300/[0.06] text-cyan-50"
+                          : "border-[var(--accent-border)] bg-[var(--accent)] text-slate-100"
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -376,7 +376,7 @@ export function StrategyBuilderView() {
 
           <aside className="course-card rounded-[30px] p-6">
             <div className="flex items-center gap-3">
-              <Target className="h-5 w-5 text-fuchsia-300" />
+              <Target className="h-5 w-5 text-slate-300" />
               <div>
                 <p className="eyebrow-label">Learned From</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Lesson references</h2>
@@ -399,7 +399,7 @@ export function StrategyBuilderView() {
 
           <aside className="course-card rounded-[30px] p-6">
             <div className="flex items-center gap-3">
-              <Bot className="h-5 w-5 text-cyan-300" />
+              <Bot className="h-5 w-5 text-slate-300" />
               <div>
                 <p className="eyebrow-label">Bot-Ready Spec</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Pseudocode and structured output</h2>

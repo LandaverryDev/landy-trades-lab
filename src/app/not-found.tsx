@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="flex flex-1 items-center justify-center">
-      <div className="max-w-xl rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,15,25,0.98),rgba(15,23,42,0.82))] p-8 text-center">
+      <div className="course-card-raised max-w-xl rounded-[32px] p-8 text-center">
         <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Route not found</p>
         <h1 className="mt-3 text-4xl font-semibold text-white">That lesson is off the chart.</h1>
         <p className="mt-4 text-base leading-7 text-slate-300">
@@ -13,7 +13,7 @@ export default function NotFound() {
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href="/"
-            className="rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+            className="course-button-primary px-4 py-3 text-sm"
           >
             Go to dashboard
           </Link>

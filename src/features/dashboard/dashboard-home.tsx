@@ -34,7 +34,7 @@ export function DashboardHome() {
     <div className="space-y-8">
       <section className="course-hero rounded-[32px] p-6 sm:p-8">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs uppercase tracking-[0.28em] text-emerald-200">
+          <span className="course-chip-success rounded-full px-4 py-1 text-xs uppercase tracking-[0.28em]">
             Learning Home
           </span>
           {activeModule ? (
@@ -49,11 +49,11 @@ export function DashboardHome() {
             <div>
               <p className="eyebrow-label">Learning Home</p>
               <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl xl:text-[3.7rem] xl:leading-[1.04]">
-                Study the concept, repeat the idea, then prove it on the chart.
+                Pick up where you left off and keep the course moving.
               </h1>
               <p className="section-copy mt-4 max-w-3xl text-base sm:text-lg">
-                Landy Trades Lab is structured like a real learning product: one clear next lesson, one review queue,
-                one training sequence, and one curriculum map that shows where you are heading.
+                This home screen is organized like a study dashboard: one clear next lesson, one review queue, one
+                guided practice loop, and a visible curriculum map.
               </p>
             </div>
 
@@ -63,8 +63,8 @@ export function DashboardHome() {
                 className="course-card-raised focus-visible-ring rounded-[28px] p-5 transition hover:-translate-y-0.5"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="eyebrow-label text-cyan-200/80">Continue Learning</p>
-                  <span className="rounded-full border border-cyan-300/20 bg-cyan-300/[0.08] px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-cyan-100">
+                  <p className="eyebrow-label">Continue Learning</p>
+                  <span className="course-chip-accent rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.22em]">
                     {nextStepLabel}
                   </span>
                 </div>
@@ -76,7 +76,7 @@ export function DashboardHome() {
                     activeModule?.summary ??
                     "Jump into the next lesson or module and keep moving through the path."}
                 </p>
-                <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950">
+                <div className="course-button-primary mt-5 px-4 py-3 text-sm">
                   Resume now
                   <ArrowRight className="h-4 w-4" />
                 </div>
@@ -134,17 +134,17 @@ export function DashboardHome() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="eyebrow-label">Strategy Builder</p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">Assemble your first rule stack</h2>
+                <h2 className="mt-2 text-2xl font-semibold text-white">Turn lessons into a study blueprint</h2>
               </div>
-              <Workflow className="h-5 w-5 text-cyan-300" />
+              <Workflow className="h-5 w-5 text-slate-300" />
             </div>
             <p className="mt-3 text-sm leading-7 text-slate-300">
-              Convert the course into a usable system blueprint: market, setup, trigger, filters, risk engine, exits,
-              and automation guardrails.
+              Organize what you learn into a rule stack: context, trigger, filters, risk rules, exits, and later
+              automation guardrails.
             </p>
             <Link
               href="/strategy-builder"
-              className="focus-visible-ring mt-5 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+              className="course-button-primary focus-visible-ring mt-5 px-4 py-3 text-sm"
             >
               Open builder
               <ArrowRight className="h-4 w-4" />
@@ -154,11 +154,11 @@ export function DashboardHome() {
           <div className="course-card-raised min-w-0 overflow-hidden rounded-[32px] p-5">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
-                <p className="eyebrow-label">Chart Practice Preview</p>
+                <p className="eyebrow-label">Visual Practice Preview</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">{sampleChart.title}</h2>
               </div>
-              <Link href={`/chart-challenge/${sampleChart.slug}`} className="text-sm text-emerald-300">
-                Open chart drill
+              <Link href={`/chart-challenge/${sampleChart.slug}`} className="text-sm text-slate-300">
+                Open practice
               </Link>
             </div>
             <p className="mt-3 text-sm leading-7 text-slate-300">{sampleChart.summary}</p>
@@ -173,7 +173,7 @@ export function DashboardHome() {
                 <p className="eyebrow-label">Curriculum Map</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Learn in a clear order</h2>
               </div>
-              <Link href="/learn" className="text-sm text-cyan-300">
+              <Link href="/learn" className="text-sm text-slate-300">
                 Open full curriculum
               </Link>
             </div>
@@ -183,7 +183,7 @@ export function DashboardHome() {
                 <div key={tier.slug} className="course-inset rounded-[24px] p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-sm text-emerald-300">{tier.label}</p>
+                      <p className="text-sm text-slate-300">{tier.label}</p>
                       <h3 className="mt-1 text-xl font-semibold text-white">{tier.tagline}</h3>
                       <p className="mt-2 text-sm leading-7 text-slate-300">{tier.description}</p>
                     </div>
@@ -213,7 +213,7 @@ function LoopStep({
   return (
     <div className="course-inset flex items-start gap-3 rounded-2xl p-3">
       <div className="rounded-xl border border-white/8 bg-white/[0.04] p-2">
-        <Icon className="h-4 w-4 text-emerald-300" />
+        <Icon className="h-4 w-4 text-slate-300" />
       </div>
       <div>
         <p className="text-sm font-semibold text-white">{title}</p>
@@ -237,7 +237,7 @@ function ReviewQueueCard({
           <p className="eyebrow-label">Review Queue</p>
           <h2 className="mt-2 text-2xl font-semibold text-white">What should be reinforced next</h2>
         </div>
-        <BrainCircuit className="h-5 w-5 text-cyan-300" />
+        <BrainCircuit className="h-5 w-5 text-slate-300" />
       </div>
 
       {items.length ? (
@@ -246,7 +246,7 @@ function ReviewQueueCard({
             <Link
               key={item.id}
               href={item.href}
-              className="course-card-soft focus-visible-ring block rounded-[22px] p-4 transition hover:border-cyan-300/20 hover:bg-white/[0.06]"
+              className="course-card-soft focus-visible-ring block rounded-[22px] p-4 transition hover:border-white/12 hover:bg-white/[0.06]"
             >
               <div className="flex items-center justify-between gap-3">
                 <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-300">
@@ -261,19 +261,19 @@ function ReviewQueueCard({
                 {item.moduleTitle} · {item.title}
               </p>
               <p className="mt-2 text-sm leading-7 text-slate-300">{item.reason}</p>
-              <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-cyan-200/70">{item.masteryLabel}</p>
+              <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-slate-300/80">{item.masteryLabel}</p>
             </Link>
           ))}
         </div>
       ) : (
-        <div className="mt-5 rounded-[22px] border border-emerald-400/12 bg-emerald-400/[0.05] p-4">
+        <div className="course-accent-panel mt-5 rounded-[22px] p-4">
           <p className="text-sm font-semibold text-white">Nothing urgent to review right now.</p>
           <p className="mt-2 text-sm leading-7 text-slate-300">
             Keep progressing through the active module, or open older chart packs if you want extra reps anyway.
           </p>
           <Link
             href={fallbackHref}
-            className="focus-visible-ring mt-4 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-2 text-sm font-semibold text-slate-950"
+            className="course-button-primary focus-visible-ring mt-4 px-4 py-2 text-sm"
           >
             Continue training
             <ArrowRight className="h-4 w-4" />

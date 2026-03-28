@@ -189,8 +189,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
 
     return (
       <div className="space-y-6">
-        <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 text-center sm:p-8">
-          <p className="text-sm uppercase tracking-[0.28em] text-fuchsia-300">Chart Challenge Complete</p>
+        <section className="course-hero rounded-[32px] p-6 text-center sm:p-8">
+          <p className="text-sm uppercase tracking-[0.28em] text-slate-300">Chart Challenge Complete</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{percent}% chart accuracy</h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">
             You completed a chart drill that mixed directional reading, direct level placement, zone marking,
@@ -204,8 +204,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           </div>
         </section>
 
-        <section className="rounded-[30px] border border-cyan-400/12 bg-cyan-400/[0.05] p-6">
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan-100/70">Coach Debrief</p>
+        <section className="course-accent-panel rounded-[30px] p-6">
+          <p className="text-xs uppercase tracking-[0.28em] text-slate-200/70">Coach Debrief</p>
           <div className="mt-4 grid gap-3">
             {challenge.coachDebrief.map((item) => (
               <div key={item} className="rounded-2xl border border-white/8 bg-slate-950/75 px-4 py-3 text-sm leading-6 text-slate-200">
@@ -227,7 +227,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           {learningModule?.simulatorSlug ? (
             <Link
               href={`/simulator/${learningModule.simulatorSlug}`}
-              className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+              className="course-button-primary px-4 py-3 text-sm"
             >
               Open simulator
               <ArrowRight className="h-4 w-4" />
@@ -240,10 +240,10 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(9,16,29,0.96),rgba(13,21,38,0.88))] p-6 sm:p-8">
+      <section className="course-hero rounded-[32px] p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.28em] text-fuchsia-300">Chart Challenge</p>
+            <p className="text-sm uppercase tracking-[0.28em] text-slate-300">Visual Practice</p>
             <h1 className="mt-2 text-4xl font-semibold text-white">{challenge.title}</h1>
             <p className="mt-3 max-w-3xl text-base leading-7 text-slate-300">{challenge.summary}</p>
           </div>
@@ -341,11 +341,11 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                     onClick={() => setSelectedChoiceId(choice.id)}
                     className={`rounded-[24px] border px-5 py-4 text-left transition ${
                       showCorrect
-                        ? "border-emerald-400/30 bg-emerald-400/10"
+                        ? "border-[var(--success-border)] bg-[var(--success)]"
                         : showWrong
                           ? "border-rose-400/30 bg-rose-400/10"
                           : selected
-                            ? "border-cyan-300/30 bg-cyan-300/[0.08]"
+                            ? "border-[var(--accent-border)] bg-[var(--accent)]"
                             : "border-white/10 bg-slate-950/70 hover:bg-slate-950"
                     }`}
                   >
@@ -358,8 +358,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           ) : null}
 
           {question.type === "price-line" ? (
-            <div className="rounded-[24px] border border-cyan-400/12 bg-cyan-400/[0.05] px-5 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/70">Direct Chart Markup</p>
+            <div className="course-accent-panel rounded-[24px] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-200/70">Direct Chart Markup</p>
               <p className="mt-3 text-sm leading-6 text-slate-200">
                 Click directly on the chart to place a line where you think the key level belongs.
               </p>
@@ -372,8 +372,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           ) : null}
 
           {question.type === "price-zone" ? (
-            <div className="rounded-[24px] border border-fuchsia-400/12 bg-fuchsia-400/[0.05] px-5 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-fuchsia-100/70">Zone Markup</p>
+            <div className="course-accent-panel rounded-[24px] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-200/70">Zone Markup</p>
               <p className="mt-3 text-sm leading-6 text-slate-200">
                 Click once for one edge of the zone, then click again for the opposite edge.
               </p>
@@ -400,8 +400,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           ) : null}
 
           {question.type === "candle-range" ? (
-            <div className="rounded-[24px] border border-emerald-400/12 bg-emerald-400/[0.05] px-5 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-emerald-100/70">Leg Markup</p>
+            <div className="course-accent-panel rounded-[24px] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-200/70">Leg Markup</p>
               <p className="mt-3 text-sm leading-6 text-slate-200">
                 Click the first candle in the move, then click the last candle to mark the full leg.
               </p>
@@ -428,8 +428,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           ) : null}
 
           {question.type === "trendline" ? (
-            <div className="rounded-[24px] border border-sky-400/12 bg-sky-400/[0.05] px-5 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sky-100/70">Trendline Markup</p>
+            <div className="course-accent-panel rounded-[24px] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-200/70">Trendline Markup</p>
               <p className="mt-3 text-sm leading-6 text-slate-200">
                 Click one anchor point on the chart, then click the second anchor to draw the trendline.
               </p>
@@ -457,7 +457,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
         </div>
 
         <div className="space-y-5">
-          <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,15,25,0.98),rgba(15,23,42,0.82))] p-6">
+          <div className="course-card-raised rounded-[30px] p-6">
             <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Your Read</p>
             {!submitted ? (
               <p className="mt-3 text-sm leading-7 text-slate-300">
@@ -475,7 +475,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
               </p>
             ) : (
               <>
-                <p className={`mt-3 text-sm uppercase tracking-[0.28em] ${isCorrect ? "text-emerald-300" : "text-rose-300"}`}>
+                <p className={`mt-3 text-sm uppercase tracking-[0.28em] ${isCorrect ? "text-slate-200" : "text-rose-300"}`}>
                   {isCorrect ? "Strong read" : "Coach correction"}
                 </p>
                 <p className="mt-4 text-sm leading-7 text-slate-300">
@@ -506,7 +506,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                             : selectedTrendline === null
                 }
                 onClick={handleSubmit}
-                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+                className="course-button-primary inline-flex px-4 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Reveal answer
               </button>
@@ -514,7 +514,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+                className="course-button-primary inline-flex px-4 py-3 text-sm"
               >
                 {currentIndex === challenge.questions.length - 1 ? "See summary" : "Next chart question"}
                 <ArrowRight className="h-4 w-4" />

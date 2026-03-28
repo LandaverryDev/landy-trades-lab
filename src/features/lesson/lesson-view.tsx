@@ -32,7 +32,7 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
           <span className="course-pill text-xs uppercase tracking-[0.28em] text-slate-300">
             {lesson.estimatedMinutes} min
           </span>
-          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs uppercase tracking-[0.28em] text-emerald-200">
+          <span className="course-chip-success rounded-full px-4 py-1 text-xs uppercase tracking-[0.28em]">
             {lesson.xpReward} XP
           </span>
         </div>
@@ -66,7 +66,7 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
           {lesson.sections.map((section, index) => (
             <article key={section.id} className="course-card rounded-[30px] p-6">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="font-mono text-sm text-cyan-300">{String(index + 1).padStart(2, "0")}</span>
+                <span className="font-mono text-sm text-slate-300">{String(index + 1).padStart(2, "0")}</span>
                 <span className="text-xs uppercase tracking-[0.24em] text-slate-400">{section.eyebrow}</span>
               </div>
               <h2 className="mt-3 text-2xl font-semibold text-white">{section.title}</h2>
@@ -88,11 +88,11 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
             </div>
           </aside>
 
-          <aside className="rounded-[30px] border border-cyan-400/12 bg-cyan-400/[0.05] p-6">
-            <p className="text-xs uppercase tracking-[0.28em] text-cyan-100/70">Bot Builder Signals</p>
+          <aside className="course-accent-panel rounded-[30px] p-6">
+            <p className="text-xs uppercase tracking-[0.28em] text-slate-200/70">Bot Builder Signals</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {lesson.botBuilderSignals.map((signal) => (
-                <span key={signal} className="rounded-full border border-cyan-200/10 bg-slate-950/70 px-3 py-2 text-sm text-cyan-50">
+                <span key={signal} className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-2 text-sm text-slate-100">
                   {signal}
                 </span>
               ))}
@@ -106,40 +106,40 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
                 <button
                   type="button"
                   onClick={() => recordLessonCompletion(lesson.slug)}
-                  className="focus-visible-ring inline-flex items-center justify-between rounded-2xl border border-emerald-400/16 bg-emerald-400/[0.08] px-4 py-4 text-sm text-white transition hover:bg-emerald-400/[0.12]"
+                  className="course-button-primary focus-visible-ring justify-between rounded-2xl px-4 py-4 text-sm"
                 >
                   Mark lesson complete
-                  <ArrowRight className="h-4 w-4 text-emerald-300" />
+                  <ArrowRight className="h-4 w-4" />
                 </button>
               ) : null}
 
               {lesson.nextLessonSlug ? (
                 <Link
                   href={`/lesson/${lesson.nextLessonSlug}`}
-                  className="focus-visible-ring inline-flex items-center justify-between rounded-2xl border border-white/8 bg-slate-950/70 px-4 py-4 text-sm text-white transition hover:border-emerald-300/20 hover:bg-slate-950"
+                  className="course-button-secondary focus-visible-ring justify-between rounded-2xl px-4 py-4 text-sm transition hover:bg-white/[0.06]"
                 >
                   Go to next lesson
-                  <ArrowRight className="h-4 w-4 text-emerald-300" />
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               ) : null}
 
               {learningModule?.drillSlug ? (
                 <Link
                   href={`/drill/${learningModule.drillSlug}`}
-                  className="focus-visible-ring inline-flex items-center justify-between rounded-2xl border border-white/8 bg-slate-950/70 px-4 py-4 text-sm text-white transition hover:border-cyan-300/20 hover:bg-slate-950"
+                  className="course-button-secondary focus-visible-ring justify-between rounded-2xl px-4 py-4 text-sm transition hover:bg-white/[0.06]"
                 >
                   Open rapid review
-                  <ArrowRight className="h-4 w-4 text-cyan-300" />
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               ) : null}
 
               {learningModule?.chartChallengeSlug ? (
                 <Link
                   href={`/chart-challenge/${learningModule.chartChallengeSlug}`}
-                  className="focus-visible-ring inline-flex items-center justify-between rounded-2xl border border-white/8 bg-slate-950/70 px-4 py-4 text-sm text-white transition hover:border-fuchsia-300/20 hover:bg-slate-950"
+                  className="course-button-secondary focus-visible-ring justify-between rounded-2xl px-4 py-4 text-sm transition hover:bg-white/[0.06]"
                 >
                   Open chart challenge
-                  <ArrowRight className="h-4 w-4 text-fuchsia-300" />
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               ) : null}
             </div>
@@ -163,7 +163,7 @@ function InfoCard({
     <div className="course-card rounded-[28px] p-5">
       <div className="flex items-center justify-between">
         <p className="text-xs uppercase tracking-[0.28em] text-slate-400">{label}</p>
-        <Icon className="h-4 w-4 text-emerald-300/80" />
+        <Icon className="h-4 w-4 text-slate-300/80" />
       </div>
       <p className="mt-3 text-lg leading-7 text-white">{value}</p>
     </div>

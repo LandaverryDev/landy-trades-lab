@@ -1,17 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050816;
-  --foreground: #e2e8f0;
-  --panel: rgba(10, 15, 27, 0.78);
-  --muted: #94a3b8;
-  --emerald-glow: rgba(18, 236, 167, 0.18);
-  --panel-border: rgba(255, 255, 255, 0.09);
-  --panel-soft: rgba(255, 255, 255, 0.04);
-  --panel-strong: linear-gradient(180deg, rgba(9, 15, 28, 0.96), rgba(6, 10, 18, 0.92));
-  --panel-raised: linear-gradient(180deg, rgba(11, 18, 33, 0.98), rgba(8, 12, 22, 0.9));
-  --glow-cyan: rgba(56, 189, 248, 0.18);
-  --glow-emerald: rgba(18, 236, 167, 0.18);
+  --background: #0f1319;
+  --foreground: #edf2f7;
+  --panel: rgba(18, 24, 33, 0.94);
+  --muted: #9aa4b2;
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --panel-soft: rgba(255, 255, 255, 0.035);
+  --panel-strong: rgba(20, 26, 36, 0.96);
+  --panel-raised: rgba(23, 29, 40, 0.98);
+  --panel-inset: rgba(10, 14, 21, 0.72);
+  --accent: rgba(145, 170, 206, 0.18);
+  --accent-border: rgba(145, 170, 206, 0.28);
+  --success: rgba(147, 197, 166, 0.18);
+  --success-border: rgba(147, 197, 166, 0.25);
+  --danger: rgba(204, 147, 147, 0.18);
+  --danger-border: rgba(204, 147, 147, 0.22);
 }
 
 @theme inline {
@@ -37,14 +41,12 @@ body {
   line-height: 1.5;
   color-scheme: dark;
   background-image:
-    radial-gradient(circle at top left, rgba(18, 236, 167, 0.08), transparent 28%),
-    radial-gradient(circle at 82% 12%, rgba(56, 189, 248, 0.09), transparent 20%),
-    radial-gradient(circle at 60% 80%, rgba(244, 114, 182, 0.05), transparent 22%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.035), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.012), rgba(255, 255, 255, 0));
 }
 
 ::selection {
-  background: rgba(56, 189, 248, 0.32);
+  background: rgba(145, 170, 206, 0.28);
   color: white;
 }
 
@@ -67,55 +69,53 @@ a {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 85%);
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), transparent 88%);
   pointer-events: none;
 }
 
 .glass-panel {
-  background: linear-gradient(180deg, rgba(8, 13, 23, 0.92), rgba(8, 12, 19, 0.82));
-  backdrop-filter: blur(26px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 90px rgba(0, 0, 0, 0.36);
+  background: rgba(17, 22, 31, 0.94);
+  backdrop-filter: blur(22px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 18px 54px rgba(0, 0, 0, 0.24);
 }
 
 .course-card {
   border: 1px solid var(--panel-border);
-  background: var(--panel-soft);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
 }
 
 .course-card-soft {
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.02));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
 
 .course-card-strong {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: var(--panel-strong);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 80px rgba(0, 0, 0, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 20px 64px rgba(0, 0, 0, 0.22);
 }
 
 .course-card-raised {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: var(--panel-raised);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 80px rgba(0, 0, 0, 0.32);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 18px 50px rgba(0, 0, 0, 0.2);
 }
 
 .course-hero {
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background:
-    radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent 24%),
-    linear-gradient(145deg, rgba(10, 18, 34, 0.96), rgba(8, 11, 20, 0.92));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 90px rgba(0, 0, 0, 0.35);
+  background: rgba(21, 27, 37, 0.97);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 20px 56px rgba(0, 0, 0, 0.22);
 }
 
 .course-inset {
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(2, 6, 18, 0.55);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  background: var(--panel-inset);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
 }
 
 .eyebrow-label {
@@ -143,13 +143,13 @@ a {
   align-items: center;
   gap: 0.4rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 9999px;
   padding: 0.5rem 0.85rem;
 }
 
 .focus-visible-ring:focus-visible {
-  box-shadow: 0 0 0 2px rgba(5, 8, 22, 0.8), 0 0 0 4px rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 0 2px rgba(15, 19, 25, 0.85), 0 0 0 4px rgba(145, 170, 206, 0.3);
 }
 
 .terminal-grid {
@@ -162,4 +162,58 @@ a {
   inset: 0;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.02));
   pointer-events: none;
+}
+
+.course-button-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(233, 238, 246, 0.92);
+  color: #10141b;
+  font-weight: 600;
+}
+
+.course-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.035);
+  color: rgb(226 232 240);
+}
+
+.course-button-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid var(--danger-border);
+  background: var(--danger);
+  color: rgb(255 236 236);
+}
+
+.course-chip-accent {
+  border: 1px solid var(--accent-border);
+  background: var(--accent);
+  color: rgb(222 232 246);
+}
+
+.course-chip-success {
+  border: 1px solid var(--success-border);
+  background: var(--success);
+  color: rgb(228 243 232);
+}
+
+.course-chip-muted {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgb(148 163 184);
+}
+
+.course-accent-panel {
+  border: 1px solid var(--accent-border);
+  background: rgba(145, 170, 206, 0.08);
 }

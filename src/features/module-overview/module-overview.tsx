@@ -57,7 +57,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
           <p className="section-copy mx-auto mt-4 max-w-2xl text-base">{baseModule.unlockRule}</p>
           <Link
             href="/learn"
-            className="focus-visible-ring mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+            className="course-button-primary focus-visible-ring mt-6 px-4 py-3 text-sm"
           >
             Back to curriculum
             <ArrowRight className="h-4 w-4" />
@@ -96,7 +96,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
             </div>
             <Link
               href={nextHref}
-              className="focus-visible-ring mt-5 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+              className="course-button-primary focus-visible-ring mt-5 px-4 py-3 text-sm"
             >
               {liveModule.completed ? "Open progress" : "Continue module"}
               <ArrowRight className="h-4 w-4" />
@@ -135,7 +135,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                 href={`/quiz/${baseModule.quizSlug}`}
                 done={quizComplete}
                 meta={quizComplete ? "Completed" : "Assessment"}
-                icon={<Trophy className="h-4 w-4 text-cyan-300" />}
+                icon={<Trophy className="h-4 w-4 text-slate-300" />}
               />
             ) : null}
 
@@ -147,7 +147,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                 href={`/drill/${baseModule.drillSlug}`}
                 done={drillComplete}
                 meta={drillComplete ? "Completed" : "Repetition"}
-                icon={<BrainCircuit className="h-4 w-4 text-emerald-300" />}
+                icon={<BrainCircuit className="h-4 w-4 text-slate-300" />}
               />
             ) : null}
 
@@ -159,7 +159,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                 href={`/chart-challenge/${baseModule.chartChallengeSlug}`}
                 done={chartComplete}
                 meta={chartComplete ? "Completed" : "Chart practice"}
-                icon={<ChartCandlestick className="h-4 w-4 text-fuchsia-300" />}
+                icon={<ChartCandlestick className="h-4 w-4 text-slate-300" />}
               />
             ) : null}
 
@@ -171,7 +171,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                 href={`/simulator/${baseModule.simulatorSlug}`}
                 done={simulatorComplete}
                 meta={simulatorComplete ? `Best ${simulatorBestScore ?? 0}%` : "Decision practice"}
-                icon={<PlayCircle className="h-4 w-4 text-emerald-300" />}
+                icon={<PlayCircle className="h-4 w-4 text-slate-300" />}
               />
             ) : null}
           </div>
@@ -207,7 +207,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                       href={`/chart-challenge/${challenge.slug}`}
                       done={done}
                       meta={done ? `Best ${bestScore ?? 0}%` : "Optional chart pack"}
-                      icon={<ChartCandlestick className="h-4 w-4 text-cyan-300" />}
+                      icon={<ChartCandlestick className="h-4 w-4 text-slate-300" />}
                     />
                   );
                 })}
@@ -239,7 +239,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                       href={`/simulator/${scenario.slug}`}
                       done={done}
                       meta={done ? `Best ${bestScore ?? 0}%` : "Optional replay"}
-                      icon={<PlayCircle className="h-4 w-4 text-emerald-300" />}
+                      icon={<PlayCircle className="h-4 w-4 text-slate-300" />}
                     />
                   );
                 })}
@@ -272,16 +272,16 @@ function SequenceRow({
   return (
     <Link
       href={href}
-      className={`focus-visible-ring flex flex-col gap-3 rounded-[24px] border p-4 transition hover:border-cyan-300/20 hover:bg-white/[0.05] ${
-        done ? "border-emerald-400/16 bg-emerald-400/[0.06]" : "border-white/8 bg-slate-950/65"
+      className={`focus-visible-ring flex flex-col gap-3 rounded-[24px] border p-4 transition hover:border-white/12 hover:bg-white/[0.05] ${
+        done ? "border-[var(--success-border)] bg-[var(--success)]" : "border-white/8 bg-slate-950/65"
       }`}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-sm text-cyan-300">{step}</span>
+          <span className="font-mono text-sm text-slate-300">{step}</span>
           {icon ?? <span className="text-xs uppercase tracking-[0.24em] text-slate-500">Lesson</span>}
         </div>
-        <span className={done ? "text-sm text-emerald-200" : "text-sm text-slate-400"}>{meta}</span>
+        <span className={done ? "text-sm text-slate-100" : "text-sm text-slate-400"}>{meta}</span>
       </div>
       <div>
         <h3 className="text-xl font-semibold text-white">{title}</h3>

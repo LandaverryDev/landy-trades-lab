@@ -16,10 +16,10 @@ export function ProgressBar({ value, label }: ProgressBarProps) {
           </span>
         </div>
       ) : null}
-      <div className="relative h-3 overflow-hidden rounded-full border border-white/8 bg-slate-950/80">
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]" />
+      <div className="relative h-3 overflow-hidden rounded-full border border-white/8 bg-slate-950/70">
+        <div className="absolute inset-0 bg-white/[0.03]" />
         <div
-          className="relative h-full rounded-full bg-[linear-gradient(90deg,rgba(18,236,167,0.88),rgba(70,193,255,0.94))] shadow-[0_0_24px_rgba(18,236,167,0.24)]"
+          className="relative h-full rounded-full bg-[#dbe4f3]"
           style={{ width: `${clampedValue}%` }}
         />
       </div>

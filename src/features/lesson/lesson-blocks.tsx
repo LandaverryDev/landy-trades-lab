@@ -32,7 +32,7 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
                   block.tone === "coach"
                     ? "border-amber-300/10 bg-amber-300/[0.06]"
                     : block.tone === "bot"
-                      ? "border-cyan-400/12 bg-cyan-400/[0.06]"
+                      ? "border-[var(--accent-border)] bg-[var(--accent)]"
                       : block.tone === "warning"
                         ? "border-rose-400/12 bg-rose-400/[0.06]"
                         : "border-white/8 bg-white/[0.04]"
@@ -55,7 +55,7 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
                   {block.items.map((item) => (
                     <div key={`${item.label}-${item.value}`} className="course-inset rounded-[22px] p-4">
                       <p className="text-xs uppercase tracking-[0.22em] text-slate-400">{item.label}</p>
-                      <p className="mt-3 font-mono text-lg text-cyan-200">{item.value}</p>
+                      <p className="mt-3 font-mono text-lg text-slate-100">{item.value}</p>
                       <p className="mt-2 text-sm leading-6 text-slate-300">{item.detail}</p>
                     </div>
                   ))}
@@ -80,7 +80,7 @@ function CalloutIcon({ tone }: { tone: "neutral" | "coach" | "bot" | "warning" }
   }
 
   if (tone === "bot") {
-    return <Bot className="h-4 w-4 text-cyan-200" />;
+    return <Bot className="h-4 w-4 text-slate-200" />;
   }
 
   if (tone === "warning") {
@@ -117,7 +117,7 @@ function renderVisual(imageKey: LessonImageBlock["imageKey"]) {
           { label: "Protect", detail: "Define risk before the order is live." },
         ].map((item, index) => (
           <div key={item.label} className="course-inset rounded-[22px] p-4">
-            <p className="font-mono text-sm text-emerald-300">0{index + 1}</p>
+            <p className="font-mono text-sm text-slate-300">0{index + 1}</p>
             <p className="mt-3 text-lg font-semibold text-white">{item.label}</p>
             <p className="mt-2 text-sm leading-6 text-slate-300">{item.detail}</p>
           </div>
@@ -130,9 +130,9 @@ function renderVisual(imageKey: LessonImageBlock["imageKey"]) {
     return (
       <div className="grid gap-3 md:grid-cols-3">
         {[
-          { title: "Stocks", accent: "text-emerald-300", detail: "Clear session structure and company-driven catalysts." },
-          { title: "Futures", accent: "text-cyan-300", detail: "Faster pacing and leverage once discipline improves." },
-          { title: "Crypto", accent: "text-fuchsia-300", detail: "Always open, visually active, and often noisier." },
+          { title: "Stocks", accent: "text-slate-100", detail: "Clear session structure and company-driven catalysts." },
+          { title: "Futures", accent: "text-slate-200", detail: "Faster pacing and leverage once discipline improves." },
+          { title: "Crypto", accent: "text-slate-300", detail: "Always open, visually active, and often noisier." },
         ].map((item) => (
           <div key={item.title} className="course-inset rounded-[22px] p-4">
             <p className={`text-sm font-semibold ${item.accent}`}>{item.title}</p>
@@ -146,11 +146,11 @@ function renderVisual(imageKey: LessonImageBlock["imageKey"]) {
   return (
     <div className="course-inset rounded-[24px] p-5">
       <div className="grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-        <div className="flex items-center justify-center rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,rgba(12,20,34,0.92),rgba(8,11,18,0.95))] p-6">
+        <div className="flex items-center justify-center rounded-[22px] border border-white/8 bg-[#121822] p-6">
           <div className="flex items-end gap-2">
-            <span className="h-14 w-2 rounded-full bg-emerald-300" />
-            <span className="h-22 w-6 rounded-lg bg-emerald-300" />
-            <span className="h-9 w-2 rounded-full bg-emerald-300" />
+            <span className="h-14 w-2 rounded-full bg-slate-200" />
+            <span className="h-22 w-6 rounded-lg bg-slate-100" />
+            <span className="h-9 w-2 rounded-full bg-slate-300" />
           </div>
         </div>
         <div className="grid gap-3">

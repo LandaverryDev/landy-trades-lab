@@ -78,8 +78,8 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
 
     return (
       <div className="space-y-6">
-        <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(8,15,31,0.96),rgba(7,11,22,0.92))] p-6 text-center sm:p-8">
-          <p className="text-sm uppercase tracking-[0.28em] text-cyan-300">Rapid Review Cleared</p>
+        <section className="course-hero rounded-[32px] p-6 text-center sm:p-8">
+          <p className="text-sm uppercase tracking-[0.28em] text-slate-300">Rapid Review Cleared</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{percent}% accuracy</h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">
             You finished {drill.title}. This loop is built for repetition, so replaying it later should feel sharper,
@@ -105,7 +105,7 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
           {learningModule?.chartChallengeSlug ? (
             <Link
               href={`/chart-challenge/${learningModule.chartChallengeSlug}`}
-              className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+              className="course-button-primary px-4 py-3 text-sm"
             >
               Open chart challenge
               <ArrowRight className="h-4 w-4" />
@@ -118,7 +118,7 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,16,31,0.96),rgba(8,11,21,0.92))] p-6 sm:p-8">
+      <section className="course-hero rounded-[32px] p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Rapid Review Drill</p>
@@ -137,10 +137,10 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
 
       <section className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-cyan-300/15 bg-cyan-300/[0.06] px-3 py-1 text-xs uppercase tracking-[0.24em] text-cyan-200">
+          <span className="course-chip-accent rounded-full px-3 py-1 text-xs uppercase tracking-[0.24em]">
             {question.type.replace(/-/g, " ")}
           </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/12 bg-emerald-400/[0.06] px-3 py-1 text-xs uppercase tracking-[0.24em] text-emerald-200">
+          <span className="course-chip-success inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs uppercase tracking-[0.24em]">
             <Zap className="h-3.5 w-3.5" />
             Fast repetition
           </span>
@@ -163,11 +163,11 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
                 onClick={() => setSelectedChoiceId(item.id)}
                 className={`rounded-[26px] border px-5 py-4 text-left transition ${
                   showCorrect
-                    ? "border-emerald-400/30 bg-emerald-400/10"
+                    ? "border-[var(--success-border)] bg-[var(--success)]"
                     : showWrong
                       ? "border-rose-400/30 bg-rose-400/10"
                       : selected
-                        ? "border-cyan-300/30 bg-cyan-300/[0.08]"
+                        ? "border-[var(--accent-border)] bg-[var(--accent)]"
                         : "border-white/10 bg-slate-950/70 hover:bg-slate-950"
                 }`}
               >
@@ -179,8 +179,8 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
         </div>
 
         {submitted ? (
-          <div className="mt-6 rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,15,25,0.98),rgba(15,23,42,0.82))] p-5">
-            <p className={`text-xs uppercase tracking-[0.28em] ${isCorrect ? "text-emerald-300" : "text-rose-300"}`}>
+          <div className="course-card-raised mt-6 rounded-[28px] p-5">
+            <p className={`text-xs uppercase tracking-[0.28em] ${isCorrect ? "text-slate-200" : "text-rose-300"}`}>
               {isCorrect ? "Correct read" : "Needs another pass"}
             </p>
             <p className="mt-3 text-base leading-7 text-slate-200">{question.explanation}</p>
@@ -194,7 +194,7 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
               type="button"
               disabled={!choice}
               onClick={handleSubmit}
-              className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+              className="course-button-primary inline-flex px-4 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-40"
             >
               Submit answer
             </button>
@@ -202,7 +202,7 @@ export function DrillPlayer({ drill }: { drill: DrillSet }) {
             <button
               type="button"
               onClick={handleNext}
-              className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+              className="course-button-primary inline-flex px-4 py-3 text-sm"
             >
               {currentIndex === drill.questions.length - 1 ? "See summary" : "Next question"}
               <ArrowRight className="h-4 w-4" />

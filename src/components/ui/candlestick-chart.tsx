@@ -304,7 +304,7 @@ export function CandlestickChart({
   }
 
   return (
-    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(11,16,28,0.95),rgba(6,10,18,0.98))] p-4 shadow-[0_22px_70px_rgba(0,0,0,0.42)]">
+    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#11161f] p-4 shadow-[0_18px_48px_rgba(0,0,0,0.28)]">
       <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full">
         <defs>
           <linearGradient id="chartGlow" x1="0%" x2="100%" y1="0%" y2="0%">

@@ -332,7 +332,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
     return (
       <div className="space-y-6">
         <section className="course-hero rounded-[32px] p-6 sm:p-8">
-          <p className="eyebrow-label text-emerald-300">Replay Complete</p>
+          <p className="eyebrow-label text-slate-300">Replay Complete</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{scenario.title}</h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">{grade.detail}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -364,19 +364,19 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                       <p className="text-sm font-semibold text-white">{profile.label}</p>
                       <p className="mt-2 text-sm leading-7 text-slate-300">{profile.detail}</p>
                     </div>
-                    <span className="rounded-full border border-rose-400/16 bg-rose-400/[0.08] px-3 py-1 text-xs uppercase tracking-[0.22em] text-rose-100">
+                    <span className="course-button-danger px-3 py-1 text-xs uppercase tracking-[0.22em]">
                       {count}x
                     </span>
                   </div>
-                  <div className="mt-4 rounded-2xl border border-cyan-400/12 bg-cyan-400/[0.05] p-4">
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-100/70">Rule To Carry Forward</p>
+                  <div className="course-accent-panel mt-4 rounded-2xl p-4">
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-slate-200/70">Rule To Carry Forward</p>
                     <p className="mt-2 text-sm leading-7 text-slate-100">{profile.rule}</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="mt-6 rounded-[24px] border border-emerald-400/12 bg-emerald-400/[0.05] p-5">
+            <div className="course-accent-panel mt-6 rounded-[24px] p-5">
               <p className="text-sm font-semibold text-white">The replay stayed clean.</p>
               <p className="mt-2 text-sm leading-7 text-slate-300">
                 No repeated leak category dominated this run. That usually means the next improvement comes from seeing
@@ -403,7 +403,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                 key={review.stepId}
                 className={`rounded-[26px] border p-5 ${
                   review.correct
-                    ? "border-emerald-400/16 bg-emerald-400/[0.06]"
+                    ? "border-[var(--success-border)] bg-[var(--success)]"
                     : "border-rose-400/16 bg-rose-400/[0.06]"
                 }`}
               >
@@ -411,7 +411,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                   <p className="text-sm uppercase tracking-[0.24em] text-slate-400">
                     Step {index + 1} · {review.stepTitle}
                   </p>
-                  <span className={review.correct ? "text-sm text-emerald-200" : "text-sm text-rose-200"}>
+                  <span className={review.correct ? "text-sm text-slate-100" : "text-sm text-rose-200"}>
                     {review.correct ? "Correct" : "Needs work"}
                   </span>
                 </div>
@@ -433,7 +433,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                 <p className="mt-2 text-sm leading-7 text-slate-300">{review.selectedActionRationale}</p>
 
                 <div className="course-inset mt-5 rounded-[22px] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-100/70">Projected Outcome</p>
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-slate-200/70">Projected Outcome</p>
                   <p className="mt-2 text-sm leading-7 text-slate-100">{review.projectedOutcome}</p>
                 </div>
 
@@ -444,8 +444,8 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                       <p className="mt-2 text-sm font-medium text-white">{review.correctActionLabel}</p>
                       <p className="mt-2 text-sm leading-7 text-slate-300">{review.correctActionRationale}</p>
                     </div>
-                    <div className="rounded-[22px] border border-cyan-400/12 bg-cyan-400/[0.05] p-4">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-100/70">Coaching Rule</p>
+                    <div className="course-accent-panel rounded-[22px] p-4">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-slate-200/70">Coaching Rule</p>
                       <p className="mt-2 text-sm leading-7 text-slate-100">{review.coachingRule}</p>
                     </div>
                   </div>
@@ -477,7 +477,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
           </button>
           <Link
             href="/progress"
-            className="focus-visible-ring inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+            className="course-button-primary focus-visible-ring px-4 py-3 text-sm"
           >
             Go to progress
             <ArrowRight className="h-4 w-4" />
@@ -492,7 +492,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
       <section className="course-hero rounded-[32px] p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="eyebrow-label text-emerald-300">Simulator / Replay</p>
+            <p className="eyebrow-label text-slate-300">Scenario Practice</p>
             <h1 className="mt-2 text-4xl font-semibold text-white">{scenario.title}</h1>
             <p className="mt-3 max-w-3xl text-base leading-7 text-slate-300">{scenario.setup}</p>
           </div>
@@ -516,7 +516,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
           </div>
 
           <div className="course-card-raised rounded-[30px] p-6">
-            <p className="eyebrow-label text-cyan-100/70">Tape Read</p>
+            <p className="eyebrow-label text-slate-200/70">Context Notes</p>
             <div className="mt-4 grid gap-3">
               {step.tapeRead.map((item) => (
                 <div key={item} className="course-inset rounded-2xl px-4 py-3 text-sm leading-7 text-slate-200">
@@ -549,11 +549,11 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                     onClick={() => setSelectedActionId(action.id)}
                     className={`focus-visible-ring rounded-[26px] border px-5 py-4 text-left transition ${
                       correct
-                        ? "border-emerald-400/30 bg-emerald-400/10"
+                        ? "border-[var(--success-border)] bg-[var(--success)]"
                         : wrong
                           ? "border-rose-400/30 bg-rose-400/10"
                           : selected
-                            ? "border-cyan-300/30 bg-cyan-300/[0.08]"
+                            ? "border-[var(--accent-border)] bg-[var(--accent)]"
                             : "border-white/10 bg-slate-950/70 hover:bg-slate-950"
                     }`}
                   >
@@ -567,7 +567,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
 
           {submitted && selectedAction ? (
             <div className="course-card-raised rounded-[30px] p-6">
-              <p className={`text-xs uppercase tracking-[0.28em] ${isCorrect ? "text-emerald-300" : "text-rose-300"}`}>
+              <p className={`text-xs uppercase tracking-[0.28em] ${isCorrect ? "text-slate-200" : "text-rose-300"}`}>
                 {isCorrect ? "Strong decision" : "Coach correction"}
               </p>
               <p className="mt-3 text-sm leading-7 text-slate-200">{step.feedback}</p>
@@ -585,8 +585,8 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                 </div>
               ) : null}
 
-              <div className="mt-5 rounded-[24px] border border-cyan-400/12 bg-cyan-400/[0.05] p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/70">Outcome Reveal</p>
+              <div className="course-accent-panel mt-5 rounded-[24px] p-4">
+                <p className="text-xs uppercase tracking-[0.22em] text-slate-200/70">Outcome Reveal</p>
                 <p className="mt-2 text-sm leading-7 text-slate-100">{currentProjectedOutcome}</p>
               </div>
 
@@ -599,8 +599,8 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                       {correctAction?.rationale ?? "Follow the cleaner process path."}
                     </p>
                   </div>
-                  <div className="rounded-[22px] border border-cyan-400/12 bg-cyan-400/[0.05] p-4">
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-100/70">Rule To Remember</p>
+                  <div className="course-accent-panel rounded-[22px] p-4">
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-slate-200/70">Rule To Remember</p>
                     <p className="mt-2 text-sm leading-7 text-slate-100">{currentCoachingRule}</p>
                   </div>
                 </div>
@@ -614,7 +614,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
                 type="button"
                 disabled={!selectedAction}
                 onClick={handleSubmit}
-                className="focus-visible-ring inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+                className="course-button-primary focus-visible-ring px-4 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Reveal outcome
               </button>
@@ -622,7 +622,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
               <button
                 type="button"
                 onClick={handleNext}
-                className="focus-visible-ring inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+                className="course-button-primary focus-visible-ring px-4 py-3 text-sm"
               >
                 {stepIndex === scenario.steps.length - 1 ? "Finish replay" : "Next decision"}
                 <ArrowRight className="h-4 w-4" />

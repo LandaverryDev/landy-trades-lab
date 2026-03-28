@@ -34,8 +34,8 @@ export function LearningPathView() {
               <ProgressBar value={progress.overallProgressPercent} label="Overall completion" />
             </div>
             {activeModule ? (
-              <div className="mt-5 rounded-2xl border border-cyan-400/10 bg-cyan-400/[0.05] p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/70">Current Module</p>
+              <div className="course-accent-panel mt-5 rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-[0.22em] text-slate-200/70">Current Module</p>
                 <p className="mt-2 text-lg font-semibold text-white">{activeModule.title}</p>
                 <p className="mt-2 text-sm leading-7 text-slate-300">{activeModule.summary}</p>
               </div>
@@ -52,7 +52,7 @@ export function LearningPathView() {
             <div key={tier.slug} className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                  <p className="text-sm text-emerald-300">{tier.label}</p>
+                  <p className="text-sm text-slate-300">{tier.label}</p>
                   <h2 className="mt-2 text-3xl font-semibold text-white">{tier.tagline}</h2>
                   <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">{tier.description}</p>
                 </div>
@@ -73,16 +73,16 @@ export function LearningPathView() {
                       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-3">
-                            <span className="font-mono text-sm text-cyan-300">
+                            <span className="font-mono text-sm text-slate-300">
                               Module {String(index + 1).padStart(2, "0")}
                             </span>
                             <span
                               className={`rounded-full px-3 py-1 text-xs uppercase tracking-[0.22em] ${
                                 locked
-                                  ? "border border-white/10 bg-white/[0.03] text-slate-400"
+                                  ? "course-chip-muted"
                                   : module.completed
-                                    ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-                                    : "border border-cyan-300/20 bg-cyan-300/[0.08] text-cyan-200"
+                                    ? "course-chip-success"
+                                    : "course-chip-accent"
                               }`}
                             >
                               {locked ? "Locked" : module.completed ? "Completed" : "In Progress"}
@@ -115,7 +115,7 @@ export function LearningPathView() {
                           ) : (
                             <Link
                               href={`/module/${module.slug}`}
-                              className="focus-visible-ring mt-4 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+                              className="course-button-primary focus-visible-ring mt-4 px-4 py-3 text-sm"
                             >
                               Open module
                               <ArrowRight className="h-4 w-4" />
