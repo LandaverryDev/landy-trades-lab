@@ -1,5 +1,6 @@
 import {
   chartChallenges,
+  drillSets,
   learningModules,
   lessons,
   quizzes,
@@ -19,6 +20,10 @@ export function getQuizBySlug(slug: string) {
   return quizzes.find((quiz) => quiz.slug === slug);
 }
 
+export function getDrillSetBySlug(slug: string) {
+  return drillSets.find((drill) => drill.slug === slug);
+}
+
 export function getChartChallengeBySlug(slug: string) {
   return chartChallenges.find((challenge) => challenge.slug === slug);
 }
@@ -33,6 +38,7 @@ export function getModuleLessons(moduleSlug: string) {
 
 export {
   chartChallenges,
+  drillSets,
   learningModules,
   lessons,
   quizzes,

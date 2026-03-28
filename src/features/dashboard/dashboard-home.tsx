@@ -88,7 +88,7 @@ export function DashboardHome() {
                   <StatTile icon={Target} label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
                   <StatTile icon={Brain} label="Chart Reads" value={`${progress.chartAccuracy}%`} />
                   <StatTile icon={Flame} label="Lessons Cleared" value={`${progress.lessonsCompleted}`} />
-                  <StatTile icon={Sparkles} label="Achievements" value={`${progress.achievements.length}`} />
+                  <StatTile icon={Sparkles} label="Rapid Drills" value={`${progress.drillAccuracy}%`} />
                 </div>
               </div>
             </div>
@@ -120,10 +120,18 @@ export function DashboardHome() {
               description="Preview how this grows from fundamentals into strategy systems and bots."
             />
             <LinkCard
-              href={activeModule?.simulatorSlug ? `/simulator/${activeModule.simulatorSlug}` : "/progress"}
-              kicker="Replay Mode"
-              title="Practice decisions inside a guided scenario"
-              description="Pause, choose, get feedback, and learn why the good trade makes sense."
+              href={activeModule?.drillSlug ? `/drill/${activeModule.drillSlug}` : activeModule?.simulatorSlug ? `/simulator/${activeModule.simulatorSlug}` : "/progress"}
+              kicker={activeModule?.drillSlug ? "Rapid Review" : "Replay Mode"}
+              title={
+                activeModule?.drillSlug
+                  ? "Run a shuffled reinforcement loop"
+                  : "Practice decisions inside a guided scenario"
+              }
+              description={
+                activeModule?.drillSlug
+                  ? "Build faster recall with short repeated drills before the chart and simulator layers."
+                  : "Pause, choose, get feedback, and learn why the good trade makes sense."
+              }
             />
           </div>
         </div>
@@ -176,9 +184,13 @@ export function DashboardHome() {
             />
             <SequenceCard
               step="03"
-              title="Next Assessment"
-              detail="Move from lesson understanding into quizzes, chart drills, and replay training."
-              href={activeModule ? `/module/${activeModule.slug}` : "/learn"}
+              title={activeModule?.drillSlug ? "Rapid Review Loop" : "Next Assessment"}
+              detail={
+                activeModule?.drillSlug
+                  ? "Shuffle short questions and repeat the module's key logic until recall becomes faster."
+                  : "Move from lesson understanding into quizzes, chart drills, and replay training."
+              }
+              href={activeModule?.drillSlug ? `/drill/${activeModule.drillSlug}` : activeModule ? `/module/${activeModule.slug}` : "/learn"}
             />
           </div>
         </div>

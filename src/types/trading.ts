@@ -45,6 +45,7 @@ export interface LearningModule {
   unlockRule: string;
   lessonSlugs: string[];
   quizSlug?: string;
+  drillSlug?: string;
   chartChallengeSlug?: string;
   simulatorSlug?: string;
 }
@@ -132,6 +133,15 @@ export interface QuizQuestion {
 }
 
 export interface Quiz {
+  slug: string;
+  moduleSlug: string;
+  title: string;
+  summary: string;
+  xpReward: number;
+  questions: QuizQuestion[];
+}
+
+export interface DrillSet {
   slug: string;
   moduleSlug: string;
   title: string;
@@ -236,6 +246,7 @@ export interface ProgressSnapshot {
   modulesCompleted: number;
   lessonsCompleted: number;
   quizAccuracy: number;
+  drillAccuracy: number;
   chartAccuracy: number;
   overallProgressPercent: number;
   achievements: Achievement[];
@@ -244,9 +255,11 @@ export interface ProgressSnapshot {
 export interface StoredLearningProgress {
   completedLessonSlugs: string[];
   completedQuizSlugs: string[];
+  completedDrillSlugs: string[];
   completedChartChallengeSlugs: string[];
   completedScenarioSlugs: string[];
   quizBestScores: Record<string, number>;
+  drillBestScores: Record<string, number>;
   chartBestScores: Record<string, number>;
   streakDays: number;
   lastActiveDate: string | null;

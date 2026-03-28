@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight, ChartCandlestick, Lock, PlayCircle, Trophy } from "lucide-react";
+import { ArrowRight, BrainCircuit, ChartCandlestick, Lock, PlayCircle, Trophy } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { getModuleBySlug, getModuleLessons } from "@/lib/course";
@@ -20,6 +20,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
 
   const firstIncompleteLesson = lessons.find((lesson) => !raw.completedLessonSlugs.includes(lesson.slug));
   const quizComplete = baseModule.quizSlug ? raw.completedQuizSlugs.includes(baseModule.quizSlug) : true;
+  const drillComplete = baseModule.drillSlug ? raw.completedDrillSlugs.includes(baseModule.drillSlug) : true;
   const chartComplete = baseModule.chartChallengeSlug
     ? raw.completedChartChallengeSlugs.includes(baseModule.chartChallengeSlug)
     : true;
@@ -31,11 +32,23 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
     ? `/lesson/${firstIncompleteLesson.slug}`
     : !quizComplete && baseModule.quizSlug
       ? `/quiz/${baseModule.quizSlug}`
+      : !drillComplete && baseModule.drillSlug
+        ? `/drill/${baseModule.drillSlug}`
       : !chartComplete && baseModule.chartChallengeSlug
         ? `/chart-challenge/${baseModule.chartChallengeSlug}`
         : !simulatorComplete && baseModule.simulatorSlug
           ? `/simulator/${baseModule.simulatorSlug}`
           : "/progress";
+  const formatStep = (value: number) => `${value}`.padStart(2, "0");
+  const quizStep = formatStep(lessons.length + 1);
+  const drillStep = formatStep(lessons.length + (baseModule.quizSlug ? 2 : 1));
+  const chartStep = formatStep(lessons.length + (baseModule.quizSlug ? 2 : 1) + (baseModule.drillSlug ? 1 : 0));
+  const simulatorStep = formatStep(
+    lessons.length +
+      (baseModule.quizSlug ? 2 : 1) +
+      (baseModule.drillSlug ? 1 : 0) +
+      (baseModule.chartChallengeSlug ? 1 : 0),
+  );
 
   return (
     <div className="space-y-8">
@@ -148,7 +161,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
 
               {baseModule.quizSlug ? (
                 <SequenceCard
-                  step={`0${lessons.length + 1}`}
+                  step={quizStep}
                   title="Module Quiz"
                   description="Checkpoint your understanding with instant feedback and local score tracking."
                   href={`/quiz/${baseModule.quizSlug}`}
@@ -158,9 +171,21 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                 />
               ) : null}
 
+              {baseModule.drillSlug ? (
+                <SequenceCard
+                  step={drillStep}
+                  title="Rapid Review"
+                  description="Run a short shuffled reinforcement loop to build faster recall before the chart work."
+                  href={`/drill/${baseModule.drillSlug}`}
+                  done={drillComplete}
+                  meta={drillComplete ? "Completed" : "Repetition loop"}
+                  icon={<BrainCircuit className="h-4 w-4 text-emerald-300" />}
+                />
+              ) : null}
+
               {baseModule.chartChallengeSlug ? (
                 <SequenceCard
-                  step={`0${lessons.length + (baseModule.quizSlug ? 2 : 1)}`}
+                  step={chartStep}
                   title="Chart Challenge"
                   description="Apply the module's visual ideas directly on a mock candlestick chart."
                   href={`/chart-challenge/${baseModule.chartChallengeSlug}`}
@@ -172,7 +197,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
 
               {baseModule.simulatorSlug ? (
                 <SequenceCard
-                  step={`0${lessons.length + (baseModule.quizSlug ? 2 : 1) + (baseModule.chartChallengeSlug ? 1 : 0)}`}
+                  step={simulatorStep}
                   title="Replay Simulator"
                   description="Practice decisions inside a guided scenario with immediate coaching feedback."
                   href={`/simulator/${baseModule.simulatorSlug}`}

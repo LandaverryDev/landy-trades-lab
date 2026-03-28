@@ -1,5 +1,6 @@
 import type {
   ChartChallenge,
+  DrillSet,
   LearningModule,
   Lesson,
   Quiz,
@@ -190,6 +191,7 @@ export const learningModules: LearningModule[] = [
       "etf-and-sector-context",
     ],
     quizSlug: "equity-playbooks-quiz",
+    drillSlug: "equity-rapid-review",
     chartChallengeSlug: "gap-and-relative-strength-challenge",
     simulatorSlug: "opening-drive-equity-simulator",
   },
@@ -217,6 +219,7 @@ export const learningModules: LearningModule[] = [
       "forex-pair-structure",
     ],
     quizSlug: "derivatives-playbooks-quiz",
+    drillSlug: "derivatives-rapid-review",
     chartChallengeSlug: "leverage-and-contract-fit-challenge",
     simulatorSlug: "derivatives-choice-simulator",
   },
@@ -244,6 +247,7 @@ export const learningModules: LearningModule[] = [
       "crypto-risk-playbook",
     ],
     quizSlug: "crypto-playbooks-quiz",
+    drillSlug: "crypto-rapid-review",
     chartChallengeSlug: "crypto-regime-shift-challenge",
     simulatorSlug: "crypto-venue-risk-simulator",
   },
@@ -4013,6 +4017,249 @@ export const quizzes: Quiz[] = [
         explanation:
           "State logic keeps the strategy organized and prevents conflicting actions across different stages of a trade.",
         coaching: "A clean state map makes automation easier to debug and safer to run.",
+      },
+    ],
+  },
+];
+
+export const drillSets: DrillSet[] = [
+  {
+    slug: "equity-rapid-review",
+    moduleSlug: "stocks-and-equity-playbooks",
+    title: "Equity Rapid Review",
+    summary:
+      "A repeatable stock-trading drill loop on watchlists, leadership, opening drives, and sector context.",
+    xpReward: 95,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What is the cleanest reason to put a stock on your intraday watchlist?",
+        choices: [
+          {
+            id: "a",
+            label: "It is liquid, showing relative strength, and has a catalyst or clear attention driver.",
+          },
+          { id: "b", label: "It has the lowest share price on the list." },
+          { id: "c", label: "It moved once with weak volume and no structure." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Good stock watchlists are built from quality filters, not random motion or cheap price alone.",
+        coaching: "Universe selection is part of the edge, not a warm-up before the real work.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: the strongest opening-drive entry is usually the first extended candle right after the bell.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "false",
+        explanation:
+          "The opening burst can show leadership, but the cleaner entry often comes after a controlled retest.",
+        coaching: "Speed shows interest. Structure shows whether the opportunity is actually tradable.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which statement best matches relative strength in a stock?",
+        choices: [
+          { id: "a", label: "The stock is holding up or pushing better than peers or the broad market." },
+          { id: "b", label: "The stock had one green candle in isolation." },
+          { id: "c", label: "The stock is moving randomly but very fast." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Relative strength is a comparative idea. The stock is outperforming something relevant, not just moving on its own.",
+        coaching: "Leadership is revealed by comparison, not by one candle's color.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "If a stock setup is clean but the sector ETF is breaking down and the index is rolling over, what is the most disciplined read?",
+        choices: [
+          { id: "a", label: "The long may still work, but the setup deserves more caution because context is weakening." },
+          { id: "b", label: "Context should be ignored because only the stock chart matters." },
+          { id: "c", label: "This means the best move is always to increase size." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A stock can outperform a weak backdrop, but the broader context is no longer helping the trade.",
+        coaching: "Stock, sector, and index alignment are one of the cleanest quality filters in equities.",
+      },
+      {
+        id: "q5",
+        type: "multiple-choice",
+        prompt: "Why are liquid stocks and ETFs usually better beginner training vehicles than random thin names?",
+        choices: [
+          { id: "a", label: "They usually provide cleaner execution and more trustworthy movement." },
+          { id: "b", label: "They always go up once they gap." },
+          { id: "c", label: "They remove the need for stop placement." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Liquidity reduces friction and makes it easier to study actual setup quality instead of getting distorted by poor fills.",
+        coaching: "Use products that let you learn the craft, not products that magnify noise.",
+      },
+    ],
+  },
+  {
+    slug: "derivatives-rapid-review",
+    moduleSlug: "options-and-derivatives-playbooks",
+    title: "Derivatives Rapid Review",
+    summary:
+      "A repeatable drill loop on contract selection, Greeks, futures sizing, and forex pair logic.",
+    xpReward: 100,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What is the biggest mistake in treating options like cheaper stock shares?",
+        choices: [
+          { id: "a", label: "It ignores time decay and contract structure." },
+          { id: "b", label: "It makes options less directional." },
+          { id: "c", label: "It means options can never be traded." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Options introduce time, strike, and sensitivity behavior beyond plain direction.",
+        coaching: "A cheaper premium is not a simpler trade.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: knowing tick value is part of knowing whether a futures size is safe.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Tick value translates price movement into real dollar exposure. Without it, size is not grounded in risk math.",
+        coaching: "Contract-aware trading starts with real exposure, not with chart confidence.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which Greek is the best first-pass way to think about direction sensitivity?",
+        choices: [
+          { id: "a", label: "Delta" },
+          { id: "b", label: "Theta" },
+          { id: "c", label: "None of them affect price movement" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Delta is the most direct first-pass measure of how strongly the contract responds to movement in the underlying.",
+        coaching: "Start practical. You do not need full academic depth to respect contract behavior.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "If a forex pair setup looks clean but it is outside meaningful session overlap and liquidity is poor, what is the best response?",
+        choices: [
+          { id: "a", label: "Reduce trust in the setup or skip until conditions improve." },
+          { id: "b", label: "Ignore the session because pair choice is the only thing that matters." },
+          { id: "c", label: "Add leverage because slower movement means safer risk." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Session quality matters in forex because pair movement and liquidity are not uniform all day.",
+        coaching: "Clean charts still need clean trading conditions.",
+      },
+      {
+        id: "q5",
+        type: "multiple-choice",
+        prompt: "What is the disciplined product-selection rule for derivatives?",
+        choices: [
+          { id: "a", label: "Choose the contract deliberately, then size it from real risk." },
+          { id: "b", label: "Pick the cheapest or most leveraged version automatically." },
+          { id: "c", label: "Ignore contract details if the chart looks obvious." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "The chart and the product have to fit each other. Good derivatives trading needs both decisions.",
+        coaching: "Product logic is part of the trade idea, not a detail added later.",
+      },
+    ],
+  },
+  {
+    slug: "crypto-rapid-review",
+    moduleSlug: "crypto-trading-playbooks",
+    title: "Crypto Rapid Review",
+    summary:
+      "A repeatable drill loop on crypto regimes, perpetual pressure, venue filters, and crypto-specific guardrails.",
+    xpReward: 100,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What should be checked before trusting a crypto setup?",
+        choices: [
+          { id: "a", label: "Regime quality, liquidity, and venue quality." },
+          { id: "b", label: "Only whether the candle is green." },
+          { id: "c", label: "Only whether the market is open." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Crypto setup quality starts with market quality. Pattern quality comes after that.",
+        coaching: "Crypto punishes traders who skip structural filters.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: perpetual contracts can behave differently from spot because crowding and funding matter.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Perpetuals carry extra pressure through funding, leverage, and liquidation dynamics.",
+        coaching: "Do not assume the perp chart is just a spot chart with more speed.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which crypto guardrail is the most system-friendly?",
+        choices: [
+          { id: "a", label: "Trade only approved venues and cap leverage explicitly." },
+          { id: "b", label: "Take any venue if the move looks big enough." },
+          { id: "c", label: "Decide on leverage after the trade is already on." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Crypto risk is not only directional. Venue and leverage controls belong inside the rules.",
+        coaching: "The best crypto playbooks use harder guardrails because the market never really stops inviting trades.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "If the market shifts from smooth trend into thin, unstable chop, what is the mature response?",
+        choices: [
+          { id: "a", label: "Tighten filters or step aside until quality improves." },
+          { id: "b", label: "Raise leverage because volatility increased." },
+          { id: "c", label: "Treat the same playbook as equally valid without adjustment." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Regime changes should change participation rules. Market quality is not constant.",
+        coaching: "Continuous access is not the same as continuous edge.",
+      },
+      {
+        id: "q5",
+        type: "multiple-choice",
+        prompt: "Why does crypto need stricter time and exposure rules than many beginners expect?",
+        choices: [
+          { id: "a", label: "Because nonstop access and fast liquidity shifts make overtrading easy." },
+          { id: "b", label: "Because crypto never has any real opportunity." },
+          { id: "c", label: "Because stop losses do not matter there." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "The 24/7 structure increases temptation and can hide structural deterioration if you do not define hard limits.",
+        coaching: "The best crypto rules protect you from the market being always available.",
       },
     ],
   },

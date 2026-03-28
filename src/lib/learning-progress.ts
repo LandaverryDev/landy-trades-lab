@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import {
   chartChallenges,
+  drillSets,
   learningModules,
   lessons,
   quizzes,
@@ -23,9 +24,11 @@ const CHANGE_EVENT = "landy-trades-lab:progress-change";
 export const defaultLearningProgress: StoredLearningProgress = {
   completedLessonSlugs: [],
   completedQuizSlugs: [],
+  completedDrillSlugs: [],
   completedChartChallengeSlugs: [],
   completedScenarioSlugs: [],
   quizBestScores: {},
+  drillBestScores: {},
   chartBestScores: {},
   streakDays: 0,
   lastActiveDate: null,
@@ -89,9 +92,11 @@ export function readStoredLearningProgress(): StoredLearningProgress {
       ...parsed,
       completedLessonSlugs: parsed.completedLessonSlugs ?? [],
       completedQuizSlugs: parsed.completedQuizSlugs ?? [],
+      completedDrillSlugs: parsed.completedDrillSlugs ?? [],
       completedChartChallengeSlugs: parsed.completedChartChallengeSlugs ?? [],
       completedScenarioSlugs: parsed.completedScenarioSlugs ?? [],
       quizBestScores: parsed.quizBestScores ?? {},
+      drillBestScores: parsed.drillBestScores ?? {},
       chartBestScores: parsed.chartBestScores ?? {},
     };
   } catch {
@@ -147,6 +152,19 @@ export function recordQuizCompletion(quizSlug: string, score: number) {
   );
 }
 
+export function recordDrillCompletion(drillSlug: string, score: number) {
+  return updateStoredLearningProgress((state) =>
+    applyActivity({
+      ...state,
+      completedDrillSlugs: addUnique(state.completedDrillSlugs, drillSlug),
+      drillBestScores: {
+        ...state.drillBestScores,
+        [drillSlug]: Math.max(state.drillBestScores[drillSlug] ?? 0, score),
+      },
+    }),
+  );
+}
+
 export function recordChartChallengeCompletion(challengeSlug: string, score: number) {
   return updateStoredLearningProgress((state) =>
     applyActivity({
@@ -173,6 +191,7 @@ function buildAchievements(state: StoredLearningProgress): Achievement[] {
   const achievements: Achievement[] = [];
   const completedLessonCount = state.completedLessonSlugs.length;
   const quizScores = Object.values(state.quizBestScores);
+  const drillScores = Object.values(state.drillBestScores);
   const chartScores = Object.values(state.chartBestScores);
 
   if (completedLessonCount > 0) {
@@ -196,6 +215,14 @@ function buildAchievements(state: StoredLearningProgress): Achievement[] {
       id: "quiz-sharpener",
       title: "Quiz Sharpener",
       detail: "Hit 80% or better on a quiz checkpoint.",
+    });
+  }
+
+  if (drillScores.some((score) => score >= 80)) {
+    achievements.push({
+      id: "drill-loop-runner",
+      title: "Drill Loop Runner",
+      detail: "Cleared a rapid review drill with 80% or better.",
     });
   }
 
@@ -256,6 +283,7 @@ function getRankMeta(totalXp: number) {
 export function deriveLearningProgress(state: StoredLearningProgress) {
   const lessonLookup = new Map(lessons.map((lesson) => [lesson.slug, lesson]));
   const quizLookup = new Map(quizzes.map((quiz) => [quiz.slug, quiz]));
+  const drillLookup = new Map(drillSets.map((drill) => [drill.slug, drill]));
   const challengeLookup = new Map(chartChallenges.map((challenge) => [challenge.slug, challenge]));
   const scenarioLookup = new Map(scenarios.map((scenario) => [scenario.slug, scenario]));
 
@@ -264,6 +292,7 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
     const lessonCount = module.lessonSlugs.length;
     const completedLessons = module.lessonSlugs.filter((slug) => state.completedLessonSlugs.includes(slug)).length;
     const quizComplete = module.quizSlug ? state.completedQuizSlugs.includes(module.quizSlug) : true;
+    const drillComplete = module.drillSlug ? state.completedDrillSlugs.includes(module.drillSlug) : true;
     const challengeComplete = module.chartChallengeSlug
       ? state.completedChartChallengeSlugs.includes(module.chartChallengeSlug)
       : true;
@@ -274,10 +303,15 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
     const totalItems =
       lessonCount +
       (module.quizSlug ? 1 : 0) +
+      (module.drillSlug ? 1 : 0) +
       (module.chartChallengeSlug ? 1 : 0) +
       (module.simulatorSlug ? 1 : 0);
     const completedItems =
-      completedLessons + (quizComplete && module.quizSlug ? 1 : 0) + (challengeComplete && module.chartChallengeSlug ? 1 : 0) + (scenarioComplete && module.simulatorSlug ? 1 : 0);
+      completedLessons +
+      (quizComplete && module.quizSlug ? 1 : 0) +
+      (drillComplete && module.drillSlug ? 1 : 0) +
+      (challengeComplete && module.chartChallengeSlug ? 1 : 0) +
+      (scenarioComplete && module.simulatorSlug ? 1 : 0);
     const completed = totalItems > 0 && completedItems === totalItems;
     const unlocked = canUnlockNext;
 
@@ -310,6 +344,9 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
     state.completedQuizSlugs
       .map((slug) => quizLookup.get(slug)?.xpReward ?? 0)
       .reduce((sum, value) => sum + value, 0) +
+    state.completedDrillSlugs
+      .map((slug) => drillLookup.get(slug)?.xpReward ?? 0)
+      .reduce((sum, value) => sum + value, 0) +
     state.completedChartChallengeSlugs
       .map((slug) => challengeLookup.get(slug)?.xpReward ?? 0)
       .reduce((sum, value) => sum + value, 0) +
@@ -319,6 +356,7 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
 
   const rankMeta = getRankMeta(totalXp);
   const quizAccuracy = average(Object.values(state.quizBestScores));
+  const drillAccuracy = average(Object.values(state.drillBestScores));
   const chartAccuracy = average(Object.values(state.chartBestScores));
   const totalContentItems = modules.reduce((sum, module) => sum + module.totalItems, 0);
   const totalCompletedItems = modules.reduce((sum, module) => sum + module.completedItems, 0);
@@ -333,6 +371,7 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
     modulesCompleted: modules.filter((module) => module.completed).length,
     lessonsCompleted: state.completedLessonSlugs.length,
     quizAccuracy,
+    drillAccuracy,
     chartAccuracy,
     overallProgressPercent:
       totalContentItems === 0 ? 0 : Math.round((totalCompletedItems / totalContentItems) * 100),

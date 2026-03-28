@@ -19,15 +19,16 @@ export function ProgressView() {
               Momentum, mastery, and what unlocks next.
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
-              The progression model is designed to make trading education feel earned. Lessons, quizzes, chart reads,
-              and scenario drills all feed a single growth loop instead of living in separate silos.
+              The progression model is designed to make trading education feel earned. Lessons, rapid-review loops,
+              quizzes, chart reads, and scenario drills all feed a single growth loop instead of living in separate silos.
             </p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <MetricCard label="Total XP" value={`${progress.totalXp}`} />
             <MetricCard label="Overall Progress" value={`${progress.overallProgressPercent}%`} />
             <MetricCard label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
+            <MetricCard label="Drill Accuracy" value={`${progress.drillAccuracy}%`} />
             <MetricCard label="Chart Accuracy" value={`${progress.chartAccuracy}%`} />
           </div>
         </div>
