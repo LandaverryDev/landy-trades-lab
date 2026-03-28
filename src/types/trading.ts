@@ -90,11 +90,26 @@ export interface LessonImageBlock {
   imageKey: LessonVisualKey;
 }
 
+export interface LessonQuickCheckBlock {
+  id: string;
+  type: "quick-check";
+  title: string;
+  prompt: string;
+  choices: Array<{
+    id: string;
+    label: string;
+  }>;
+  correctChoiceId: string;
+  explanation: string;
+  coaching: string;
+}
+
 export type LessonBlock =
   | LessonTextBlock
   | LessonCalloutBlock
   | LessonDiagramBlock
-  | LessonImageBlock;
+  | LessonImageBlock
+  | LessonQuickCheckBlock;
 
 export interface LessonSection {
   id: string;

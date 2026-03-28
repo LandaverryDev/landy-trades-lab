@@ -44,14 +44,20 @@ export const learningModules: LearningModule[] = [
     summary:
       "A visual starter flow covering what trading is, the basic market concepts that matter first, and how to read candlesticks.",
     xpReward: 280,
-    lessonCount: 3,
-    estimatedMinutes: 24,
+    lessonCount: 5,
+    estimatedMinutes: 38,
     progressPercent: 34,
-    focusAreas: ["What is trading?", "Basic market concepts", "Candlestick reading"],
+    focusAreas: ["What is trading?", "Trading vs investing", "Basic market concepts", "Candlestick reading"],
     botBuilderHook:
       "This module teaches the first machine-readable inputs you will later need for strategy rules: market type, price movement, and candle behavior.",
     unlockRule: "Available now",
-    lessonSlugs: ["what-is-trading", "basic-market-concepts", "candlestick-basics"],
+    lessonSlugs: [
+      "what-is-trading",
+      "trading-vs-investing",
+      "basic-market-concepts",
+      "candlestick-basics",
+      "candle-location-and-context",
+    ],
     quizSlug: "beginner-foundations-quiz",
     drillSlug: "beginner-foundations-rapid-review",
     chartChallengeSlug: "trend-and-support-challenge",
@@ -70,17 +76,19 @@ export const learningModules: LearningModule[] = [
     summary:
       "Learn support and resistance, trend direction, stop placement, and simple position sizing.",
     xpReward: 340,
-    lessonCount: 4,
-    estimatedMinutes: 34,
+    lessonCount: 6,
+    estimatedMinutes: 50,
     progressPercent: 0,
-    focusAreas: ["Support", "Resistance", "Trend direction", "Risk basics"],
+    focusAreas: ["Support", "Resistance", "Trend direction", "Trend vs chop", "Risk basics"],
     botBuilderHook:
       "The next step is defining direction, levels, and invalidation in a way a rules engine could later evaluate.",
     unlockRule: "Unlock after Beginner Foundations",
     lessonSlugs: [
       "support-and-resistance",
       "trend-direction",
+      "trend-vs-chop",
       "stop-loss-basics",
+      "reward-to-risk-basics",
       "position-sizing-basics",
     ],
     quizSlug: "levels-trends-risk-quiz",
@@ -373,6 +381,22 @@ export const lessons: Lesson[] = [
             title: "Fast rule",
             body: "If you cannot explain where the trade is wrong, you are not ready to take it.",
           },
+          {
+            id: "trade-loop-check",
+            type: "quick-check",
+            title: "Trade plan check",
+            prompt: "Which piece makes a trade idea structured instead of random?",
+            choices: [
+              { id: "a", label: "It has a setup, a trigger, and a clear invalidation point." },
+              { id: "b", label: "It feels urgent and fast." },
+              { id: "c", label: "Someone online sounded certain about it." },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "A real trade plan has a reason to enter, a condition that confirms the idea, and a place where the idea clearly fails.",
+            coaching:
+              "That same structure later becomes strategy logic: setup filter, trigger event, and invalidation rule.",
+          },
         ],
       },
       {
@@ -426,6 +450,105 @@ export const lessons: Lesson[] = [
       "Risk logic comes before profit targets.",
     ],
     botBuilderSignals: ["Setup state", "Trigger event", "Invalidation level", "Risk size"],
+    nextLessonSlug: "trading-vs-investing",
+  },
+  {
+    slug: "trading-vs-investing",
+    moduleSlug: "market-bootcamp",
+    title: "Trading vs Investing",
+    summary:
+      "Trading and investing both use markets, but the time horizon, decision speed, and risk handling are very different.",
+    objective: "Separate short-term trading decisions from long-term investing so the app’s training path feels more concrete.",
+    estimatedMinutes: 6,
+    xpReward: 60,
+    keyTerms: ["Time horizon", "Catalyst", "Holding period", "Decision speed"],
+    sections: [
+      {
+        id: "time-horizon",
+        eyebrow: "Core Difference",
+        title: "Trading is shorter-horizon decision-making",
+        summary: "The question is not just what asset you own. It is how and why you are using it.",
+        blocks: [
+          {
+            id: "time-horizon-text",
+            type: "text",
+            body:
+              "Investors usually care about long-term business value, multi-month trends, and portfolio growth. Traders care more about shorter-term movement, timing, and whether a setup is active right now.",
+            bullets: [
+              "Investing often allows more time for the thesis to play out.",
+              "Trading needs tighter entry, exit, and risk rules.",
+              "A trader can be bullish on a company long term and still avoid a bad short-term trade.",
+            ],
+          },
+          {
+            id: "time-horizon-diagram",
+            type: "diagram",
+            title: "Same market, different job",
+            caption: "The market can serve more than one goal depending on your time horizon.",
+            items: [
+              {
+                label: "Investor lens",
+                value: "Months to years",
+                detail: "More patience, more focus on bigger business or macro thesis.",
+              },
+              {
+                label: "Trader lens",
+                value: "Minutes to days",
+                detail: "More focus on timing, execution, and whether the setup is valid now.",
+              },
+              {
+                label: "Shared need",
+                value: "Risk control",
+                detail: "Both still need position control, but trading requires much faster feedback loops.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "decision-speed",
+        eyebrow: "Practical Read",
+        title: "Trading asks for clearer decisions under more pressure",
+        summary: "The shorter the holding period, the more structure matters.",
+        blocks: [
+          {
+            id: "decision-speed-text",
+            type: "text",
+            body:
+              "A trader usually cannot rely on a vague long-term story to rescue a weak entry. They need the setup, the trigger, and the risk rule to be clear before acting.",
+          },
+          {
+            id: "decision-speed-check",
+            type: "quick-check",
+            title: "Time horizon check",
+            prompt: "Why does this app teach tighter structure for trading than for investing?",
+            choices: [
+              { id: "a", label: "Because shorter-horizon decisions need clearer timing and risk controls." },
+              { id: "b", label: "Because traders never need risk rules." },
+              { id: "c", label: "Because investing and trading are basically identical." },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Shorter time horizons leave less room for vague reasoning. Trading needs cleaner entry, exit, and invalidation logic.",
+            coaching:
+              "This is why the app keeps repeating structure, timing, and risk instead of only talking about market opinions.",
+          },
+          {
+            id: "decision-speed-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Automation gets easier when the time horizon is explicit. A system behaves very differently if it is built for five minutes versus five months.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Trading and investing can use the same market but with different time horizons and rules.",
+      "Trading usually needs tighter timing and faster risk control.",
+      "Shorter-horizon decisions demand more structure, not less.",
+    ],
+    botBuilderSignals: ["Time horizon", "Holding period", "Decision window", "Catalyst timing"],
     nextLessonSlug: "basic-market-concepts",
   },
   {
@@ -462,6 +585,22 @@ export const lessons: Lesson[] = [
             tone: "neutral",
             title: "First principle",
             body: "The chart is not random noise. It is pressure and reaction made visible.",
+          },
+          {
+            id: "price-moves-check",
+            type: "quick-check",
+            title: "Auction logic check",
+            prompt: "What is the simplest reason price moves on a chart?",
+            choices: [
+              { id: "a", label: "Buyers and sellers keep agreeing to transact at different prices." },
+              { id: "b", label: "Candles move randomly with no underlying auction process." },
+              { id: "c", label: "Only news matters, even on every tiny move." },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Price changes because the market keeps finding new prices where participants are willing to buy or sell.",
+            coaching:
+              "That auction idea is basic, but it explains later concepts like support, resistance, breakouts, and failed moves.",
           },
         ],
       },
@@ -554,6 +693,22 @@ export const lessons: Lesson[] = [
               "Strong close: the side in control finished the candle better.",
             ],
           },
+          {
+            id: "candle-anatomy-check",
+            type: "quick-check",
+            title: "Candle anatomy check",
+            prompt: "What usually matters first when you read a candle quickly?",
+            choices: [
+              { id: "a", label: "Body size, wick behavior, and where the close sits inside the range" },
+              { id: "b", label: "Only the candle color, with no context" },
+              { id: "c", label: "The candle name before the shape" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "The body shows control, the wicks show rejection or exploration, and the close shows who finished stronger.",
+            coaching:
+              "This is why the app teaches candle reading as a visual story, not a memorization list of names.",
+          },
         ],
       },
       {
@@ -596,6 +751,98 @@ export const lessons: Lesson[] = [
       "Visual reads can be translated into numerical strategy rules later.",
     ],
     botBuilderSignals: ["Body-to-range ratio", "Wick rejection threshold", "Close location", "Consecutive closes"],
+    nextLessonSlug: "candle-location-and-context",
+  },
+  {
+    slug: "candle-location-and-context",
+    moduleSlug: "market-bootcamp",
+    title: "Candle Location and Context",
+    summary:
+      "The same candle can be powerful or meaningless depending on where it forms. Location turns a candle from shape into information.",
+    objective: "Read candles in context so you stop overreacting to isolated green or red bars.",
+    estimatedMinutes: 7,
+    xpReward: 70,
+    keyTerms: ["Location", "Context", "Breakout candle", "Rejection candle"],
+    sections: [
+      {
+        id: "location-matters",
+        eyebrow: "Context First",
+        title: "A strong candle at support means more than a strong candle in the middle of nowhere",
+        summary: "Location changes the meaning of the exact same candle shape.",
+        blocks: [
+          {
+            id: "location-matters-text",
+            type: "text",
+            body:
+              "A bullish candle after buyers defend support can be useful. The same bullish candle in the middle of random chop may not matter much at all.",
+            bullets: [
+              "Candle + support can suggest real defense.",
+              "Candle + resistance can suggest real rejection.",
+              "Candle inside noise often deserves less confidence.",
+            ],
+          },
+          {
+            id: "location-matters-diagram",
+            type: "diagram",
+            title: "Three ways to read the same green candle",
+            caption: "The shape stays the same. The location changes the lesson.",
+            items: [
+              {
+                label: "At support",
+                value: "Potential defense",
+                detail: "The candle may show buyers stepping in where the chart already mattered.",
+              },
+              {
+                label: "In clean breakout",
+                value: "Potential acceptance",
+                detail: "A strong close through a level can show real expansion, not just random movement.",
+              },
+              {
+                label: "Inside chop",
+                value: "Low information",
+                detail: "The candle may look strong, but the surrounding structure gives it little edge.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "sequence-before-signal",
+        eyebrow: "Execution Filter",
+        title: "Sequence before signal keeps you from forcing weak trades",
+        summary: "The better question is not 'Was that candle green?' but 'What story was price telling before it formed?'",
+        blocks: [
+          {
+            id: "sequence-before-signal-text",
+            type: "text",
+            body:
+              "Before trusting a candle, check whether price was trending, pulling back, retesting a level, or simply moving sideways without purpose.",
+          },
+          {
+            id: "sequence-before-signal-check",
+            type: "quick-check",
+            title: "Location check",
+            prompt: "Which candle is usually more informative?",
+            choices: [
+              { id: "a", label: "A strong candle that forms at a meaningful level or after a clean retest" },
+              { id: "b", label: "Any random candle in the middle of overlapping chop" },
+              { id: "c", label: "Only the biggest candle on the page, no matter where it formed" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Location gives the candle its meaning. Structure and sequence decide whether the candle belongs to a usable idea.",
+            coaching:
+              "Later chart drills will keep training this question because trade quality often starts with location before it starts with pattern names.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "A candle becomes more useful when it forms at a meaningful location.",
+      "Structure around the candle matters more than the candle color alone.",
+      "Reading location well is one of the fastest ways to avoid low-quality beginner trades.",
+    ],
+    botBuilderSignals: ["Level proximity", "Retest context", "Breakout close location", "Chop filter"],
     nextLessonSlug: "support-and-resistance",
   },
   {
@@ -632,6 +879,22 @@ export const lessons: Lesson[] = [
             tone: "coach",
             title: "Fast rule",
             body: "If you need to zoom in forever to justify a level, it is probably not clean enough to trust.",
+          },
+          {
+            id: "zones-not-lines-check",
+            type: "quick-check",
+            title: "Zone check",
+            prompt: "Why is it safer for beginners to think in zones instead of exact lines?",
+            choices: [
+              { id: "a", label: "Because price often probes around a decision area before choosing direction." },
+              { id: "b", label: "Because levels do not matter at all." },
+              { id: "c", label: "Because exact price is always irrelevant." },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Support and resistance usually behave like areas where decisions happen, not perfect one-tick boundaries.",
+            coaching:
+              "Thinking in zones will help later with retests, stop placement, and avoiding overprecision.",
           },
         ],
       },
@@ -717,6 +980,22 @@ export const lessons: Lesson[] = [
             title: "First question on every chart",
             body: "Is price mostly advancing, mostly declining, or mostly chopping?",
           },
+          {
+            id: "sequence-first-check",
+            type: "quick-check",
+            title: "Trend sequence check",
+            prompt: "What usually defines an uptrend first?",
+            choices: [
+              { id: "a", label: "Higher highs and higher lows building over time" },
+              { id: "b", label: "One green candle" },
+              { id: "c", label: "Any move that feels exciting" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "An uptrend is a sequence of structure, not a single bar or a feeling about the chart.",
+            coaching:
+              "This is why the app keeps bringing you back to pushes and pullbacks, not just colors or labels.",
+          },
         ],
       },
       {
@@ -764,6 +1043,83 @@ export const lessons: Lesson[] = [
       "A clean trend gives better timing and safer invalidation points.",
     ],
     botBuilderSignals: ["Higher highs", "Higher lows", "Lower highs", "Pullback depth"],
+    nextLessonSlug: "trend-vs-chop",
+  },
+  {
+    slug: "trend-vs-chop",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Trend vs Chop",
+    summary:
+      "One of the biggest beginner mistakes is trying to trade every chart the same way. Clean trends and messy chop demand different decisions.",
+    objective: "Distinguish between tradable structure and low-quality chop before you force a setup.",
+    estimatedMinutes: 7,
+    xpReward: 70,
+    keyTerms: ["Chop", "Follow-through", "Structure quality", "Skip filter"],
+    sections: [
+      {
+        id: "chop-signals",
+        eyebrow: "Skip Filter",
+        title: "Chop usually overlaps, hesitates, and fails to follow through",
+        summary: "Messy structure should often reduce confidence or remove the trade entirely.",
+        blocks: [
+          {
+            id: "chop-signals-text",
+            type: "text",
+            body:
+              "When price keeps overlapping prior candles, breaking levels without follow-through, and whipping back and forth, edge usually gets worse fast.",
+            bullets: [
+              "Overlapping candles often reduce signal quality.",
+              "Repeated failed breaks can signal indecision.",
+              "Skipping a weak chart is a decision, not a missed opportunity.",
+            ],
+          },
+          {
+            id: "chop-signals-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Common beginner leak",
+            body: "Many beginners trade a weak chart just because they want action. Chop punishes impatience.",
+          },
+        ],
+      },
+      {
+        id: "trend-vs-chop-check",
+        eyebrow: "Fast Decision",
+        title: "A skip rule is part of the system, not a failure of confidence",
+        summary: "Your edge improves when you learn what not to trade.",
+        blocks: [
+          {
+            id: "trend-vs-chop-check-block",
+            type: "quick-check",
+            title: "Quality filter check",
+            prompt: "What is often the best response to a chart with weak follow-through and constant overlap?",
+            choices: [
+              { id: "a", label: "Reduce confidence or skip until the structure improves." },
+              { id: "b", label: "Take larger size to make the messy move worth it." },
+              { id: "c", label: "Assume every breakout will suddenly start working." },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "When structure quality is poor, the right answer is often patience. Trading less can be better trading.",
+            coaching:
+              "A good system is not only entry logic. It also has a skip filter for weak conditions.",
+          },
+          {
+            id: "trend-vs-chop-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Later this becomes a filter: refuse entries when overlap is too high, follow-through is too weak, or structure quality falls below threshold.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Not every chart deserves a trade.",
+      "Chop often shows up through overlap, hesitation, and failed expansion.",
+      "Skip rules belong inside a real strategy.",
+    ],
+    botBuilderSignals: ["Overlap filter", "Breakout follow-through", "Expansion quality", "Skip condition"],
     nextLessonSlug: "stop-loss-basics",
   },
   {
@@ -800,6 +1156,22 @@ export const lessons: Lesson[] = [
             tone: "coach",
             title: "Fast rule",
             body: "Never place a stop at a random dollar amount without asking whether the chart idea has actually failed there.",
+          },
+          {
+            id: "idea-first-check",
+            type: "quick-check",
+            title: "Stop logic check",
+            prompt: "Where should a stop usually go first?",
+            choices: [
+              { id: "a", label: "Beyond the point where the setup is clearly invalidated" },
+              { id: "b", label: "At a random dollar number that feels emotionally easier" },
+              { id: "c", label: "Nowhere, if the setup looked strong enough" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "The stop belongs where the chart idea breaks. That is what makes it a rule instead of an emotion.",
+            coaching:
+              "Position size can adjust. The invalidation point should not float around because of emotion.",
           },
         ],
       },
@@ -848,6 +1220,99 @@ export const lessons: Lesson[] = [
       "Position size exists to support the stop, not replace it.",
     ],
     botBuilderSignals: ["Invalidation zone", "Buffer size", "Risk per trade", "Stop distance"],
+    nextLessonSlug: "reward-to-risk-basics",
+  },
+  {
+    slug: "reward-to-risk-basics",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Reward-to-Risk Basics",
+    summary:
+      "A trade can be directionally correct and still not be worth taking if the possible reward is too small compared with the risk.",
+    objective: "Understand why trade selection improves when target distance and stop distance are evaluated together.",
+    estimatedMinutes: 7,
+    xpReward: 70,
+    keyTerms: ["Reward-to-risk", "Target distance", "Trade selection", "Asymmetry"],
+    sections: [
+      {
+        id: "rr-core",
+        eyebrow: "Trade Selection",
+        title: "Not every valid setup offers a good enough payoff",
+        summary: "A setup can still be too cramped or too late to justify the risk.",
+        blocks: [
+          {
+            id: "rr-core-text",
+            type: "text",
+            body:
+              "Reward-to-risk compares how much room the trade has to move in your favor versus how much it could lose if the setup fails.",
+            bullets: [
+              "A tight target with a wide stop can make the trade unattractive.",
+              "A cleaner location often improves reward-to-risk before the trade even starts.",
+              "A trade can be valid and still not be worth taking.",
+            ],
+          },
+          {
+            id: "rr-core-diagram",
+            type: "diagram",
+            title: "Why location changes the math",
+            caption: "Better entries often improve the ratio before anything happens after entry.",
+            items: [
+              {
+                label: "Late entry",
+                value: "Worse ratio",
+                detail: "Less distance to target and often the same invalidation zone.",
+              },
+              {
+                label: "Tighter location",
+                value: "Cleaner ratio",
+                detail: "More room to target relative to the stop distance.",
+              },
+              {
+                label: "Skip condition",
+                value: "Low payoff",
+                detail: "If the nearest realistic target is too close, the setup may not justify the risk.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "rr-filter",
+        eyebrow: "Practical Filter",
+        title: "Reward-to-risk is a filter, not a guarantee",
+        summary: "A good ratio does not create edge by itself, but a bad ratio can destroy an otherwise decent idea.",
+        blocks: [
+          {
+            id: "rr-filter-check",
+            type: "quick-check",
+            title: "Reward-to-risk check",
+            prompt: "Why do traders use reward-to-risk as a filter?",
+            choices: [
+              { id: "a", label: "Because some trades do not offer enough upside relative to the stop" },
+              { id: "b", label: "Because a high ratio guarantees a winning trade" },
+              { id: "c", label: "Because stops become unnecessary once the ratio looks good" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Reward-to-risk helps you reject trades that may not pay enough if they work, even before win rate is considered.",
+            coaching:
+              "Treat it as a trade-selection filter. It improves discipline, but it does not replace setup quality or context.",
+          },
+          {
+            id: "rr-filter-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Many systems include a minimum reward-to-risk rule so the strategy can reject setups that are too cramped to justify the stop.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Reward-to-risk helps filter out low-payoff setups.",
+      "Entry location often changes the ratio more than beginners expect.",
+      "A good ratio helps selection, but it does not replace setup quality.",
+    ],
+    botBuilderSignals: ["Minimum R filter", "Target distance", "Stop distance", "Skip threshold"],
     nextLessonSlug: "position-sizing-basics",
   },
   {
@@ -3408,6 +3873,21 @@ export const quizzes: Quiz[] = [
           "A candle only becomes meaningful when you place it inside the surrounding structure and sequence.",
         coaching: "Read the story around the candle, not just the candle alone.",
       },
+      {
+        id: "q5",
+        type: "multiple-choice",
+        prompt: "Why does this course separate trading from investing early?",
+        context: "Use the clearer beginner distinction.",
+        choices: [
+          { id: "a", label: "Because trading usually needs tighter timing and faster risk decisions." },
+          { id: "b", label: "Because investing and trading are exactly the same process." },
+          { id: "c", label: "Because investors never care about risk." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Trading usually works on a shorter horizon, so timing, invalidation, and execution become much more important.",
+        coaching: "That difference is why this app keeps repeating setup, trigger, and risk logic from the start.",
+      },
     ],
   },
   {
@@ -3481,6 +3961,33 @@ export const quizzes: Quiz[] = [
         explanation:
           "With fixed risk, a wider stop means more risk per share or contract, so the size normally shrinks.",
         coaching: "Size follows stop distance and risk budget, not confidence.",
+      },
+      {
+        id: "q5",
+        type: "multiple-choice",
+        prompt: "Why can a valid-looking setup still be a bad trade on reward-to-risk terms?",
+        choices: [
+          { id: "a", label: "Because the realistic target may be too close compared with the stop distance." },
+          { id: "b", label: "Because reward-to-risk automatically guarantees losses." },
+          { id: "c", label: "Because stop placement stops mattering once the chart looks clean." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A trade can be structurally valid and still offer too little upside relative to the risk you must take.",
+        coaching: "This is why trade selection includes payoff, not only direction.",
+      },
+      {
+        id: "q6",
+        type: "true-false",
+        prompt: "True or false: a chart can be trending and still be low quality if overlap and failed follow-through stay high.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Trend direction and trend quality are not the same. Weak structure can reduce edge even when the market is leaning one way.",
+        coaching: "That is the whole point of learning trend quality and chop filters before chasing every move.",
       },
     ],
   },
@@ -4106,6 +4613,33 @@ export const drillSets: DrillSet[] = [
           "Candles only become meaningful when you place them inside the surrounding structure and story.",
         coaching: "The sequence around the candle is where the real read comes from.",
       },
+      {
+        id: "q5",
+        type: "multiple-choice",
+        prompt: "What is the best beginner summary of trading versus investing?",
+        choices: [
+          { id: "a", label: "Trading usually needs tighter timing and faster risk decisions than investing." },
+          { id: "b", label: "They are the same as long as a chart is open." },
+          { id: "c", label: "Investing never uses risk control." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Trading works on a shorter horizon, so structure, timing, and invalidation need to be clearer and faster.",
+        coaching: "That time-horizon difference explains why this path teaches faster decision logic so early.",
+      },
+      {
+        id: "q6",
+        type: "true-false",
+        prompt: "True or false: a strong-looking candle in random chop can still be low information.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Location and structure change the meaning of the candle. A strong bar in weak context may still be low quality.",
+        coaching: "The candle matters, but where it formed matters just as much.",
+      },
     ],
   },
   {
@@ -4170,6 +4704,34 @@ export const drillSets: DrillSet[] = [
         explanation:
           "With fixed risk, a wider stop means more risk per share or contract, so the size normally shrinks.",
         coaching: "Size follows stop distance and risk budget, not confidence.",
+      },
+      {
+        id: "q5",
+        type: "multiple-choice",
+        prompt: "What is usually the best response to a chart with heavy overlap and weak follow-through?",
+        choices: [
+          { id: "a", label: "Reduce confidence or skip until structure improves." },
+          { id: "b", label: "Increase size so the messy chart becomes worth it." },
+          { id: "c", label: "Assume the next breakout must finally work." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Messy structure often reduces edge. A disciplined skip is part of a real trading process.",
+        coaching: "Trend quality and chop filters are there to protect you from low-information conditions.",
+      },
+      {
+        id: "q6",
+        type: "pattern-match",
+        prompt: "Why is reward-to-risk useful before entry?",
+        choices: [
+          { id: "a", label: "It helps reject trades whose realistic upside is too small relative to the stop." },
+          { id: "b", label: "It guarantees profit if the number is high enough." },
+          { id: "c", label: "It removes the need for an invalidation point." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Reward-to-risk is a trade-selection filter. It helps you avoid cramped setups that may not pay enough even if they work.",
+        coaching: "Use it to improve selection, not to pretend probability no longer matters.",
       },
     ],
   },

@@ -1,6 +1,9 @@
-import { Bot, Flame, ShieldAlert, Sparkles } from "lucide-react";
+"use client";
 
-import type { LessonBlock, LessonImageBlock } from "@/types/trading";
+import { useState } from "react";
+import { ArrowRight, Bot, Flame, ShieldAlert, Sparkles } from "lucide-react";
+
+import type { LessonBlock, LessonImageBlock, LessonQuickCheckBlock } from "@/types/trading";
 
 export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
   return (
@@ -66,10 +69,98 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
           case "image":
             return <LessonVisualCard key={block.id} block={block} />;
 
+          case "quick-check":
+            return <InlineQuickCheck key={block.id} block={block} />;
+
           default:
             return null;
         }
       })}
+    </div>
+  );
+}
+
+function InlineQuickCheck({ block }: { block: LessonQuickCheckBlock }) {
+  const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const isCorrect = selectedChoiceId === block.correctChoiceId;
+
+  return (
+    <div className="course-card-raised rounded-[24px] p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="eyebrow-label">Inline Practice</p>
+          <h3 className="mt-2 text-lg font-semibold text-white">{block.title}</h3>
+        </div>
+        <span className="course-chip-accent rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.2em]">
+          Quick check
+        </span>
+      </div>
+
+      <p className="mt-4 text-sm leading-7 text-slate-200">{block.prompt}</p>
+
+      <div className="mt-4 grid gap-3">
+        {block.choices.map((choice) => {
+          const selected = selectedChoiceId === choice.id;
+          const showCorrect = submitted && choice.id === block.correctChoiceId;
+          const showWrong = submitted && selected && choice.id !== block.correctChoiceId;
+
+          return (
+            <button
+              key={choice.id}
+              type="button"
+              disabled={submitted}
+              onClick={() => setSelectedChoiceId(choice.id)}
+              className={`rounded-[22px] border px-4 py-4 text-left transition ${
+                showCorrect
+                  ? "border-[var(--success-border)] bg-[var(--success)]"
+                  : showWrong
+                    ? "border-[var(--danger-border)] bg-[var(--danger)]"
+                    : selected
+                      ? "border-[var(--accent-border)] bg-[var(--accent)]"
+                      : "border-white/10 bg-slate-950/60 hover:bg-slate-950/80"
+              }`}
+            >
+              <p className="text-sm font-medium text-white">{choice.label}</p>
+            </button>
+          );
+        })}
+      </div>
+
+      {submitted ? (
+        <div className="course-inset mt-4 rounded-[22px] p-4">
+          <p className={`text-xs uppercase tracking-[0.24em] ${isCorrect ? "text-slate-200" : "text-rose-300"}`}>
+            {isCorrect ? "Good read" : "Tighten the concept"}
+          </p>
+          <p className="mt-3 text-sm leading-7 text-slate-200">{block.explanation}</p>
+          <p className="mt-3 text-sm leading-6 text-slate-400">{block.coaching}</p>
+        </div>
+      ) : null}
+
+      <div className="mt-4 flex flex-wrap gap-3">
+        {!submitted ? (
+          <button
+            type="button"
+            disabled={!selectedChoiceId}
+            onClick={() => setSubmitted(true)}
+            className="course-button-primary focus-visible-ring px-4 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Check it
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedChoiceId(null);
+              setSubmitted(false);
+            }}
+            className="course-button-secondary focus-visible-ring px-4 py-3 text-sm transition hover:bg-white/[0.06]"
+          >
+            Try again
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
