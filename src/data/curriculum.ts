@@ -93,14 +93,22 @@ export const learningModules: LearningModule[] = [
     summary:
       "Study breakouts, pullbacks, entries, exits, volume context, and when to skip weak structure.",
     xpReward: 420,
-    lessonCount: 6,
-    estimatedMinutes: 48,
+    lessonCount: 4,
+    estimatedMinutes: 36,
     progressPercent: 0,
     focusAreas: ["Breakouts", "Pullbacks", "Entries", "Exits"],
     botBuilderHook:
       "This is where chart ideas become triggers, filters, and management rules.",
     unlockRule: "Unlock after Levels, Trends, and Risk",
-    lessonSlugs: [],
+    lessonSlugs: [
+      "breakout-basics",
+      "pullback-entries",
+      "entries-and-exits",
+      "volume-and-confirmation",
+    ],
+    quizSlug: "structure-execution-quiz",
+    chartChallengeSlug: "breakout-or-fakeout-challenge",
+    simulatorSlug: "breakout-retest-simulator",
   },
   {
     id: "module-04",
@@ -746,6 +754,342 @@ export const lessons: Lesson[] = [
       "A strong risk engine is what keeps strategy logic alive over time.",
     ],
     botBuilderSignals: ["Risk budget", "Stop distance", "Size formula", "Reward-to-risk filter"],
+    nextLessonSlug: "breakout-basics",
+  },
+  {
+    slug: "breakout-basics",
+    moduleSlug: "structure-and-execution",
+    title: "Breakout Basics",
+    summary:
+      "A breakout is only useful when price actually escapes a meaningful area and shows signs of acceptance instead of immediate rejection.",
+    objective: "Learn to separate a clean breakout from a weak pop that fails quickly back into the range.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["Breakout", "Range high", "Acceptance", "Fakeout"],
+    sections: [
+      {
+        id: "what-makes-a-breakout",
+        eyebrow: "Setup Logic",
+        title: "A breakout starts with a level that traders can actually see",
+        summary: "Not every new high is a breakout. The area has to matter first.",
+        blocks: [
+          {
+            id: "breakout-level-text",
+            type: "text",
+            body:
+              "The best breakouts push through a clear resistance zone, not a random candle top. They usually look stronger when the move expands with intent instead of barely poking above the range.",
+            bullets: [
+              "The prior level should be obvious.",
+              "The move should separate from the range cleanly.",
+              "A strong close above the zone matters more than a quick intrabar poke.",
+            ],
+          },
+          {
+            id: "breakout-level-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Fast read",
+            body: "If the breakout cannot stay above the level, it may not be a breakout at all. It may only be a trap.",
+          },
+        ],
+      },
+      {
+        id: "acceptance-vs-fakeout",
+        eyebrow: "Execution Filter",
+        title: "Acceptance is the real signal, not the first touch above resistance",
+        summary: "A breakout becomes more credible when price spends time above the level without instantly giving it back.",
+        blocks: [
+          {
+            id: "acceptance-diagram",
+            type: "diagram",
+            title: "Breakout checklist",
+            caption: "The cleanest setups stack multiple clues rather than relying on one candle.",
+            items: [
+              {
+                label: "Level quality",
+                value: "Clear range edge",
+                detail: "The market has already shown the area matters.",
+              },
+              {
+                label: "Breakout candle",
+                value: "Strong close",
+                detail: "The move should close with intent rather than fading hard into the candle close.",
+              },
+              {
+                label: "Follow-through",
+                value: "Hold above level",
+                detail: "Price should accept the new zone instead of snapping immediately back inside.",
+              },
+            ],
+          },
+          {
+            id: "acceptance-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Breakout systems often require a defined level, a close beyond it, and a hold or retest condition before entry is allowed.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "A breakout is stronger when it clears a meaningful level and closes with intent.",
+      "Acceptance above the level matters more than the first poke through it.",
+      "Fakeouts usually show weak follow-through and fast rejection back into the range.",
+    ],
+    botBuilderSignals: ["Range high", "Breakout close", "Time above level", "Failed acceptance"],
+    nextLessonSlug: "pullback-entries",
+  },
+  {
+    slug: "pullback-entries",
+    moduleSlug: "structure-and-execution",
+    title: "Pullback Entries",
+    summary:
+      "The best entry is often not the first breakout candle. It is the controlled pullback that proves the move can hold.",
+    objective: "Use pullbacks to improve location, reduce chase, and define risk more clearly.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["Pullback", "Retest", "Location", "Chasing"],
+    sections: [
+      {
+        id: "why-pullbacks-help",
+        eyebrow: "Location Edge",
+        title: "Pullbacks give you structure that breakout chasing usually removes",
+        summary: "A retest often turns a fast move into a cleaner trade plan.",
+        blocks: [
+          {
+            id: "why-pullbacks-help-text",
+            type: "text",
+            body:
+              "Buying the first breakout candle can work, but it often forces poor reward-to-risk. Waiting for a controlled pullback lets you test whether the old resistance will hold as new support.",
+            bullets: [
+              "A pullback can confirm role reversal.",
+              "A retest often gives a tighter invalidation point.",
+              "Patience usually improves trade location.",
+            ],
+          },
+          {
+            id: "why-pullbacks-help-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Common mistake",
+            body: "Many beginners buy a breakout only because they fear missing the move. That often means entering where the stop is least efficient.",
+          },
+        ],
+      },
+      {
+        id: "controlled-vs-ugly",
+        eyebrow: "Entry Filter",
+        title: "A healthy pullback cools the move off without destroying the structure",
+        summary: "The quality of the retrace matters as much as the breakout itself.",
+        blocks: [
+          {
+            id: "controlled-vs-ugly-diagram",
+            type: "diagram",
+            title: "What makes a pullback cleaner",
+            caption: "The best pullbacks look organized instead of panicked.",
+            items: [
+              {
+                label: "Depth",
+                value: "Reasonable",
+                detail: "The retrace should not completely erase the breakout's progress.",
+              },
+              {
+                label: "Pace",
+                value: "Controlled",
+                detail: "A healthy pullback often looks slower and less emotional than the breakout leg.",
+              },
+              {
+                label: "Reaction",
+                value: "Bounce from level",
+                detail: "The market should respond near the support or retest zone.",
+              },
+            ],
+          },
+          {
+            id: "controlled-vs-ugly-coach",
+            type: "callout",
+            tone: "coach",
+            title: "Fast rule",
+            body: "If the pullback breaks the whole idea apart, the setup is probably gone. Let it go.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Pullbacks can turn momentum into a cleaner trade location.",
+      "Retests are valuable because they give confirmation and a logical stop.",
+      "A weak pullback can still mean the breakout failed, so quality matters.",
+    ],
+    botBuilderSignals: ["Retest distance", "Pullback depth", "Response candle", "Hold above level"],
+    nextLessonSlug: "entries-and-exits",
+  },
+  {
+    slug: "entries-and-exits",
+    moduleSlug: "structure-and-execution",
+    title: "Entries and Exits",
+    summary:
+      "Execution quality comes from knowing when to trigger in, where to reduce risk, and when to take profit instead of hoping forever.",
+    objective: "Build a cleaner framework for entries, targets, and trade management.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Entry trigger", "Target", "Reward-to-risk", "Scale out"],
+    sections: [
+      {
+        id: "entry-trigger",
+        eyebrow: "Trigger Logic",
+        title: "A setup becomes tradable when something specific confirms entry",
+        summary: "The trigger should be observable and repeatable.",
+        blocks: [
+          {
+            id: "entry-trigger-text",
+            type: "text",
+            body:
+              "A trigger could be a breakout close, a reclaim of a level, a strong response candle at support, or another clear event. The key is that it must be defined before the trade starts.",
+            bullets: [
+              "The setup gets your attention.",
+              "The trigger tells you when to act.",
+              "The invalidation tells you where the trade stops making sense.",
+            ],
+          },
+          {
+            id: "entry-trigger-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Triggers are the exact part of the process that most naturally become coded rules later.",
+          },
+        ],
+      },
+      {
+        id: "exit-logic",
+        eyebrow: "Trade Management",
+        title: "Exits should be planned before the trade starts",
+        summary: "Targets and scaling are part of discipline, not an afterthought.",
+        blocks: [
+          {
+            id: "exit-logic-diagram",
+            type: "diagram",
+            title: "Simple exit framework",
+            caption: "Good exits protect both the trade and your process.",
+            items: [
+              {
+                label: "Initial target",
+                value: "Logical level",
+                detail: "Use prior highs, range edges, or measured move ideas instead of random wishes.",
+              },
+              {
+                label: "Scale out",
+                value: "Reduce risk",
+                detail: "Taking partial profit can lock something in while keeping a piece on.",
+              },
+              {
+                label: "Reward-to-risk",
+                value: "Worth taking",
+                detail: "The expected move should justify the risk required by the setup.",
+              },
+            ],
+          },
+          {
+            id: "exit-logic-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Common mistake",
+            body: "Many traders manage winners with hope and losers with emotion. Reverse that. Manage both with a plan.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Setups, triggers, and exits should all be defined before entry.",
+      "Targets should come from structure, not excitement.",
+      "Reward-to-risk matters because not every setup deserves capital.",
+    ],
+    botBuilderSignals: ["Trigger rule", "Target rule", "Scale-out rule", "Reward-to-risk filter"],
+    nextLessonSlug: "volume-and-confirmation",
+  },
+  {
+    slug: "volume-and-confirmation",
+    moduleSlug: "structure-and-execution",
+    title: "Volume and Confirmation",
+    summary:
+      "Volume helps tell you whether a breakout or bounce has real participation behind it or whether the move is running on weak conviction.",
+    objective: "Use simple volume context as a confirmation layer without overcomplicating the chart.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["Volume", "Participation", "Confirmation", "Expansion"],
+    sections: [
+      {
+        id: "volume-context",
+        eyebrow: "Confirmation Layer",
+        title: "Volume is most useful when it supports the structure you already see",
+        summary: "Use it to confirm, not to replace price action.",
+        blocks: [
+          {
+            id: "volume-context-text",
+            type: "text",
+            body:
+              "A breakout with expanding volume often signals stronger participation. A breakout with weak volume may still work, but it deserves more caution and less blind trust.",
+            bullets: [
+              "Strong participation can improve confidence in the move.",
+              "Weak participation can increase the odds of fakeouts.",
+              "Volume is most useful when paired with a clear level or trigger.",
+            ],
+          },
+          {
+            id: "volume-context-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "Simple rule",
+            body: "Price tells the story first. Volume helps confirm whether the story has enough energy behind it.",
+          },
+        ],
+      },
+      {
+        id: "confirmation-stack",
+        eyebrow: "Trade Quality",
+        title: "The strongest trades usually stack multiple clues together",
+        summary: "One clue alone is rarely enough to build a robust playbook.",
+        blocks: [
+          {
+            id: "confirmation-stack-diagram",
+            type: "diagram",
+            title: "Stacking confirmation",
+            caption: "The more aligned the clues, the cleaner the decision.",
+            items: [
+              {
+                label: "Structure",
+                value: "Clear level",
+                detail: "The market is reacting around a visible support or resistance area.",
+              },
+              {
+                label: "Price action",
+                value: "Strong trigger",
+                detail: "A response candle or breakout close confirms intent.",
+              },
+              {
+                label: "Participation",
+                value: "Helpful volume",
+                detail: "Activity supports the move instead of looking empty.",
+              },
+            ],
+          },
+          {
+            id: "confirmation-stack-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Confirmation layers often become optional filters in a system: level quality, trigger quality, and participation filter.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Volume works best as confirmation, not as a replacement for price action.",
+      "The strongest setups often align structure, trigger, and participation.",
+      "Confirmation layers are what make strategy logic more selective and robust.",
+    ],
+    botBuilderSignals: ["Volume filter", "Participation threshold", "Trigger quality", "Setup quality"],
   },
 ];
 
@@ -914,6 +1258,98 @@ export const quizzes: Quiz[] = [
         explanation:
           "With fixed risk, a wider stop means more risk per share or contract, so the size normally shrinks.",
         coaching: "Size follows stop distance and risk budget, not confidence.",
+      },
+    ],
+  },
+  {
+    slug: "structure-execution-quiz",
+    moduleSlug: "structure-and-execution",
+    title: "Structure and Execution Quiz",
+    summary:
+      "Check your understanding of breakouts, pullbacks, entry triggers, exits, and volume confirmation.",
+    xpReward: 110,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What makes a breakout more trustworthy?",
+        choices: [
+          {
+            id: "a",
+            label: "It clears a meaningful level, closes with strength, and does not instantly lose the breakout zone.",
+          },
+          {
+            id: "b",
+            label: "It only trades one tick above resistance before collapsing back into the range.",
+          },
+          {
+            id: "c",
+            label: "It feels exciting enough to chase immediately.",
+          },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A stronger breakout usually clears a relevant level and shows acceptance above it instead of immediate rejection.",
+        coaching: "Acceptance matters more than the first poke through the line.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: a controlled pullback can improve entry location and clarify the stop.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "A healthy retest often turns a fast move into a cleaner trade with better structure and risk definition.",
+        coaching: "Patience often improves the trade more than speed does.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which statement best matches a good entry trigger?",
+        choices: [
+          {
+            id: "a",
+            label: "A specific event planned in advance, such as a reclaim, breakout close, or strong response candle.",
+          },
+          {
+            id: "b",
+            label: "Any moment the chart feels like it might move soon.",
+          },
+          {
+            id: "c",
+            label: "Only entering once the move is already extremely extended.",
+          },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A trigger has to be specific enough that you could describe it clearly before the trade starts.",
+        coaching: "If you cannot define the trigger, the setup is still too vague.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "Why is volume most useful in this module?",
+        choices: [
+          {
+            id: "a",
+            label: "It helps confirm whether the price action has participation behind it.",
+          },
+          {
+            id: "b",
+            label: "It can replace levels, triggers, and structure completely.",
+          },
+          {
+            id: "c",
+            label: "It guarantees a breakout will never fail.",
+          },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Volume adds confidence when it supports the structure and trigger you already see, but it should not replace them.",
+        coaching: "Use volume as confirmation, not as a shortcut.",
       },
     ],
   },
@@ -1098,6 +1534,94 @@ export const chartChallenges: ChartChallenge[] = [
       "This is exactly how strategy rules get defined later: market regime, setup zone, invalidation level, then size.",
     ],
   },
+  {
+    slug: "breakout-or-fakeout-challenge",
+    moduleSlug: "structure-and-execution",
+    title: "Breakout or Fakeout Challenge",
+    summary:
+      "Judge whether the move is being accepted above resistance and identify the cleanest retest zone for entry.",
+    xpReward: 120,
+    candles: [
+      { open: 87.4, high: 87.8, low: 87.0, close: 87.6 },
+      { open: 87.6, high: 88.1, low: 87.2, close: 87.9 },
+      { open: 87.9, high: 88.3, low: 87.5, close: 88.0 },
+      { open: 88.0, high: 88.2, low: 87.6, close: 87.8 },
+      { open: 87.8, high: 88.0, low: 87.4, close: 87.6 },
+      { open: 87.6, high: 88.7, low: 87.5, close: 88.5 },
+      { open: 88.5, high: 89.1, low: 88.3, close: 88.9 },
+      { open: 88.9, high: 89.2, low: 88.2, close: 88.4 },
+      { open: 88.4, high: 88.6, low: 88.0, close: 88.2 },
+      { open: 88.2, high: 89.0, low: 88.1, close: 88.8 },
+      { open: 88.8, high: 89.6, low: 88.6, close: 89.4 },
+      { open: 89.4, high: 89.9, low: 89.1, close: 89.7 },
+    ],
+    questions: [
+      {
+        id: "acceptance-read",
+        type: "multiple-choice",
+        prompt: "What is the best read on the move after the breakout candle?",
+        instruction: "Choose the most accurate interpretation of the structure.",
+        explanation:
+          "The cleanest read is a valid breakout with retest acceptance. Price cleared the range, pulled back in a controlled way, and then resumed higher.",
+        coaching: "A breakout becomes more useful when you can see both escape and acceptance, not just the first impulse.",
+        choices: [
+          { id: "accepted-breakout", label: "Accepted breakout with a controlled retest" },
+          { id: "failed-fakeout", label: "Immediate failed fakeout with no bullish edge" },
+          { id: "pure-chop", label: "Pure chop with no directional information" },
+        ],
+        correctChoiceId: "accepted-breakout",
+      },
+      {
+        id: "retest-zone-read",
+        type: "hotspot",
+        prompt: "Where is the best retest zone for the long idea?",
+        instruction: "Click the area where the old breakout level became the most useful support.",
+        explanation:
+          "The cleanest retest zone sits near the post-breakout pullback that held above the old resistance area. That is where the long thesis becomes structured.",
+        coaching: "A good retest area offers both confirmation and a nearby invalidation point.",
+        hotspots: [
+          {
+            id: "under-range",
+            label: "Below old range",
+            candleStart: 0,
+            candleEnd: 2,
+            priceLow: 87.1,
+            priceHigh: 87.7,
+            correct: false,
+            explanation:
+              "This area is too far below the actual post-breakout structure to be the best immediate retest zone.",
+          },
+          {
+            id: "breakout-retest-zone",
+            label: "Breakout retest",
+            candleStart: 6,
+            candleEnd: 9,
+            priceLow: 88.0,
+            priceHigh: 88.5,
+            correct: true,
+            explanation:
+              "This is the key zone. Price pulled back after the breakout, held above the old range, and then resumed higher.",
+          },
+          {
+            id: "late-chase-zone",
+            label: "Late chase area",
+            candleStart: 10,
+            candleEnd: 11,
+            priceLow: 89.1,
+            priceHigh: 89.8,
+            correct: false,
+            explanation:
+              "This area is too extended to offer the same entry quality or stop efficiency as the retest zone.",
+          },
+        ],
+      },
+    ],
+    coachDebrief: [
+      "A clean breakout usually gives you two jobs: judge acceptance, then judge the retest.",
+      "Retest entries often improve both location and risk compared with chasing extension.",
+      "This sequence maps directly to trading logic later: level, breakout close, retest hold, then trigger.",
+    ],
+  },
 ];
 
 export const scenarios: Scenario[] = [
@@ -1184,6 +1708,125 @@ export const scenarios: Scenario[] = [
       "The best trades often become clearer after confirmation, not before it.",
       "A good setup is a chain of if-then decisions, not one giant prediction.",
       "This replay mirrors system design: detect state, confirm trigger, define risk, manage outcome.",
+    ],
+  },
+  {
+    slug: "breakout-retest-simulator",
+    moduleSlug: "structure-and-execution",
+    title: "Breakout Retest Simulator",
+    summary:
+      "Walk through a breakout, decide whether acceptance is real, and manage the entry after a retest instead of chasing impulse.",
+    xpReward: 130,
+    setup:
+      "A stock has been trapped under a clear intraday range high. It finally breaks through with strength, then starts pulling back toward the breakout level.",
+    steps: [
+      {
+        id: "breakout-step-1",
+        title: "Right after the break",
+        marketContext:
+          "The breakout candle closes strong, but price is already a bit extended above the range high.",
+        tapeRead: [
+          "The level is real because price was capped there repeatedly.",
+          "The breakout candle shows strength.",
+          "Entry location is not ideal if you chase the extension blindly.",
+        ],
+        riskCallout: "Strong setup does not automatically mean good price location.",
+        actions: [
+          {
+            id: "chase-breakout",
+            label: "Buy immediately because the breakout looks strong",
+            rationale: "Get in before it runs away without you.",
+          },
+          {
+            id: "wait-for-retest",
+            label: "Wait to see whether the breakout level holds on a pullback",
+            rationale: "Let the market confirm acceptance and improve location.",
+          },
+          {
+            id: "short-immediately",
+            label: "Short the extension because it must retrace",
+            rationale: "Assume every strong candle is overdone.",
+          },
+        ],
+        correctActionId: "wait-for-retest",
+        feedback:
+          "Waiting is the cleaner move. The breakout is interesting, but the retest will tell you whether the new level is truly accepted.",
+        outcome:
+          "Price pulls back into the old range high, wicks briefly below it, then starts stabilizing above the level.",
+      },
+      {
+        id: "breakout-step-2",
+        title: "Retest response",
+        marketContext:
+          "The pullback slowed down and a strong response candle just closed back up from the retest zone.",
+        tapeRead: [
+          "The breakout level acted as support.",
+          "The response candle confirms buyers are defending.",
+          "The invalidation point is now just below the retest structure.",
+        ],
+        riskCallout: "This is where patience turns into better reward-to-risk.",
+        actions: [
+          {
+            id: "long-with-structure-stop",
+            label: "Enter long with a stop just below the retest zone",
+            rationale: "Use the structure to define the risk cleanly.",
+          },
+          {
+            id: "go-full-size-random-stop",
+            label: "Enter large size and use a random stop amount",
+            rationale: "The setup is good enough that exact invalidation no longer matters.",
+          },
+          {
+            id: "skip-all-retests",
+            label: "Skip because any retrace means the breakout was weak",
+            rationale: "A real breakout should never pull back.",
+          },
+        ],
+        correctActionId: "long-with-structure-stop",
+        feedback:
+          "This is the high-quality entry. The level held, the response candle confirmed, and the stop is tied to the actual setup logic.",
+        outcome:
+          "Price rotates back up through the recent high and gives you a strong first target into fresh momentum.",
+      },
+      {
+        id: "breakout-step-3",
+        title: "Managing the follow-through",
+        marketContext:
+          "The trade is working, but price is nearing the next overhead decision area and momentum is no longer accelerating.",
+        tapeRead: [
+          "The setup has paid you for being patient.",
+          "Price is entering a logical spot for partial profit.",
+          "You still want to leave room in case the trend continues.",
+        ],
+        riskCallout: "Good management protects a winner without choking it too early.",
+        actions: [
+          {
+            id: "partial-and-trail",
+            label: "Take partial profit and trail the rest under structure",
+            rationale: "Lock in progress while letting a runner continue if it can.",
+          },
+          {
+            id: "hold-with-no-plan",
+            label: "Hold the full size with no plan because it still looks strong",
+            rationale: "A winner should never be touched.",
+          },
+          {
+            id: "flip-short-instantly",
+            label: "Reverse short immediately at the first hesitation",
+            rationale: "Every pause at resistance must reverse.",
+          },
+        ],
+        correctActionId: "partial-and-trail",
+        feedback:
+          "Partial profit plus a trailing plan is the mature choice. It respects both the open gain and the fact that price is approaching another decision zone.",
+        outcome:
+          "Price pauses, then continues higher. You bank gains and still participate in the continuation.",
+      },
+    ],
+    closingNotes: [
+      "Structure gives the setup. The retest gives the location. The trigger gives the entry.",
+      "Breakout trades become cleaner when you stop treating every impulse candle like a mandatory chase.",
+      "This simulator maps directly to system design later: level detection, acceptance test, retest trigger, stop, and management.",
     ],
   },
 ];
