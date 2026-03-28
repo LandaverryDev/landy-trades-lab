@@ -12,7 +12,13 @@ export type ChartQuestionType =
   | "hotspot"
   | "price-line"
   | "price-zone"
-  | "candle-range";
+  | "candle-range"
+  | "trendline";
+
+export interface ChartLinePoint {
+  candleIndex: number;
+  price: number;
+}
 
 export interface Tier {
   slug: TierSlug;
@@ -168,6 +174,8 @@ export interface ChartChallengeQuestion {
   correctZoneHigh?: number;
   correctCandleStart?: number;
   correctCandleEnd?: number;
+  correctLineStart?: ChartLinePoint;
+  correctLineEnd?: ChartLinePoint;
   tolerance?: number;
   selectionLabel?: string;
 }

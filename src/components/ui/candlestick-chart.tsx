@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import type { Candle, ChartHotspot } from "@/types/trading";
+import type { Candle, ChartHotspot, ChartLinePoint } from "@/types/trading";
 
 interface PriceZoneSelection {
   low: number;
@@ -12,6 +12,11 @@ interface PriceZoneSelection {
 interface CandleRangeSelection {
   start: number;
   end: number;
+}
+
+interface TrendlineSelection {
+  start: ChartLinePoint;
+  end: ChartLinePoint;
 }
 
 interface CandlestickChartProps {
@@ -41,6 +46,14 @@ interface CandlestickChartProps {
   onCandleRangeDraftSelect?: (index: number) => void;
   onCandleRangeSelect?: (range: CandleRangeSelection) => void;
   candleRangeSelectionLabel?: string;
+  selectedTrendline?: TrendlineSelection | null;
+  correctTrendline?: TrendlineSelection | null;
+  trendlineDraftPoint?: ChartLinePoint | null;
+  revealTrendlineAnswer?: boolean;
+  onTrendlineDraftSelect?: (point: ChartLinePoint) => void;
+  onTrendlineSelect?: (line: TrendlineSelection) => void;
+  trendlineSelectionLabel?: string;
+  trendlineTolerance?: number;
   height?: number;
 }
 
@@ -71,6 +84,14 @@ export function CandlestickChart({
   onCandleRangeDraftSelect,
   onCandleRangeSelect,
   candleRangeSelectionLabel = "Selected candle range",
+  selectedTrendline,
+  correctTrendline,
+  trendlineDraftPoint,
+  revealTrendlineAnswer = false,
+  onTrendlineDraftSelect,
+  onTrendlineSelect,
+  trendlineSelectionLabel = "Selected trendline",
+  trendlineTolerance = 0.35,
   height = 360,
 }: CandlestickChartProps) {
   const [hoverPrice, setHoverPrice] = useState<number | null>(null);
@@ -100,6 +121,7 @@ export function CandlestickChart({
   const guidePrices = Array.from({ length: 5 }, (_, index) => minPrice + (priceRange / 4) * index);
   const zoneSelectionActive = Boolean(onZoneDraftSelect || onZoneSelect);
   const candleRangeSelectionActive = Boolean(onCandleRangeDraftSelect || onCandleRangeSelect);
+  const trendlineSelectionActive = Boolean(onTrendlineDraftSelect || onTrendlineSelect);
   const selectedPriceCorrect =
     selectedPrice !== null &&
     selectedPrice !== undefined &&
@@ -162,6 +184,35 @@ export function CandlestickChart({
     normalizedCorrectCandleRange &&
     normalizedSelectedCandleRange.start === normalizedCorrectCandleRange.start &&
     normalizedSelectedCandleRange.end === normalizedCorrectCandleRange.end;
+  const normalizedSelectedTrendline =
+    selectedTrendline && selectedTrendline.start.candleIndex <= selectedTrendline.end.candleIndex
+      ? selectedTrendline
+      : selectedTrendline
+        ? { start: selectedTrendline.end, end: selectedTrendline.start }
+        : null;
+  const normalizedCorrectTrendline =
+    correctTrendline && correctTrendline.start.candleIndex <= correctTrendline.end.candleIndex
+      ? correctTrendline
+      : correctTrendline
+        ? { start: correctTrendline.end, end: correctTrendline.start }
+        : null;
+  const draftTrendline =
+    trendlineDraftPoint && hoverCandleIndex !== null && hoverPrice !== null
+      ? {
+          start: trendlineDraftPoint,
+          end: {
+            candleIndex: hoverCandleIndex,
+            price: hoverPrice,
+          },
+        }
+      : null;
+  const selectedTrendlineCorrect =
+    normalizedSelectedTrendline &&
+    normalizedCorrectTrendline &&
+    normalizedSelectedTrendline.start.candleIndex === normalizedCorrectTrendline.start.candleIndex &&
+    normalizedSelectedTrendline.end.candleIndex === normalizedCorrectTrendline.end.candleIndex &&
+    Math.abs(normalizedSelectedTrendline.start.price - normalizedCorrectTrendline.start.price) <= trendlineTolerance &&
+    Math.abs(normalizedSelectedTrendline.end.price - normalizedCorrectTrendline.end.price) <= trendlineTolerance;
 
   function clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
@@ -179,7 +230,7 @@ export function CandlestickChart({
   }
 
   function handlePricePointerMove(event: React.PointerEvent<SVGRectElement>) {
-    if (!onPriceSelect && !zoneSelectionActive && !candleRangeSelectionActive) {
+    if (!onPriceSelect && !zoneSelectionActive && !candleRangeSelectionActive && !trendlineSelectionActive) {
       return;
     }
 
@@ -189,7 +240,7 @@ export function CandlestickChart({
       setHoverPrice(Number(yToPrice(point.y).toFixed(2)));
     }
 
-    if (candleRangeSelectionActive) {
+    if (candleRangeSelectionActive || trendlineSelectionActive) {
       setHoverCandleIndex(xToCandleIndex(point.x));
     }
   }
@@ -219,6 +270,25 @@ export function CandlestickChart({
 
     if (zoneSelectionActive) {
       onZoneDraftSelect?.(price);
+      return;
+    }
+
+    if (onTrendlineSelect && trendlineDraftPoint) {
+      onTrendlineSelect({
+        start: trendlineDraftPoint,
+        end: {
+          candleIndex,
+          price,
+        },
+      });
+      return;
+    }
+
+    if (trendlineSelectionActive) {
+      onTrendlineDraftSelect?.({
+        candleIndex,
+        price,
+      });
       return;
     }
 
@@ -278,7 +348,7 @@ export function CandlestickChart({
           );
         })}
 
-        {onPriceSelect || zoneSelectionActive || candleRangeSelectionActive ? (
+        {onPriceSelect || zoneSelectionActive || candleRangeSelectionActive || trendlineSelectionActive ? (
           <rect
             x={paddingX}
             y={paddingY}
@@ -291,6 +361,32 @@ export function CandlestickChart({
             onPointerLeave={handlePricePointerLeave}
             onClick={handlePriceSelect}
           />
+        ) : null}
+
+        {revealTrendlineAnswer && normalizedCorrectTrendline ? (
+          <g pointerEvents="none">
+            <line
+              x1={candleToX(normalizedCorrectTrendline.start.candleIndex)}
+              y1={priceToY(normalizedCorrectTrendline.start.price)}
+              x2={candleToX(normalizedCorrectTrendline.end.candleIndex)}
+              y2={priceToY(normalizedCorrectTrendline.end.price)}
+              stroke="rgba(34,197,94,0.92)"
+              strokeWidth="2.5"
+              strokeDasharray="10 8"
+            />
+            <circle
+              cx={candleToX(normalizedCorrectTrendline.start.candleIndex)}
+              cy={priceToY(normalizedCorrectTrendline.start.price)}
+              r="5"
+              fill="rgba(34,197,94,0.95)"
+            />
+            <circle
+              cx={candleToX(normalizedCorrectTrendline.end.candleIndex)}
+              cy={priceToY(normalizedCorrectTrendline.end.price)}
+              r="5"
+              fill="rgba(34,197,94,0.95)"
+            />
+          </g>
         ) : null}
 
         {revealCandleRangeAnswer && normalizedCorrectCandleRange ? (
@@ -343,6 +439,20 @@ export function CandlestickChart({
             strokeDasharray="8 8"
             rx="18"
           />
+        ) : null}
+
+        {draftTrendline ? (
+          <g pointerEvents="none">
+            <line
+              x1={candleToX(draftTrendline.start.candleIndex)}
+              y1={priceToY(draftTrendline.start.price)}
+              x2={candleToX(draftTrendline.end.candleIndex)}
+              y2={priceToY(draftTrendline.end.price)}
+              stroke="rgba(56,189,248,0.72)"
+              strokeWidth="2.5"
+              strokeDasharray="8 8"
+            />
+          </g>
         ) : null}
 
         {hotspots?.map((hotspot) => {
@@ -416,7 +526,7 @@ export function CandlestickChart({
           </g>
         ) : null}
 
-        {hoverCandleIndex !== null && candleRangeSelectionActive ? (
+        {hoverCandleIndex !== null && (candleRangeSelectionActive || trendlineSelectionActive) ? (
           <g pointerEvents="none">
             <rect
               x={candleToX(hoverCandleIndex) - candleSlot / 2}
@@ -611,6 +721,64 @@ export function CandlestickChart({
           </g>
         ) : null}
 
+        {normalizedSelectedTrendline ? (
+          <g pointerEvents="none">
+            <line
+              x1={candleToX(normalizedSelectedTrendline.start.candleIndex)}
+              y1={priceToY(normalizedSelectedTrendline.start.price)}
+              x2={candleToX(normalizedSelectedTrendline.end.candleIndex)}
+              y2={priceToY(normalizedSelectedTrendline.end.price)}
+              stroke={
+                revealTrendlineAnswer
+                  ? selectedTrendlineCorrect
+                    ? "rgba(34,197,94,0.98)"
+                    : "rgba(251,113,133,0.98)"
+                  : "rgba(56,189,248,0.98)"
+              }
+              strokeWidth="3"
+            />
+            <circle
+              cx={candleToX(normalizedSelectedTrendline.start.candleIndex)}
+              cy={priceToY(normalizedSelectedTrendline.start.price)}
+              r="5"
+              fill={
+                revealTrendlineAnswer
+                  ? selectedTrendlineCorrect
+                    ? "rgba(34,197,94,0.98)"
+                    : "rgba(251,113,133,0.98)"
+                  : "rgba(56,189,248,0.98)"
+              }
+            />
+            <circle
+              cx={candleToX(normalizedSelectedTrendline.end.candleIndex)}
+              cy={priceToY(normalizedSelectedTrendline.end.price)}
+              r="5"
+              fill={
+                revealTrendlineAnswer
+                  ? selectedTrendlineCorrect
+                    ? "rgba(34,197,94,0.98)"
+                    : "rgba(251,113,133,0.98)"
+                  : "rgba(56,189,248,0.98)"
+              }
+            />
+            <text
+              x={candleToX(normalizedSelectedTrendline.start.candleIndex)}
+              y={priceToY(normalizedSelectedTrendline.start.price) - 10}
+              fill={
+                revealTrendlineAnswer
+                  ? selectedTrendlineCorrect
+                    ? "rgba(187,247,208,0.95)"
+                    : "rgba(254,205,211,0.95)"
+                  : "rgba(186,230,253,0.95)"
+              }
+              fontSize="14"
+              fontWeight="600"
+            >
+              {trendlineSelectionLabel}
+            </text>
+          </g>
+        ) : null}
+
         {revealZoneAnswer && normalizedCorrectZone ? (
           <text
             x={width - paddingX - 8}
@@ -634,6 +802,19 @@ export function CandlestickChart({
             fontWeight="600"
           >
             Answer candles {normalizedCorrectCandleRange.start + 1}-{normalizedCorrectCandleRange.end + 1}
+          </text>
+        ) : null}
+
+        {revealTrendlineAnswer && normalizedCorrectTrendline ? (
+          <text
+            x={candleToX(normalizedCorrectTrendline.end.candleIndex)}
+            y={priceToY(normalizedCorrectTrendline.end.price) - 10}
+            textAnchor="end"
+            fill="rgba(187,247,208,0.95)"
+            fontSize="14"
+            fontWeight="600"
+          >
+            Answer line
           </text>
         ) : null}
 

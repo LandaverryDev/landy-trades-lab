@@ -2311,6 +2311,19 @@ export const chartChallenges: ChartChallenge[] = [
         tolerance: 0.28,
         selectionLabel: "Stop line",
       },
+      {
+        id: "trendline-read",
+        type: "trendline",
+        prompt: "Draw the rising trend guide connecting the higher lows before the final push.",
+        instruction: "Click the first anchor low, then the later higher low that confirms the same upward structure.",
+        explanation:
+          "The cleanest trend guide connects the meaningful pullback lows that stair-step upward before price pushes into the final breakout. That rising line shows the market is still making higher lows rather than breaking structure.",
+        coaching: "Use anchor points that define structure, not random candles in the middle of noise.",
+        correctLineStart: { candleIndex: 4, price: 113.2 },
+        correctLineEnd: { candleIndex: 9, price: 114.1 },
+        tolerance: 0.35,
+        selectionLabel: "Trend guide",
+      },
     ],
     coachDebrief: [
       "A beginner trade plan still needs the same sequence: trend first, level second, stop third.",

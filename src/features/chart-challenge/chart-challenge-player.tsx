@@ -18,6 +18,11 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   const [selectedZone, setSelectedZone] = useState<{ low: number; high: number } | null>(null);
   const [candleRangeDraftIndex, setCandleRangeDraftIndex] = useState<number | null>(null);
   const [selectedCandleRange, setSelectedCandleRange] = useState<{ start: number; end: number } | null>(null);
+  const [trendlineDraftPoint, setTrendlineDraftPoint] = useState<{ candleIndex: number; price: number } | null>(null);
+  const [selectedTrendline, setSelectedTrendline] = useState<{
+    start: { candleIndex: number; price: number };
+    end: { candleIndex: number; price: number };
+  } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -32,30 +37,71 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     [question.hotspots, selectedHotspotId],
   );
 
-  const isCorrect =
-    question.type === "multiple-choice"
-      ? selectedChoiceId === question.correctChoiceId
-      : question.type === "hotspot"
-        ? Boolean(selectedHotspot?.correct)
-        : question.type === "price-line"
-          ? selectedPrice !== null &&
-            question.correctPrice !== undefined &&
-            Math.abs(selectedPrice - question.correctPrice) <= (question.tolerance ?? 0.25)
-          : question.type === "price-zone"
-            ? selectedZone !== null &&
-              question.correctZoneLow !== undefined &&
-              question.correctZoneHigh !== undefined &&
-              Math.abs(selectedZone.low - Math.min(question.correctZoneLow, question.correctZoneHigh)) <=
-                (question.tolerance ?? 0.25) &&
-              Math.abs(selectedZone.high - Math.max(question.correctZoneLow, question.correctZoneHigh)) <=
-                (question.tolerance ?? 0.25)
-            : selectedCandleRange !== null &&
-              question.correctCandleStart !== undefined &&
-              question.correctCandleEnd !== undefined &&
-              Math.min(selectedCandleRange.start, selectedCandleRange.end) ===
-                Math.min(question.correctCandleStart, question.correctCandleEnd) &&
-              Math.max(selectedCandleRange.start, selectedCandleRange.end) ===
-                Math.max(question.correctCandleStart, question.correctCandleEnd);
+  const isCorrect = (() => {
+    switch (question.type) {
+      case "multiple-choice":
+        return selectedChoiceId === question.correctChoiceId;
+      case "hotspot":
+        return Boolean(selectedHotspot?.correct);
+      case "price-line":
+        return (
+          selectedPrice !== null &&
+          question.correctPrice !== undefined &&
+          Math.abs(selectedPrice - question.correctPrice) <= (question.tolerance ?? 0.25)
+        );
+      case "price-zone":
+        return (
+          selectedZone !== null &&
+          question.correctZoneLow !== undefined &&
+          question.correctZoneHigh !== undefined &&
+          Math.abs(selectedZone.low - Math.min(question.correctZoneLow, question.correctZoneHigh)) <=
+            (question.tolerance ?? 0.25) &&
+          Math.abs(selectedZone.high - Math.max(question.correctZoneLow, question.correctZoneHigh)) <=
+            (question.tolerance ?? 0.25)
+        );
+      case "candle-range":
+        return (
+          selectedCandleRange !== null &&
+          question.correctCandleStart !== undefined &&
+          question.correctCandleEnd !== undefined &&
+          Math.min(selectedCandleRange.start, selectedCandleRange.end) ===
+            Math.min(question.correctCandleStart, question.correctCandleEnd) &&
+          Math.max(selectedCandleRange.start, selectedCandleRange.end) ===
+            Math.max(question.correctCandleStart, question.correctCandleEnd)
+        );
+      case "trendline": {
+        if (!selectedTrendline || !question.correctLineStart || !question.correctLineEnd) {
+          return false;
+        }
+
+        const selectedStart =
+          selectedTrendline.start.candleIndex <= selectedTrendline.end.candleIndex
+            ? selectedTrendline.start
+            : selectedTrendline.end;
+        const selectedEnd =
+          selectedTrendline.start.candleIndex <= selectedTrendline.end.candleIndex
+            ? selectedTrendline.end
+            : selectedTrendline.start;
+        const correctStart =
+          question.correctLineStart.candleIndex <= question.correctLineEnd.candleIndex
+            ? question.correctLineStart
+            : question.correctLineEnd;
+        const correctEnd =
+          question.correctLineStart.candleIndex <= question.correctLineEnd.candleIndex
+            ? question.correctLineEnd
+            : question.correctLineStart;
+
+        return (
+          selectedStart.candleIndex === correctStart.candleIndex &&
+          selectedEnd.candleIndex === correctEnd.candleIndex &&
+          Math.abs(selectedStart.price - correctStart.price) <= (question.tolerance ?? 0.35) &&
+          Math.abs(selectedEnd.price - correctEnd.price) <= (question.tolerance ?? 0.35)
+        );
+      }
+      default:
+        return false;
+    }
+  })();
 
   function handleSubmit() {
     if (submitted) {
@@ -82,6 +128,10 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
       return;
     }
 
+    if (question.type === "trendline" && !selectedTrendline) {
+      return;
+    }
+
     if (isCorrect) {
       setCorrectCount((count) => count + 1);
     }
@@ -105,6 +155,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setSelectedZone(null);
     setCandleRangeDraftIndex(null);
     setSelectedCandleRange(null);
+    setTrendlineDraftPoint(null);
+    setSelectedTrendline(null);
     setSubmitted(false);
   }
 
@@ -117,6 +169,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setSelectedZone(null);
     setCandleRangeDraftIndex(null);
     setSelectedCandleRange(null);
+    setTrendlineDraftPoint(null);
+    setSelectedTrendline(null);
     setSubmitted(false);
     setCorrectCount(0);
     setCompleted(false);
@@ -250,6 +304,18 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
             }
             onCandleRangeSelect={question.type === "candle-range" && !submitted ? setSelectedCandleRange : undefined}
             candleRangeSelectionLabel={question.selectionLabel}
+            selectedTrendline={question.type === "trendline" ? selectedTrendline : null}
+            correctTrendline={
+              question.type === "trendline" && question.correctLineStart && question.correctLineEnd
+                ? { start: question.correctLineStart, end: question.correctLineEnd }
+                : null
+            }
+            trendlineDraftPoint={question.type === "trendline" ? trendlineDraftPoint : null}
+            revealTrendlineAnswer={question.type === "trendline" ? submitted : false}
+            onTrendlineDraftSelect={question.type === "trendline" && !submitted ? setTrendlineDraftPoint : undefined}
+            onTrendlineSelect={question.type === "trendline" && !submitted ? setSelectedTrendline : undefined}
+            trendlineSelectionLabel={question.selectionLabel}
+            trendlineTolerance={question.type === "trendline" ? question.tolerance : undefined}
           />
 
           {question.type === "multiple-choice" ? (
@@ -352,6 +418,34 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
               ) : null}
             </div>
           ) : null}
+
+          {question.type === "trendline" ? (
+            <div className="rounded-[24px] border border-sky-400/12 bg-sky-400/[0.05] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-sky-100/70">Trendline Markup</p>
+              <p className="mt-3 text-sm leading-6 text-slate-200">
+                Click one anchor point on the chart, then click the second anchor to draw the trendline.
+              </p>
+              <p className="mt-3 text-sm text-slate-300">
+                {selectedTrendline
+                  ? `${question.selectionLabel ?? "Selected trendline"}: candles ${selectedTrendline.start.candleIndex + 1}-${selectedTrendline.end.candleIndex + 1}`
+                  : trendlineDraftPoint
+                    ? `First anchor set at candle ${trendlineDraftPoint.candleIndex + 1}, ${trendlineDraftPoint.price.toFixed(2)}. Click again to finish the line.`
+                    : "No trendline placed yet."}
+              </p>
+              {(selectedTrendline || trendlineDraftPoint) && !submitted ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTrendlineDraftPoint(null);
+                    setSelectedTrendline(null);
+                  }}
+                  className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/[0.05]"
+                >
+                  Reset line
+                </button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-5">
@@ -365,9 +459,11 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                     ? "Click a highlighted zone on the chart, then reveal the answer."
                     : question.type === "price-line"
                       ? "Place a line directly on the chart where you believe the key level belongs."
-                      : question.type === "price-zone"
+                    : question.type === "price-zone"
                         ? "Mark the full support or resistance band by placing both edges directly on the chart."
-                        : "Mark the full candle range of the breakout leg or swing move directly on the chart."}
+                        : question.type === "candle-range"
+                          ? "Mark the full candle range of the breakout leg or swing move directly on the chart."
+                          : "Draw the trendline directly on the chart by placing both anchor points."}
               </p>
             ) : (
               <>
@@ -397,7 +493,9 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                         ? selectedPrice === null
                         : question.type === "price-zone"
                           ? selectedZone === null
-                          : selectedCandleRange === null
+                          : question.type === "candle-range"
+                            ? selectedCandleRange === null
+                            : selectedTrendline === null
                 }
                 onClick={handleSubmit}
                 className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"

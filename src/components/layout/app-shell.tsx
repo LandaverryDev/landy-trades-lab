@@ -21,8 +21,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(11,214,144,0.16),_transparent_28%),radial-gradient(circle_at_85%_15%,_rgba(56,189,248,0.16),_transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(244,114,182,0.08),_transparent_24%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(148,163,184,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.06)_1px,transparent_1px)] [background-size:72px_72px]" />
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[1600px] flex-col gap-6 px-4 py-4 sm:px-6 lg:flex-row lg:px-8">
-        <aside className="glass-panel flex w-full flex-col gap-6 rounded-[32px] p-5 lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)] lg:w-[295px]">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-[1720px] flex-col gap-6 px-4 py-4 sm:px-6 lg:flex-row lg:px-8">
+        <aside className="glass-panel flex w-full min-w-0 flex-col gap-6 rounded-[32px] p-5 lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)] lg:w-[285px] lg:min-w-[285px]">
           <div className="flex items-center gap-4">
             <BrandMark />
             <div>
@@ -69,7 +69,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </aside>
 
-        <main className="flex min-h-[80vh] flex-1 flex-col rounded-[32px] border border-white/8 bg-slate-950/65 p-4 shadow-[0_30px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-6 lg:p-8">
+        <main className="flex min-h-[80vh] min-w-0 flex-1 flex-col rounded-[32px] border border-white/8 bg-slate-950/65 p-4 shadow-[0_30px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-6 lg:p-8">
           {children}
         </main>
       </div>
