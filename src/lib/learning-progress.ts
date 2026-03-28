@@ -254,7 +254,13 @@ function average(values: number[]) {
   return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
-function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearningProgress) {
+function buildReviewQueue(
+  modules: DerivedModuleProgress[],
+  state: StoredLearningProgress,
+  quizLookup: Map<string, (typeof quizzes)[number]>,
+  drillLookup: Map<string, (typeof drillSets)[number]>,
+  challengeLookup: Map<string, (typeof chartChallenges)[number]>,
+) {
   const queue: ReviewQueueItem[] = [];
 
   modules.forEach((module) => {
@@ -273,7 +279,7 @@ function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearnin
           slug: module.quizSlug,
           moduleSlug: module.slug,
           moduleTitle: module.title,
-          title: "Module Quiz",
+          title: quizLookup.get(module.quizSlug)?.title ?? "Module Quiz",
           href: `/quiz/${module.quizSlug}`,
           score,
           reason: "Unfinished quiz checkpoint",
@@ -286,7 +292,7 @@ function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearnin
           slug: module.quizSlug,
           moduleSlug: module.slug,
           moduleTitle: module.title,
-          title: "Module Quiz",
+          title: quizLookup.get(module.quizSlug)?.title ?? "Module Quiz",
           href: `/quiz/${module.quizSlug}`,
           score,
           reason: `Reinforce quiz score at ${score ?? 0}%`,
@@ -306,7 +312,7 @@ function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearnin
           slug: module.drillSlug,
           moduleSlug: module.slug,
           moduleTitle: module.title,
-          title: "Rapid Review",
+          title: drillLookup.get(module.drillSlug)?.title ?? "Rapid Review",
           href: `/drill/${module.drillSlug}`,
           score,
           reason: "Unfinished rapid review loop",
@@ -319,7 +325,7 @@ function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearnin
           slug: module.drillSlug,
           moduleSlug: module.slug,
           moduleTitle: module.title,
-          title: "Rapid Review",
+          title: drillLookup.get(module.drillSlug)?.title ?? "Rapid Review",
           href: `/drill/${module.drillSlug}`,
           score,
           reason: `Sharpen drill recall from ${score ?? 0}%`,
@@ -339,7 +345,7 @@ function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearnin
           slug: module.chartChallengeSlug,
           moduleSlug: module.slug,
           moduleTitle: module.title,
-          title: "Chart Challenge",
+          title: challengeLookup.get(module.chartChallengeSlug)?.title ?? "Chart Challenge",
           href: `/chart-challenge/${module.chartChallengeSlug}`,
           score,
           reason: "Unfinished chart drill",
@@ -352,7 +358,7 @@ function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearnin
           slug: module.chartChallengeSlug,
           moduleSlug: module.slug,
           moduleTitle: module.title,
-          title: "Chart Challenge",
+          title: challengeLookup.get(module.chartChallengeSlug)?.title ?? "Chart Challenge",
           href: `/chart-challenge/${module.chartChallengeSlug}`,
           score,
           reason: `Improve chart accuracy from ${score ?? 0}%`,
@@ -360,6 +366,40 @@ function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearnin
         });
       }
     }
+
+    module.reviewChartChallengeSlugs?.forEach((challengeSlug) => {
+      const challenge = challengeLookup.get(challengeSlug);
+      const score = state.chartBestScores[challengeSlug] ?? null;
+      const completed = state.completedChartChallengeSlugs.includes(challengeSlug);
+
+      if (!completed) {
+        queue.push({
+          id: `chart-review:${challengeSlug}`,
+          kind: "chart",
+          slug: challengeSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: challenge?.title ?? "Review Chart Pack",
+          href: `/chart-challenge/${challengeSlug}`,
+          score,
+          reason: "Unopened review chart pack",
+          priority: 1,
+        });
+      } else if ((score ?? 0) < 82) {
+        queue.push({
+          id: `chart-review:${challengeSlug}`,
+          kind: "chart",
+          slug: challengeSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: challenge?.title ?? "Review Chart Pack",
+          href: `/chart-challenge/${challengeSlug}`,
+          score,
+          reason: `Tighten review chart accuracy from ${score ?? 0}%`,
+          priority: 2,
+        });
+      }
+    });
   });
 
   return queue.sort((left, right) => {
@@ -480,7 +520,7 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
   const quizAccuracy = average(Object.values(state.quizBestScores));
   const drillAccuracy = average(Object.values(state.drillBestScores));
   const chartAccuracy = average(Object.values(state.chartBestScores));
-  const reviewQueue = buildReviewQueue(modules, state);
+  const reviewQueue = buildReviewQueue(modules, state, quizLookup, drillLookup, challengeLookup);
   const totalContentItems = modules.reduce((sum, module) => sum + module.totalItems, 0);
   const totalCompletedItems = modules.reduce((sum, module) => sum + module.completedItems, 0);
 

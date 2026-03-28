@@ -47,6 +47,7 @@ export interface LearningModule {
   quizSlug?: string;
   drillSlug?: string;
   chartChallengeSlug?: string;
+  reviewChartChallengeSlugs?: string[];
   simulatorSlug?: string;
 }
 

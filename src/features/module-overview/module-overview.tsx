@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { ArrowRight, BrainCircuit, ChartCandlestick, Lock, PlayCircle, Trophy } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { getModuleBySlug, getModuleLessons } from "@/lib/course";
+import { getChartChallengeBySlug, getModuleBySlug, getModuleLessons } from "@/lib/course";
 import { useLearningProgress } from "@/lib/learning-progress";
 
 export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
@@ -13,6 +13,9 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
   const baseModule = getModuleBySlug(moduleSlug);
   const liveModule = modules.find((module) => module.slug === moduleSlug);
   const lessons = getModuleLessons(moduleSlug);
+  const reviewCharts = (baseModule?.reviewChartChallengeSlugs ?? [])
+    .map((slug) => getChartChallengeBySlug(slug))
+    .filter((challenge): challenge is NonNullable<typeof challenge> => Boolean(challenge));
 
   if (!baseModule || !liveModule) {
     return null;
@@ -208,6 +211,38 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
               ) : null}
             </div>
           </section>
+
+          {reviewCharts.length ? (
+            <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Extra Reps</p>
+                  <h2 className="mt-2 text-3xl font-semibold text-white">Review chart packs</h2>
+                </div>
+                <p className="text-sm text-slate-400">Optional repetition, not required for unlocks</p>
+              </div>
+
+              <div className="mt-6 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                {reviewCharts.map((challenge) => {
+                  const done = raw.completedChartChallengeSlugs.includes(challenge.slug);
+                  const bestScore = raw.chartBestScores[challenge.slug];
+
+                  return (
+                    <SequenceCard
+                      key={challenge.slug}
+                      step="R"
+                      title={challenge.title}
+                      description={challenge.summary}
+                      href={`/chart-challenge/${challenge.slug}`}
+                      done={done}
+                      meta={done ? `Best ${bestScore ?? 0}%` : "Optional chart pack"}
+                      icon={<ChartCandlestick className="h-4 w-4 text-cyan-300" />}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
         </>
       )}
     </div>

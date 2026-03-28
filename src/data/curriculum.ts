@@ -54,6 +54,7 @@ export const learningModules: LearningModule[] = [
     lessonSlugs: ["what-is-trading", "basic-market-concepts", "candlestick-basics"],
     quizSlug: "beginner-foundations-quiz",
     chartChallengeSlug: "trend-and-support-challenge",
+    reviewChartChallengeSlugs: ["candle-context-review-challenge"],
     simulatorSlug: "open-drive-pullback",
   },
   {
@@ -82,6 +83,7 @@ export const learningModules: LearningModule[] = [
     ],
     quizSlug: "levels-trends-risk-quiz",
     chartChallengeSlug: "trend-level-and-stop-challenge",
+    reviewChartChallengeSlugs: ["role-reversal-review-challenge"],
   },
   {
     id: "module-03",
@@ -137,6 +139,7 @@ export const learningModules: LearningModule[] = [
     ],
     quizSlug: "execution-mechanics-quiz",
     chartChallengeSlug: "spread-and-session-challenge",
+    reviewChartChallengeSlugs: ["session-lull-review-challenge"],
     simulatorSlug: "execution-quality-simulator",
   },
   {
@@ -165,6 +168,7 @@ export const learningModules: LearningModule[] = [
     ],
     quizSlug: "structure-execution-quiz",
     chartChallengeSlug: "breakout-or-fakeout-challenge",
+    reviewChartChallengeSlugs: ["pullback-location-review-challenge"],
     simulatorSlug: "breakout-retest-simulator",
   },
   {
@@ -4325,6 +4329,92 @@ export const chartChallenges: ChartChallenge[] = [
     ],
   },
   {
+    slug: "candle-context-review-challenge",
+    moduleSlug: "market-bootcamp",
+    title: "Candle Context Review",
+    summary:
+      "Run a fast visual review on candle strength, rejection, and where the sequence starts losing momentum.",
+    xpReward: 85,
+    candles: [
+      { open: 48.4, high: 48.9, low: 48.2, close: 48.8 },
+      { open: 48.8, high: 49.4, low: 48.7, close: 49.2 },
+      { open: 49.2, high: 49.9, low: 49.0, close: 49.7 },
+      { open: 49.7, high: 50.1, low: 49.6, close: 50.0 },
+      { open: 50.0, high: 50.2, low: 49.6, close: 49.7 },
+      { open: 49.7, high: 49.9, low: 49.2, close: 49.3 },
+      { open: 49.3, high: 49.6, low: 49.0, close: 49.5 },
+      { open: 49.5, high: 49.8, low: 49.1, close: 49.2 },
+      { open: 49.2, high: 49.3, low: 48.8, close: 48.9 },
+      { open: 48.9, high: 49.1, low: 48.5, close: 48.7 },
+    ],
+    questions: [
+      {
+        id: "sequence-read",
+        type: "multiple-choice",
+        prompt: "What is the cleanest read on the full candle sequence?",
+        instruction: "Read the chart as a story, not as isolated candles.",
+        explanation:
+          "The best read is early bullish momentum followed by a loss of control. The first expansion is clean, then the candles begin failing to hold their highs and momentum fades.",
+        coaching: "One strong candle matters less than whether the sequence can keep holding strength.",
+        choices: [
+          { id: "fading-after-expansion", label: "Early bullish expansion, then fading momentum and weaker closes" },
+          { id: "clean-uptrend", label: "A clean uninterrupted uptrend with no warning signs" },
+          { id: "bear-trend-start", label: "An immediate downtrend from the first candle" },
+        ],
+        correctChoiceId: "fading-after-expansion",
+      },
+      {
+        id: "rejection-zone",
+        type: "hotspot",
+        prompt: "Where does the chart show the clearest rejection after the strongest push?",
+        instruction: "Click the area where buyers pushed but could not fully hold the higher prices.",
+        explanation:
+          "The rejection shows up near the local highs after the run-up, where upper exploration stops leading to strong closes and price begins slipping lower.",
+        coaching: "Rejection matters most when it appears after expansion and starts interrupting prior control.",
+        hotspots: [
+          {
+            id: "early-strength",
+            label: "Early strength zone",
+            candleStart: 0,
+            candleEnd: 2,
+            priceLow: 48.2,
+            priceHigh: 49.8,
+            correct: false,
+            explanation:
+              "This area still represents expansion and control rather than the clearest rejection.",
+          },
+          {
+            id: "top-rejection",
+            label: "Top rejection zone",
+            candleStart: 3,
+            candleEnd: 5,
+            priceLow: 49.6,
+            priceHigh: 50.2,
+            correct: true,
+            explanation:
+              "This is where the move stops holding its highs cleanly and the chart starts leaking momentum.",
+          },
+          {
+            id: "late-fade",
+            label: "Late fade area",
+            candleStart: 7,
+            candleEnd: 9,
+            priceLow: 48.5,
+            priceHigh: 49.8,
+            correct: false,
+            explanation:
+              "This is already after the rejection did its damage. It is the result, not the clearest rejection point.",
+          },
+        ],
+      },
+    ],
+    coachDebrief: [
+      "Candle reading gets stronger when you compare pushes and failed holds, not when you memorize names.",
+      "The sequence matters because control can fade before the chart fully reverses.",
+      "This kind of visual read later becomes measurable through close strength and rejection rules.",
+    ],
+  },
+  {
     slug: "volatility-and-market-fit-challenge",
     moduleSlug: "market-vehicles-and-instruments",
     title: "Volatility and Market Fit Challenge",
@@ -4433,6 +4523,60 @@ export const chartChallenges: ChartChallenge[] = [
     ],
   },
   {
+    slug: "session-lull-review-challenge",
+    moduleSlug: "orders-sessions-and-execution",
+    title: "Session Lull Review",
+    summary:
+      "Practice spotting when chart quality degrades into a lower-energy session window before the market wakes up again.",
+    xpReward: 90,
+    candles: [
+      { open: 91.2, high: 92.0, low: 91.0, close: 91.8 },
+      { open: 91.8, high: 92.5, low: 91.7, close: 92.3 },
+      { open: 92.3, high: 92.8, low: 92.0, close: 92.6 },
+      { open: 92.6, high: 92.7, low: 92.2, close: 92.4 },
+      { open: 92.4, high: 92.5, low: 92.1, close: 92.3 },
+      { open: 92.3, high: 92.4, low: 92.0, close: 92.2 },
+      { open: 92.2, high: 92.6, low: 92.1, close: 92.5 },
+      { open: 92.5, high: 93.1, low: 92.4, close: 92.9 },
+      { open: 92.9, high: 93.4, low: 92.8, close: 93.2 },
+      { open: 93.2, high: 93.6, low: 93.0, close: 93.5 },
+    ],
+    questions: [
+      {
+        id: "lull-window",
+        type: "candle-range",
+        prompt: "Mark the slower session window before participation expands again.",
+        instruction: "Click the first candle where the tape cools off, then the last candle before it wakes up.",
+        explanation:
+          "The middle stretch is the lull. Range compresses, movement slows, and the chart stops offering the same clean participation as the opening push or later expansion.",
+        coaching: "A setup can still exist on paper while session quality becomes much less attractive.",
+        correctCandleStart: 3,
+        correctCandleEnd: 6,
+        selectionLabel: "Session lull",
+      },
+      {
+        id: "execution-read",
+        type: "multiple-choice",
+        prompt: "What is the cleanest execution conclusion during that lull?",
+        instruction: "Choose the answer that respects time-of-day quality.",
+        explanation:
+          "The strongest answer is to reduce aggression or wait. Session quality is weaker, so the same setup deserves less trust than it did during the stronger window.",
+        coaching: "Time filters protect expectancy because not every candle deserves the same confidence.",
+        choices: [
+          { id: "reduce-aggression", label: "Reduce aggression or wait for stronger participation to return" },
+          { id: "same-aggression", label: "Trade exactly the same as the strongest window because the chart still exists" },
+          { id: "bigger-size", label: "Increase size because slower movement means lower risk" },
+        ],
+        correctChoiceId: "reduce-aggression",
+      },
+    ],
+    coachDebrief: [
+      "Session quality is a real part of the setup, not an optional footnote.",
+      "The same chart shape can deserve a different decision when participation changes.",
+      "This is why execution filters matter in live trading and in system design.",
+    ],
+  },
+  {
     slug: "trend-level-and-stop-challenge",
     moduleSlug: "levels-trends-and-risk",
     title: "Trend, Level, and Stop Challenge",
@@ -4499,6 +4643,58 @@ export const chartChallenges: ChartChallenge[] = [
       "A beginner trade plan still needs the same sequence: trend first, level second, stop third.",
       "The best stop is usually just beyond the structure that justified the trade.",
       "This is exactly how strategy rules get defined later: market regime, setup zone, invalidation level, then size.",
+    ],
+  },
+  {
+    slug: "role-reversal-review-challenge",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Role Reversal Review",
+    summary:
+      "Reinforce support/resistance flips by marking the retest zone and reading where the invalidation actually belongs.",
+    xpReward: 90,
+    candles: [
+      { open: 67.4, high: 67.8, low: 67.1, close: 67.6 },
+      { open: 67.6, high: 68.0, low: 67.3, close: 67.9 },
+      { open: 67.9, high: 68.1, low: 67.5, close: 67.7 },
+      { open: 67.7, high: 68.5, low: 67.6, close: 68.3 },
+      { open: 68.3, high: 68.9, low: 68.1, close: 68.7 },
+      { open: 68.7, high: 68.8, low: 68.2, close: 68.3 },
+      { open: 68.3, high: 68.5, low: 67.9, close: 68.1 },
+      { open: 68.1, high: 68.6, low: 68.0, close: 68.5 },
+      { open: 68.5, high: 69.0, low: 68.4, close: 68.9 },
+      { open: 68.9, high: 69.4, low: 68.7, close: 69.2 },
+    ],
+    questions: [
+      {
+        id: "role-reversal-zone",
+        type: "price-zone",
+        prompt: "Mark the breakout retest zone where old resistance became support.",
+        instruction: "Mark the full area the long thesis depends on holding after the breakout.",
+        explanation:
+          "The strongest zone is the old resistance area that gets retested and defended. That is the cleanest example of role reversal on this chart.",
+        coaching: "Think in defended zones, not perfect single-price lines.",
+        correctZoneLow: 68.0,
+        correctZoneHigh: 68.4,
+        tolerance: 0.16,
+        selectionLabel: "Retest zone",
+      },
+      {
+        id: "invalidation-read",
+        type: "price-line",
+        prompt: "Where should the stop sit for the role-reversal long thesis?",
+        instruction: "Click just below the area that should hold if the breakout still deserves trust.",
+        explanation:
+          "The invalidation belongs just below the retest support zone. If that area fails cleanly, the role-reversal thesis weakens sharply.",
+        coaching: "Stops belong below the logic of the trade, not at a random emotional distance.",
+        correctPrice: 67.9,
+        tolerance: 0.18,
+        selectionLabel: "Stop line",
+      },
+    ],
+    coachDebrief: [
+      "Role reversal is one of the clearest bridges from visual chart reading into rule logic.",
+      "A retest zone improves both timing and stop placement because the level now has a job to do.",
+      "This is exactly the kind of structure that later becomes breakout-hold code.",
     ],
   },
   {
@@ -4599,6 +4795,61 @@ export const chartChallenges: ChartChallenge[] = [
       "A clean breakout usually gives you two jobs: judge acceptance, then judge the retest.",
       "Retest entries often improve both location and risk compared with chasing extension.",
       "This sequence maps directly to trading logic later: level, breakout close, retest hold, then trigger.",
+    ],
+  },
+  {
+    slug: "pullback-location-review-challenge",
+    moduleSlug: "structure-and-execution",
+    title: "Pullback Location Review",
+    summary:
+      "Reinforce the difference between a clean pullback entry zone and a late chase after the move already stretched.",
+    xpReward: 95,
+    candles: [
+      { open: 79.4, high: 79.9, low: 79.2, close: 79.8 },
+      { open: 79.8, high: 80.4, low: 79.7, close: 80.2 },
+      { open: 80.2, high: 80.9, low: 80.1, close: 80.7 },
+      { open: 80.7, high: 81.4, low: 80.6, close: 81.2 },
+      { open: 81.2, high: 81.3, low: 80.8, close: 80.9 },
+      { open: 80.9, high: 81.0, low: 80.5, close: 80.6 },
+      { open: 80.6, high: 81.1, low: 80.5, close: 81.0 },
+      { open: 81.0, high: 81.7, low: 80.9, close: 81.5 },
+      { open: 81.5, high: 82.0, low: 81.3, close: 81.9 },
+      { open: 81.9, high: 82.4, low: 81.8, close: 82.2 },
+    ],
+    questions: [
+      {
+        id: "pullback-entry-zone",
+        type: "price-zone",
+        prompt: "Mark the cleanest pullback entry zone before the trend resumes.",
+        instruction: "Mark the area where the retrace becomes the best location for the long thesis.",
+        explanation:
+          "The best pullback entry zone sits in the controlled retrace after the first expansion leg, before the move resumes and becomes more extended again.",
+        coaching: "A good pullback zone improves reward-to-risk because the stop can stay tied to structure.",
+        correctZoneLow: 80.5,
+        correctZoneHigh: 80.9,
+        tolerance: 0.16,
+        selectionLabel: "Pullback zone",
+      },
+      {
+        id: "late-chase-read",
+        type: "multiple-choice",
+        prompt: "What is the right read on the final extension after price resumes higher?",
+        instruction: "Choose the answer that respects location instead of urgency.",
+        explanation:
+          "The final extension may still look strong, but it is no longer the cleanest location for the original setup. The better decision is to recognize that the best entry already happened earlier.",
+        coaching: "A strong move can still be a bad entry if the structure that supported it is already behind you.",
+        choices: [
+          { id: "best-entry-gone", label: "The trend is still up, but the cleanest entry location is already gone" },
+          { id: "must-chase", label: "Momentum is strong, so the best move is to chase immediately" },
+          { id: "trend-failed", label: "Any extension means the whole trend is now invalid" },
+        ],
+        correctChoiceId: "best-entry-gone",
+      },
+    ],
+    coachDebrief: [
+      "The best trade is often not the strongest-looking candle. It is the cleanest location inside the move.",
+      "Pullback logic is how you turn trend into structure instead of emotion.",
+      "This is one of the most important repetition skills for avoiding low-quality chases.",
     ],
   },
   {
