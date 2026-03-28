@@ -1,13 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import type { ComponentType } from "react";
 import { ArrowRight, Brain, Flame, Sparkles, Target } from "lucide-react";
 
 import { CandlestickChart } from "@/components/ui/candlestick-chart";
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { chartChallenges, getDashboardSnapshot } from "@/lib/course";
+import { chartChallenges } from "@/lib/course";
+import { useLearningProgress } from "@/lib/learning-progress";
 
 export function DashboardHome() {
-  const { activeModule, progress, tierProgress, upcomingLesson } = getDashboardSnapshot();
+  const { activeModule, progress, tierProgress, upcomingLesson } = useLearningProgress();
   const sampleChart = chartChallenges[0];
   const supportQuestion = sampleChart.questions.find((question) => question.type === "hotspot");
 
@@ -114,7 +117,7 @@ export function DashboardHome() {
               description="Preview how this grows from fundamentals into strategy systems and bots."
             />
             <LinkCard
-              href="/simulator/open-drive-pullback"
+              href={activeModule?.simulatorSlug ? `/simulator/${activeModule.simulatorSlug}` : "/progress"}
               kicker="Replay Mode"
               title="Practice decisions inside a guided scenario"
               description="Pause, choose, get feedback, and learn why the good trade makes sense."
@@ -160,7 +163,7 @@ export function DashboardHome() {
               step="01"
               title={upcomingLesson?.title ?? "Start here"}
               detail={upcomingLesson?.summary ?? "Move through the next short visual lesson."}
-              href={`/lesson/${upcomingLesson?.slug ?? activeModule?.lessonSlugs[0] ?? ""}`}
+              href={upcomingLesson ? `/lesson/${upcomingLesson.slug}` : "/learn"}
             />
             <SequenceCard
               step="02"

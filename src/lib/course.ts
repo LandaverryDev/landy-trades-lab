@@ -2,7 +2,6 @@ import {
   chartChallenges,
   learningModules,
   lessons,
-  progressSnapshot,
   quizzes,
   scenarios,
   tiers,
@@ -28,44 +27,14 @@ export function getScenarioBySlug(slug: string) {
   return scenarios.find((scenario) => scenario.slug === slug);
 }
 
-export function getTierModules(tierSlug: (typeof tiers)[number]["slug"]) {
-  return learningModules.filter((module) => module.tier === tierSlug);
-}
-
-export function getActiveModule() {
-  return learningModules.find((module) => module.status === "active");
-}
-
 export function getModuleLessons(moduleSlug: string) {
   return lessons.filter((lesson) => lesson.moduleSlug === moduleSlug);
-}
-
-export function getTierProgress() {
-  return tiers.map((tier) => ({
-    ...tier,
-    modules: getTierModules(tier.slug),
-  }));
-}
-
-export function getDashboardSnapshot() {
-  const activeModule = getActiveModule();
-  const upcomingLesson = activeModule
-    ? getLessonBySlug(activeModule.lessonSlugs[progressSnapshot.lessonsCompleted] ?? activeModule.lessonSlugs[0])
-    : undefined;
-
-  return {
-    activeModule,
-    upcomingLesson,
-    progress: progressSnapshot,
-    tierProgress: getTierProgress(),
-  };
 }
 
 export {
   chartChallenges,
   learningModules,
   lessons,
-  progressSnapshot,
   quizzes,
   scenarios,
   tiers,

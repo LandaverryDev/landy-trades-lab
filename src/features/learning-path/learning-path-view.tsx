@@ -1,11 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { Lock, Sparkles } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { getActiveModule, getModuleLessons, learningModules, progressSnapshot, tiers } from "@/lib/course";
+import { getModuleLessons } from "@/lib/course";
+import { useLearningProgress } from "@/lib/learning-progress";
 
 export function LearningPathView() {
-  const activeModule = getActiveModule();
+  const { activeModule, modules, progress, tierProgress, raw } = useLearningProgress();
   const activeLessons = activeModule ? getModuleLessons(activeModule.slug) : [];
 
   return (
@@ -24,7 +27,7 @@ export function LearningPathView() {
           </div>
           <div className="rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4">
             <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Current beginner progress</p>
-            <p className="mt-2 font-mono text-3xl text-white">{progressSnapshot.overallProgressPercent}%</p>
+            <p className="mt-2 font-mono text-3xl text-white">{progress.overallProgressPercent}%</p>
             <p className="mt-2 text-sm text-slate-300">XP, quiz, and chart drills feed the same track.</p>
           </div>
         </div>
@@ -48,14 +51,18 @@ export function LearningPathView() {
               <Link
                 key={lesson.slug}
                 href={`/lesson/${lesson.slug}`}
-                className="rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(8,11,18,0.95))] p-5 transition hover:-translate-y-0.5 hover:border-cyan-300/20"
+                className={`rounded-[28px] border p-5 transition hover:-translate-y-0.5 ${
+                  raw.completedLessonSlugs.includes(lesson.slug)
+                    ? "border-emerald-400/16 bg-emerald-400/[0.06]"
+                    : "border-white/8 bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(8,11,18,0.95))] hover:border-cyan-300/20"
+                }`}
               >
                 <p className="font-mono text-sm text-cyan-300">0{index + 1}</p>
                 <h3 className="mt-4 text-xl font-semibold text-white">{lesson.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">{lesson.summary}</p>
                 <div className="mt-4 flex items-center justify-between text-sm text-slate-400">
                   <span>{lesson.estimatedMinutes} min</span>
-                  <span>{lesson.xpReward} XP</span>
+                  <span>{raw.completedLessonSlugs.includes(lesson.slug) ? "Completed" : `${lesson.xpReward} XP`}</span>
                 </div>
               </Link>
             ))}
@@ -92,8 +99,8 @@ export function LearningPathView() {
       ) : null}
 
       <section className="space-y-6">
-        {tiers.map((tier) => {
-          const modules = learningModules.filter((module) => module.tier === tier.slug);
+        {tierProgress.map((tier) => {
+          const tierModules = modules.filter((module) => module.tier === tier.slug);
 
           return (
             <div key={tier.slug} className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
@@ -109,8 +116,8 @@ export function LearningPathView() {
               </div>
 
               <div className="mt-6 grid gap-5 xl:grid-cols-2">
-                {modules.map((module) => {
-                  const locked = module.status === "locked";
+                {tierModules.map((module) => {
+                  const locked = !module.unlocked;
                   const href = module.lessonSlugs[0] ? `/lesson/${module.lessonSlugs[0]}` : "/learn";
 
                   return (
@@ -126,7 +133,7 @@ export function LearningPathView() {
                               : "border border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
                           }`}
                         >
-                          {locked ? "Locked" : module.status === "completed" ? "Completed" : "Active"}
+                          {locked ? "Locked" : module.completed ? "Completed" : "Active"}
                         </span>
                       </div>
 
@@ -147,6 +154,10 @@ export function LearningPathView() {
                       <div className="mt-5 rounded-[24px] border border-cyan-400/10 bg-cyan-400/[0.06] p-4">
                         <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/70">Bot Builder Hook</p>
                         <p className="mt-2 text-sm leading-6 text-slate-200">{module.botBuilderHook}</p>
+                      </div>
+
+                      <div className="mt-5">
+                        <ProgressBar value={module.progressPercent} label="Live progress" />
                       </div>
 
                       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">

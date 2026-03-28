@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
+import { recordScenarioCompletion, useLearningProgress } from "@/lib/learning-progress";
 import type { Scenario } from "@/types/trading";
 
 export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
@@ -11,6 +12,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
   const [selectedActionId, setSelectedActionId] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const { raw } = useLearningProgress();
 
   const step = scenario.steps[stepIndex];
   const selectedAction = useMemo(
@@ -29,6 +31,7 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
 
   function handleNext() {
     if (stepIndex === scenario.steps.length - 1) {
+      recordScenarioCompletion(scenario.slug);
       setCompleted(true);
       return;
     }
@@ -58,7 +61,10 @@ export function ScenarioSimulator({ scenario }: { scenario: Scenario }) {
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <FinalTile label="Scenario XP" value={`${scenario.xpReward}`} />
             <FinalTile label="Steps Cleared" value={`${scenario.steps.length}`} />
-            <FinalTile label="Focus" value="Decision Quality" />
+            <FinalTile
+              label="Status"
+              value={raw.completedScenarioSlugs.includes(scenario.slug) ? "Completed" : "Decision Quality"}
+            />
           </div>
         </section>
 

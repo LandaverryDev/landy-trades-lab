@@ -2,7 +2,6 @@ import type {
   ChartChallenge,
   LearningModule,
   Lesson,
-  ProgressSnapshot,
   Quiz,
   Scenario,
   Tier,
@@ -683,34 +682,3 @@ export const scenarios: Scenario[] = [
     ],
   },
 ];
-
-export const progressSnapshot: ProgressSnapshot = {
-  currentTier: "beginner",
-  title: "Tape Apprentice",
-  totalXp: 160,
-  xpIntoLevel: 160,
-  xpForNextLevel: 400,
-  streakDays: 3,
-  modulesCompleted: 0,
-  lessonsCompleted: 1,
-  quizAccuracy: 78,
-  chartAccuracy: 72,
-  overallProgressPercent: 14,
-  achievements: [
-    {
-      id: "starter",
-      title: "First Lesson Cleared",
-      detail: "Completed the opening trading foundations lesson.",
-    },
-    {
-      id: "streak",
-      title: "3-Day Streak",
-      detail: "Returned to train for three sessions in a row.",
-    },
-    {
-      id: "read",
-      title: "Chart Reader",
-      detail: "Started identifying control, rejection, and support zones with intention.",
-    },
-  ],
-};

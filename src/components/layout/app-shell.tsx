@@ -1,9 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { BarChart3, BrainCircuit, LayoutDashboard } from "lucide-react";
 
 import { BrandMark } from "@/components/ui/brand-mark";
-import { progressSnapshot } from "@/lib/course";
+import { useLearningProgress } from "@/lib/learning-progress";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -12,6 +14,8 @@ const navItems = [
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const { progress } = useLearningProgress();
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(11,214,144,0.16),_transparent_28%),radial-gradient(circle_at_85%_15%,_rgba(56,189,248,0.16),_transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(244,114,182,0.08),_transparent_24%)]" />
@@ -31,11 +35,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Current Rank</p>
             <div className="mt-3 flex items-end justify-between">
               <div>
-                <p className="font-mono text-3xl text-white">{progressSnapshot.totalXp} XP</p>
-                <p className="mt-1 text-sm text-slate-300">{progressSnapshot.title}</p>
+                <p className="font-mono text-3xl text-white">{progress.totalXp} XP</p>
+                <p className="mt-1 text-sm text-slate-300">{progress.title}</p>
               </div>
               <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-right">
-                <p className="font-mono text-lg text-emerald-200">{progressSnapshot.streakDays}d</p>
+                <p className="font-mono text-lg text-emerald-200">{progress.streakDays}d</p>
                 <p className="text-xs uppercase tracking-[0.24em] text-emerald-100/70">streak</p>
               </div>
             </div>

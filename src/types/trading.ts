@@ -220,3 +220,23 @@ export interface ProgressSnapshot {
   overallProgressPercent: number;
   achievements: Achievement[];
 }
+
+export interface StoredLearningProgress {
+  completedLessonSlugs: string[];
+  completedQuizSlugs: string[];
+  completedChartChallengeSlugs: string[];
+  completedScenarioSlugs: string[];
+  quizBestScores: Record<string, number>;
+  chartBestScores: Record<string, number>;
+  streakDays: number;
+  lastActiveDate: string | null;
+}
+
+export interface DerivedModuleProgress extends LearningModule {
+  unlocked: boolean;
+  completed: boolean;
+  progressPercent: number;
+  completedItems: number;
+  totalItems: number;
+  liveStatus: ModuleStatus;
+}

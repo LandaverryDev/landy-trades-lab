@@ -5,8 +5,8 @@ import { useMemo, useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
 import { CandlestickChart } from "@/components/ui/candlestick-chart";
-import { readStoredBestScore, writeStoredBestScore } from "@/lib/assessment-storage";
 import { getModuleBySlug } from "@/lib/course";
+import { recordChartChallengeCompletion, useLearningProgress } from "@/lib/learning-progress";
 import type { ChartChallenge } from "@/types/trading";
 
 export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge }) {
@@ -16,10 +16,11 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const [bestScore, setBestScore] = useState<number | null>(() => readStoredBestScore("chart", challenge.slug));
 
   const question = challenge.questions[currentIndex];
   const learningModule = getModuleBySlug(challenge.moduleSlug);
+  const { raw } = useLearningProgress();
+  const bestScore = raw.chartBestScores[challenge.slug] ?? null;
 
   const selectedHotspot = useMemo(
     () => question.hotspots?.find((hotspot) => hotspot.id === selectedHotspotId) ?? null,
@@ -54,10 +55,7 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   function handleNext() {
     if (currentIndex === challenge.questions.length - 1) {
       const percent = Math.round((correctCount / challenge.questions.length) * 100);
-      const nextBest = bestScore === null ? percent : Math.max(bestScore, percent);
-
-      writeStoredBestScore("chart", challenge.slug, percent);
-      setBestScore(nextBest);
+      recordChartChallengeCompletion(challenge.slug, percent);
       setCompleted(true);
       return;
     }

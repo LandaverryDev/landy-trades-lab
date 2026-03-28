@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 
 import { getModuleBySlug } from "@/lib/course";
-import { readStoredBestScore, writeStoredBestScore } from "@/lib/assessment-storage";
+import { recordQuizCompletion, useLearningProgress } from "@/lib/learning-progress";
 import type { Quiz } from "@/types/trading";
 
 export function QuizPlayer({ quiz }: { quiz: Quiz }) {
@@ -14,9 +14,10 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const [bestScore, setBestScore] = useState<number | null>(() => readStoredBestScore("quiz", quiz.slug));
 
   const learningModule = getModuleBySlug(quiz.moduleSlug);
+  const { raw } = useLearningProgress();
+  const bestScore = raw.quizBestScores[quiz.slug] ?? null;
 
   const question = quiz.questions[currentIndex];
   const choice = question.choices.find((item) => item.id === selectedChoiceId);
@@ -37,10 +38,7 @@ export function QuizPlayer({ quiz }: { quiz: Quiz }) {
   function handleNext() {
     if (currentIndex === quiz.questions.length - 1) {
       const percent = Math.round((correctCount / quiz.questions.length) * 100);
-      const nextBest = bestScore === null ? percent : Math.max(bestScore, percent);
-
-      writeStoredBestScore("quiz", quiz.slug, percent);
-      setBestScore(nextBest);
+      recordQuizCompletion(quiz.slug, percent);
       setCompleted(true);
       return;
     }

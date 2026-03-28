@@ -1,18 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import type { ComponentType } from "react";
 import { ArrowRight, BrainCircuit, Clock3 } from "lucide-react";
 
 import { LessonBlocks } from "@/features/lesson/lesson-blocks";
 import { getLessonBySlug, getModuleBySlug } from "@/lib/course";
+import { recordLessonCompletion, useLearningProgress } from "@/lib/learning-progress";
 
 export function LessonView({ lessonSlug }: { lessonSlug: string }) {
   const lesson = getLessonBySlug(lessonSlug);
+  const { raw } = useLearningProgress();
 
   if (!lesson) {
     return null;
   }
 
   const learningModule = getModuleBySlug(lesson.moduleSlug);
+  const isCompleted = raw.completedLessonSlugs.includes(lesson.slug);
 
   return (
     <div className="space-y-8">
@@ -24,6 +29,11 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
           <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1 text-xs uppercase tracking-[0.28em] text-slate-300">
             {lesson.xpReward} XP
           </span>
+          {isCompleted ? (
+            <span className="rounded-full border border-cyan-400/16 bg-cyan-400/[0.08] px-4 py-1 text-xs uppercase tracking-[0.28em] text-cyan-200">
+              Completed
+            </span>
+          ) : null}
         </div>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
@@ -92,6 +102,17 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
           <aside className="rounded-[30px] border border-white/10 bg-white/[0.04] p-6">
             <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Continue Training</p>
             <div className="mt-4 grid gap-3">
+              {!isCompleted ? (
+                <button
+                  type="button"
+                  onClick={() => recordLessonCompletion(lesson.slug)}
+                  className="inline-flex items-center justify-between rounded-2xl border border-emerald-400/16 bg-emerald-400/[0.08] px-4 py-4 text-sm text-white transition hover:bg-emerald-400/[0.12]"
+                >
+                  Mark lesson complete
+                  <ArrowRight className="h-4 w-4 text-emerald-300" />
+                </button>
+              ) : null}
+
               {lesson.nextLessonSlug ? (
                 <Link
                   href={`/lesson/${lesson.nextLessonSlug}`}

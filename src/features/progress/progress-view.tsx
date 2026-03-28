@@ -1,10 +1,14 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { learningModules, progressSnapshot, tiers } from "@/lib/course";
+import { resetStoredLearningProgress, useLearningProgress } from "@/lib/learning-progress";
 
 export function ProgressView() {
+  const { modules, progress, tierProgress } = useLearningProgress();
+
   return (
     <div className="space-y-8">
       <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 sm:p-8">
@@ -21,10 +25,10 @@ export function ProgressView() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <MetricCard label="Total XP" value={`${progressSnapshot.totalXp}`} />
-            <MetricCard label="Overall Progress" value={`${progressSnapshot.overallProgressPercent}%`} />
-            <MetricCard label="Quiz Accuracy" value={`${progressSnapshot.quizAccuracy}%`} />
-            <MetricCard label="Chart Accuracy" value={`${progressSnapshot.chartAccuracy}%`} />
+            <MetricCard label="Total XP" value={`${progress.totalXp}`} />
+            <MetricCard label="Overall Progress" value={`${progress.overallProgressPercent}%`} />
+            <MetricCard label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
+            <MetricCard label="Chart Accuracy" value={`${progress.chartAccuracy}%`} />
           </div>
         </div>
       </section>
@@ -32,23 +36,29 @@ export function ProgressView() {
       <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6">
           <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Rank Progression</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white">{progressSnapshot.title}</h2>
+          <h2 className="mt-3 text-3xl font-semibold text-white">{progress.title}</h2>
           <p className="mt-2 text-sm leading-6 text-slate-300">
             You are currently in the beginner tier, building the chart language and discipline needed for future playbook
             and automation modules.
           </p>
           <div className="mt-6 space-y-5">
             <ProgressBar
-              value={Math.round((progressSnapshot.xpIntoLevel / progressSnapshot.xpForNextLevel) * 100)}
+              value={Math.round((progress.xpIntoLevel / progress.xpForNextLevel) * 100)}
               label="Current Rank Progress"
             />
             <div className="grid gap-3">
-              {progressSnapshot.achievements.map((achievement) => (
-                <div key={achievement.id} className="rounded-[24px] border border-white/8 bg-slate-950/70 p-4">
-                  <p className="text-sm font-semibold text-white">{achievement.title}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">{achievement.detail}</p>
+              {progress.achievements.length ? (
+                progress.achievements.map((achievement) => (
+                  <div key={achievement.id} className="rounded-[24px] border border-white/8 bg-slate-950/70 p-4">
+                    <p className="text-sm font-semibold text-white">{achievement.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{achievement.detail}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-[24px] border border-white/8 bg-slate-950/70 p-4 text-sm leading-6 text-slate-300">
+                  No achievements yet. Finish a lesson, clear the quiz, or complete the chart drill to start building momentum.
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -59,18 +69,28 @@ export function ProgressView() {
               <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Unlock Map</p>
               <h2 className="mt-2 text-3xl font-semibold text-white">Curriculum progression</h2>
             </div>
-            <Link
-              href="/learn"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/[0.05]"
-            >
-              Open path
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={resetStoredLearningProgress}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/[0.05]"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Reset local progress
+              </button>
+              <Link
+                href="/learn"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/[0.05]"
+              >
+                Open path
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
 
           <div className="mt-6 space-y-4">
-            {tiers.map((tier) => {
-              const tierModules = learningModules.filter((module) => module.tier === tier.slug);
+            {tierProgress.map((tier) => {
+              const tierModules = modules.filter((module) => module.tier === tier.slug);
 
               return (
                 <div key={tier.slug} className="rounded-[28px] border border-white/8 bg-slate-950/65 p-5">
@@ -94,13 +114,16 @@ export function ProgressView() {
                           </div>
                           <span
                             className={`rounded-full px-3 py-1 text-xs uppercase tracking-[0.24em] ${
-                              module.status === "active"
+                              module.liveStatus === "active"
                                 ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
                                 : "border border-white/10 bg-white/[0.03] text-slate-400"
                             }`}
                           >
-                            {module.status}
+                            {module.liveStatus}
                           </span>
+                        </div>
+                        <div className="mt-4">
+                          <ProgressBar value={module.progressPercent} label="Module progress" />
                         </div>
                       </div>
                     ))}
