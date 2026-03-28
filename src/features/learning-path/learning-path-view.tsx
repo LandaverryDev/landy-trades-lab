@@ -11,21 +11,24 @@ export function LearningPathView() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 sm:p-8">
-        <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Curriculum</p>
+      <section className="course-hero rounded-[32px] p-6 sm:p-8">
+        <p className="eyebrow-label">Curriculum</p>
         <div className="mt-4 grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)]">
           <div>
-            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              Follow the learning path in order.
-            </h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
+            <h1 className="section-title">Follow the learning path in order.</h1>
+            <p className="section-copy mt-4 max-w-3xl text-base">
               Start with foundations, then move through risk, instruments, execution, psychology, and system design.
               Each module unlocks the next so the learning stays structured instead of scattered.
             </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <span className="course-pill text-sm text-slate-200">Start with beginner foundations</span>
+              <span className="course-pill text-sm text-slate-200">Unlock one module at a time</span>
+              <span className="course-pill text-sm text-slate-200">Use drills to reinforce weak spots</span>
+            </div>
           </div>
 
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Current Progress</p>
+          <div className="course-card-raised rounded-[28px] p-5">
+            <p className="eyebrow-label">Current Progress</p>
             <p className="mt-3 font-mono text-3xl text-white">{progress.overallProgressPercent}%</p>
             <div className="mt-4">
               <ProgressBar value={progress.overallProgressPercent} label="Overall completion" />
@@ -34,7 +37,7 @@ export function LearningPathView() {
               <div className="mt-5 rounded-2xl border border-cyan-400/10 bg-cyan-400/[0.05] p-4">
                 <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/70">Current Module</p>
                 <p className="mt-2 text-lg font-semibold text-white">{activeModule.title}</p>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{activeModule.summary}</p>
+                <p className="mt-2 text-sm leading-7 text-slate-300">{activeModule.summary}</p>
               </div>
             ) : null}
           </div>
@@ -65,7 +68,7 @@ export function LearningPathView() {
                   return (
                     <div
                       key={module.slug}
-                      className="rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(8,11,18,0.95))] p-5"
+                      className="course-card-raised rounded-[28px] p-5"
                     >
                       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                         <div className="min-w-0">
@@ -93,7 +96,7 @@ export function LearningPathView() {
                             {module.focusAreas.map((area) => (
                               <span
                                 key={area}
-                                className="rounded-full border border-white/8 bg-slate-950/70 px-3 py-1 text-sm text-slate-200"
+                                className="course-pill text-sm text-slate-200"
                               >
                                 {area}
                               </span>
@@ -101,9 +104,9 @@ export function LearningPathView() {
                           </div>
                         </div>
 
-                        <div className="w-full max-w-sm rounded-[24px] border border-white/10 bg-white/[0.04] p-4">
+                        <div className="course-card w-full max-w-sm rounded-[24px] p-4">
                           <ProgressBar value={module.progressPercent} label="Module progress" />
-                          <p className="mt-3 text-sm leading-6 text-slate-300">{module.unlockRule}</p>
+                          <p className="mt-3 text-sm leading-7 text-slate-300">{module.unlockRule}</p>
                           {locked ? (
                             <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-slate-400">
                               <Lock className="h-4 w-4" />
@@ -112,7 +115,7 @@ export function LearningPathView() {
                           ) : (
                             <Link
                               href={`/module/${module.slug}`}
-                              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+                              className="focus-visible-ring mt-4 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
                             >
                               Open module
                               <ArrowRight className="h-4 w-4" />

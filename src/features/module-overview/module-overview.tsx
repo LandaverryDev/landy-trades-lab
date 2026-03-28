@@ -46,14 +46,14 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
   if (!liveModule.unlocked) {
     return (
       <div className="space-y-8">
-        <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-8 text-center">
+        <section className="course-hero rounded-[32px] p-8 text-center">
           <Lock className="mx-auto h-8 w-8 text-slate-500" />
-          <p className="mt-4 text-sm uppercase tracking-[0.28em] text-slate-400">Module Locked</p>
+          <p className="eyebrow-label mt-4">Module Locked</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{baseModule.title}</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">{baseModule.unlockRule}</p>
+          <p className="section-copy mx-auto mt-4 max-w-2xl text-base">{baseModule.unlockRule}</p>
           <Link
             href="/learn"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+            className="focus-visible-ring mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
           >
             Back to curriculum
             <ArrowRight className="h-4 w-4" />
@@ -65,24 +65,24 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(145deg,rgba(10,18,34,0.95),rgba(8,11,22,0.92))] p-6 sm:p-8">
+      <section className="course-hero rounded-[32px] p-6 sm:p-8">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
           <div>
-            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Module</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl">{baseModule.title}</h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">{baseModule.summary}</p>
+            <p className="eyebrow-label">Module</p>
+            <h1 className="section-title mt-3">{baseModule.title}</h1>
+            <p className="section-copy mt-4 max-w-3xl text-base">{baseModule.summary}</p>
 
             <div className="mt-5 flex flex-wrap gap-2">
               {baseModule.focusAreas.map((area) => (
-                <span key={area} className="rounded-full border border-white/8 bg-white/[0.03] px-4 py-2 text-sm text-slate-200">
+                <span key={area} className="course-pill text-sm text-slate-200">
                   {area}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Module Progress</p>
+          <div className="course-card-raised rounded-[28px] p-5">
+            <p className="eyebrow-label">Module Progress</p>
             <div className="mt-4">
               <ProgressBar value={liveModule.progressPercent} label="Completion" />
             </div>
@@ -92,7 +92,7 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
             </div>
             <Link
               href={nextHref}
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
+              className="focus-visible-ring mt-5 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950"
             >
               {liveModule.completed ? "Open progress" : "Continue module"}
               <ArrowRight className="h-4 w-4" />
@@ -102,8 +102,8 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)]">
-        <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Learning Sequence</p>
+        <div className="course-card rounded-[32px] p-6">
+          <p className="eyebrow-label">Learning Sequence</p>
           <h2 className="mt-2 text-3xl font-semibold text-white">Work through this in order</h2>
 
           <div className="mt-6 space-y-4">
@@ -174,16 +174,16 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
         </div>
 
         <div className="space-y-6">
-          <aside className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-            <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Why This Module Matters</p>
+          <aside className="course-card rounded-[32px] p-6">
+            <p className="eyebrow-label">Why This Module Matters</p>
             <p className="mt-4 text-sm leading-7 text-slate-300">{baseModule.botBuilderHook}</p>
           </aside>
 
           {reviewCharts.length ? (
-            <aside className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
+            <aside className="course-card rounded-[32px] p-6">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Optional Review</p>
+                  <p className="eyebrow-label">Optional Review</p>
                   <h2 className="mt-2 text-2xl font-semibold text-white">Extra chart reps</h2>
                 </div>
                 <p className="text-sm text-slate-400">Not required to unlock the next module</p>
@@ -236,7 +236,7 @@ function SequenceRow({
   return (
     <Link
       href={href}
-      className={`flex flex-col gap-3 rounded-[24px] border p-4 transition hover:border-cyan-300/20 hover:bg-white/[0.05] ${
+      className={`focus-visible-ring flex flex-col gap-3 rounded-[24px] border p-4 transition hover:border-cyan-300/20 hover:bg-white/[0.05] ${
         done ? "border-emerald-400/16 bg-emerald-400/[0.06]" : "border-white/8 bg-slate-950/65"
       }`}
     >
@@ -257,7 +257,7 @@ function SequenceRow({
 
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/8 bg-slate-950/70 p-4">
+    <div className="course-inset rounded-2xl p-4">
       <p className="text-xs uppercase tracking-[0.22em] text-slate-400">{label}</p>
       <p className="mt-2 font-mono text-xl text-white">{value}</p>
     </div>
