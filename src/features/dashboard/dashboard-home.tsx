@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import type { ComponentType } from "react";
-import { ArrowRight, Brain, Flame, Sparkles, Target } from "lucide-react";
+import { ArrowRight, Brain, BrainCircuit, Flame, Sparkles, Target } from "lucide-react";
 
 import { CandlestickChart } from "@/components/ui/candlestick-chart";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { chartChallenges } from "@/lib/course";
 import { useLearningProgress } from "@/lib/learning-progress";
+import type { ReviewQueueItem } from "@/types/trading";
 
 export function DashboardHome() {
-  const { activeModule, progress, tierProgress, upcomingLesson } = useLearningProgress();
+  const { activeModule, progress, reviewQueue, tierProgress, upcomingLesson } = useLearningProgress();
   const sampleChart = chartChallenges[0];
   const chartPreviewQuestion = sampleChart.questions.find((question) => question.type === "hotspot");
 
@@ -113,25 +114,15 @@ export function DashboardHome() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <ReviewQueueCard
+              items={reviewQueue.slice(0, 3)}
+              fallbackHref={activeModule ? `/module/${activeModule.slug}` : "/learn"}
+            />
             <LinkCard
               href="/learn"
               kicker="Roadmap"
               title="See the full beginner-to-advanced learning path"
               description="Preview how this grows from fundamentals into strategy systems and bots."
-            />
-            <LinkCard
-              href={activeModule?.drillSlug ? `/drill/${activeModule.drillSlug}` : activeModule?.simulatorSlug ? `/simulator/${activeModule.simulatorSlug}` : "/progress"}
-              kicker={activeModule?.drillSlug ? "Rapid Review" : "Replay Mode"}
-              title={
-                activeModule?.drillSlug
-                  ? "Run a shuffled reinforcement loop"
-                  : "Practice decisions inside a guided scenario"
-              }
-              description={
-                activeModule?.drillSlug
-                  ? "Build faster recall with short repeated drills before the chart and simulator layers."
-                  : "Pause, choose, get feedback, and learn why the good trade makes sense."
-              }
             />
           </div>
         </div>
@@ -184,17 +175,76 @@ export function DashboardHome() {
             />
             <SequenceCard
               step="03"
-              title={activeModule?.drillSlug ? "Rapid Review Loop" : "Next Assessment"}
+              title={reviewQueue[0] ? "Review Queue" : activeModule?.drillSlug ? "Rapid Review Loop" : "Next Assessment"}
               detail={
-                activeModule?.drillSlug
+                reviewQueue[0]
+                  ? `${reviewQueue[0].moduleTitle}: ${reviewQueue[0].reason}.`
+                  : activeModule?.drillSlug
                   ? "Shuffle short questions and repeat the module's key logic until recall becomes faster."
                   : "Move from lesson understanding into quizzes, chart drills, and replay training."
               }
-              href={activeModule?.drillSlug ? `/drill/${activeModule.drillSlug}` : activeModule ? `/module/${activeModule.slug}` : "/learn"}
+              href={reviewQueue[0]?.href ?? (activeModule?.drillSlug ? `/drill/${activeModule.drillSlug}` : activeModule ? `/module/${activeModule.slug}` : "/learn")}
             />
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+function ReviewQueueCard({
+  items,
+  fallbackHref,
+}: {
+  items: ReviewQueueItem[];
+  fallbackHref: string;
+}) {
+  return (
+    <div className="min-w-0 rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(8,13,24,0.98),rgba(10,18,31,0.92))] p-5">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Review Queue</p>
+          <h3 className="mt-2 text-2xl font-semibold text-white">What needs another pass</h3>
+        </div>
+        <BrainCircuit className="h-5 w-5 text-cyan-300" />
+      </div>
+
+      {items.length ? (
+        <div className="mt-5 space-y-3">
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              href={item.href}
+              className="block rounded-[22px] border border-white/8 bg-white/[0.04] p-4 transition hover:border-cyan-300/20 hover:bg-white/[0.06]"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-300">
+                  {item.kind}
+                </span>
+                <span className="text-xs text-slate-400">{item.score !== null ? `${item.score}%` : "New"}</span>
+              </div>
+              <p className="mt-3 text-base font-semibold text-white">
+                {item.moduleTitle} · {item.title}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">{item.reason}</p>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-5 rounded-[22px] border border-emerald-400/12 bg-emerald-400/[0.05] p-4">
+          <p className="text-sm font-semibold text-white">No review debt right now.</p>
+          <p className="mt-2 text-sm leading-6 text-slate-300">
+            Keep moving through the active module or open an earlier chart drill if you want extra reps anyway.
+          </p>
+          <Link
+            href={fallbackHref}
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-2 text-sm font-semibold text-slate-950"
+          >
+            Continue training
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

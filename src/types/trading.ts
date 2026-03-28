@@ -236,6 +236,19 @@ export interface Achievement {
   detail: string;
 }
 
+export interface ReviewQueueItem {
+  id: string;
+  kind: "quiz" | "drill" | "chart";
+  slug: string;
+  moduleSlug: string;
+  moduleTitle: string;
+  title: string;
+  href: string;
+  score: number | null;
+  reason: string;
+  priority: number;
+}
+
 export interface ProgressSnapshot {
   currentTier: TierSlug;
   title: string;

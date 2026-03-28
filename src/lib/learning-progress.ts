@@ -15,6 +15,7 @@ import type {
   Achievement,
   DerivedModuleProgress,
   ProgressSnapshot,
+  ReviewQueueItem,
   StoredLearningProgress,
 } from "@/types/trading";
 
@@ -253,6 +254,127 @@ function average(values: number[]) {
   return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
+function buildReviewQueue(modules: DerivedModuleProgress[], state: StoredLearningProgress) {
+  const queue: ReviewQueueItem[] = [];
+
+  modules.forEach((module) => {
+    if (!module.unlocked) {
+      return;
+    }
+
+    if (module.quizSlug) {
+      const score = state.quizBestScores[module.quizSlug] ?? null;
+      const completed = state.completedQuizSlugs.includes(module.quizSlug);
+
+      if (!completed) {
+        queue.push({
+          id: `quiz:${module.quizSlug}`,
+          kind: "quiz",
+          slug: module.quizSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: "Module Quiz",
+          href: `/quiz/${module.quizSlug}`,
+          score,
+          reason: "Unfinished quiz checkpoint",
+          priority: 0,
+        });
+      } else if ((score ?? 0) < 80) {
+        queue.push({
+          id: `quiz:${module.quizSlug}`,
+          kind: "quiz",
+          slug: module.quizSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: "Module Quiz",
+          href: `/quiz/${module.quizSlug}`,
+          score,
+          reason: `Reinforce quiz score at ${score ?? 0}%`,
+          priority: 1,
+        });
+      }
+    }
+
+    if (module.drillSlug) {
+      const score = state.drillBestScores[module.drillSlug] ?? null;
+      const completed = state.completedDrillSlugs.includes(module.drillSlug);
+
+      if (!completed) {
+        queue.push({
+          id: `drill:${module.drillSlug}`,
+          kind: "drill",
+          slug: module.drillSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: "Rapid Review",
+          href: `/drill/${module.drillSlug}`,
+          score,
+          reason: "Unfinished rapid review loop",
+          priority: 0,
+        });
+      } else if ((score ?? 0) < 85) {
+        queue.push({
+          id: `drill:${module.drillSlug}`,
+          kind: "drill",
+          slug: module.drillSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: "Rapid Review",
+          href: `/drill/${module.drillSlug}`,
+          score,
+          reason: `Sharpen drill recall from ${score ?? 0}%`,
+          priority: 1,
+        });
+      }
+    }
+
+    if (module.chartChallengeSlug) {
+      const score = state.chartBestScores[module.chartChallengeSlug] ?? null;
+      const completed = state.completedChartChallengeSlugs.includes(module.chartChallengeSlug);
+
+      if (!completed) {
+        queue.push({
+          id: `chart:${module.chartChallengeSlug}`,
+          kind: "chart",
+          slug: module.chartChallengeSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: "Chart Challenge",
+          href: `/chart-challenge/${module.chartChallengeSlug}`,
+          score,
+          reason: "Unfinished chart drill",
+          priority: 0,
+        });
+      } else if ((score ?? 0) < 80) {
+        queue.push({
+          id: `chart:${module.chartChallengeSlug}`,
+          kind: "chart",
+          slug: module.chartChallengeSlug,
+          moduleSlug: module.slug,
+          moduleTitle: module.title,
+          title: "Chart Challenge",
+          href: `/chart-challenge/${module.chartChallengeSlug}`,
+          score,
+          reason: `Improve chart accuracy from ${score ?? 0}%`,
+          priority: 1,
+        });
+      }
+    }
+  });
+
+  return queue.sort((left, right) => {
+    if (left.priority !== right.priority) {
+      return left.priority - right.priority;
+    }
+
+    if ((left.score ?? -1) !== (right.score ?? -1)) {
+      return (left.score ?? -1) - (right.score ?? -1);
+    }
+
+    return left.moduleTitle.localeCompare(right.moduleTitle);
+  });
+}
+
 function getRankMeta(totalXp: number) {
   if (totalXp >= 1200) {
     return {
@@ -358,6 +480,7 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
   const quizAccuracy = average(Object.values(state.quizBestScores));
   const drillAccuracy = average(Object.values(state.drillBestScores));
   const chartAccuracy = average(Object.values(state.chartBestScores));
+  const reviewQueue = buildReviewQueue(modules, state);
   const totalContentItems = modules.reduce((sum, module) => sum + module.totalItems, 0);
   const totalCompletedItems = modules.reduce((sum, module) => sum + module.completedItems, 0);
 
@@ -389,6 +512,7 @@ export function deriveLearningProgress(state: StoredLearningProgress) {
     activeModule,
     upcomingLesson,
     progress,
+    reviewQueue,
     tierProgress,
   };
 }

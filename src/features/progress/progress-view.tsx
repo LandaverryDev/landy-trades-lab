@@ -7,7 +7,7 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { resetStoredLearningProgress, useLearningProgress } from "@/lib/learning-progress";
 
 export function ProgressView() {
-  const { modules, progress, tierProgress } = useLearningProgress();
+  const { modules, progress, reviewQueue, tierProgress } = useLearningProgress();
 
   return (
     <div className="space-y-8">
@@ -60,6 +60,33 @@ export function ProgressView() {
                   No achievements yet. Finish a lesson, clear the quiz, or complete the chart drill to start building momentum.
                 </div>
               )}
+            </div>
+
+            <div className="rounded-[24px] border border-white/8 bg-slate-950/70 p-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Review Queue</p>
+              <div className="mt-3 space-y-3">
+                {reviewQueue.length ? (
+                  reviewQueue.slice(0, 4).map((item) => (
+                    <Link
+                      key={item.id}
+                      href={item.href}
+                      className="block rounded-2xl border border-white/8 bg-white/[0.03] p-3 transition hover:bg-white/[0.05]"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-semibold text-white">
+                          {item.moduleTitle} · {item.title}
+                        </p>
+                        <span className="text-xs text-slate-400">{item.score !== null ? `${item.score}%` : "New"}</span>
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">{item.reason}</p>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-sm leading-6 text-slate-300">
+                    No weak-score or unfinished review items are queued right now.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
