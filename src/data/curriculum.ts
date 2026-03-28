@@ -128,7 +128,15 @@ export const learningModules: LearningModule[] = [
     botBuilderHook:
       "Bots remove impulse, but only after you identify the impulses and guardrails clearly.",
     unlockRule: "Unlock after Structure and Execution",
-    lessonSlugs: [],
+    lessonSlugs: [
+      "trading-psychology-basics",
+      "discipline-and-routine",
+      "common-beginner-mistakes",
+      "strategy-blueprint-basics",
+    ],
+    quizSlug: "psychology-discipline-quiz",
+    chartChallengeSlug: "a-plus-or-skip-challenge",
+    simulatorSlug: "revenge-trade-reset-simulator",
   },
   {
     id: "module-05",
@@ -1090,6 +1098,322 @@ export const lessons: Lesson[] = [
       "Confirmation layers are what make strategy logic more selective and robust.",
     ],
     botBuilderSignals: ["Volume filter", "Participation threshold", "Trigger quality", "Setup quality"],
+    nextLessonSlug: "trading-psychology-basics",
+  },
+  {
+    slug: "trading-psychology-basics",
+    moduleSlug: "psychology-and-discipline",
+    title: "Trading Psychology Basics",
+    summary:
+      "Psychology in trading is not about staying calm all the time. It is about noticing when emotion is trying to replace process.",
+    objective: "Recognize the emotional traps that distort decision-making and weaken good trade logic.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["FOMO", "Revenge trading", "Impulse", "Process"],
+    sections: [
+      {
+        id: "emotion-vs-process",
+        eyebrow: "Core Lens",
+        title: "Most trading mistakes happen when emotion overrides the checklist",
+        summary: "The market is not the only variable. Your state of mind is one too.",
+        blocks: [
+          {
+            id: "emotion-vs-process-text",
+            type: "text",
+            body:
+              "Fear can make you exit too early. Greed can make you hold too long. FOMO can make you chase. Anger can make you trade back losses. The fix is not pretending those feelings disappear. The fix is building a process strong enough to block them from steering the trade.",
+            bullets: [
+              "FOMO often shows up after a move is already extended.",
+              "Revenge trading often appears after a loss that feels personal.",
+              "A process gives you a decision standard even when your emotions are noisy.",
+            ],
+          },
+          {
+            id: "emotion-vs-process-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Hard rule",
+            body: "If your reason for entry is emotional urgency, you do not have a valid trade reason yet.",
+          },
+        ],
+      },
+      {
+        id: "psychology-loop",
+        eyebrow: "Awareness",
+        title: "Bad emotional loops can repeat fast unless you name them clearly",
+        summary: "Most impulse behavior follows a recognizable pattern.",
+        blocks: [
+          {
+            id: "psychology-loop-diagram",
+            type: "diagram",
+            title: "Common emotional loop",
+            caption: "Pressure builds when the trader reacts to emotion instead of structure.",
+            items: [
+              {
+                label: "Trigger",
+                value: "Missed move or loss",
+                detail: "Something happens that makes you feel behind, wrong, or frustrated.",
+              },
+              {
+                label: "Impulse",
+                value: "Force a trade",
+                detail: "You enter without waiting for the setup quality that your plan requires.",
+              },
+              {
+                label: "Damage",
+                value: "Worse decision",
+                detail: "The rushed trade usually has weaker location, weaker risk, or both.",
+              },
+            ],
+          },
+          {
+            id: "psychology-loop-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Common mistake",
+            body: "Many new traders treat the next trade like emotional repair instead of a fresh decision.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Emotions are normal. Letting them define entry is the real problem.",
+      "Most impulse trades come from urgency, frustration, or the need to be right quickly.",
+      "A repeatable process is the main defense against emotional decision-making.",
+    ],
+    botBuilderSignals: ["Skip after emotional trigger", "Checklist gate", "Session loss cap", "Trade quality filter"],
+    nextLessonSlug: "discipline-and-routine",
+  },
+  {
+    slug: "discipline-and-routine",
+    moduleSlug: "psychology-and-discipline",
+    title: "Discipline and Routine",
+    summary:
+      "Discipline is not random willpower. It is a routine that reduces avoidable decisions before the session even starts.",
+    objective: "Build a simple pre-trade and in-trade routine that protects consistency under pressure.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["Routine", "Checklist", "Consistency", "Execution standard"],
+    sections: [
+      {
+        id: "routine-edge",
+        eyebrow: "Execution Standard",
+        title: "Routines protect quality when the market speeds up",
+        summary: "A structured process keeps fast markets from pulling you into random action.",
+        blocks: [
+          {
+            id: "routine-edge-text",
+            type: "text",
+            body:
+              "Good routines simplify decisions. Before the session, define the instruments, levels, risk limit, and setups you care about. During the session, check whether the market is actually matching the plan instead of inventing trades on the fly.",
+            bullets: [
+              "Pre-session: watchlist, key levels, bias, and max loss.",
+              "Pre-entry: setup, trigger, stop, target, and size.",
+              "Post-trade: review whether you followed process, not just whether you won.",
+            ],
+          },
+          {
+            id: "routine-edge-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "Useful mindset",
+            body: "The best routine removes unnecessary choices so your energy stays available for the market itself.",
+          },
+        ],
+      },
+      {
+        id: "discipline-stack",
+        eyebrow: "Practical Routine",
+        title: "A short checklist beats vague motivation",
+        summary: "Clarity is more useful than hype.",
+        blocks: [
+          {
+            id: "discipline-stack-diagram",
+            type: "diagram",
+            title: "Simple discipline stack",
+            caption: "Each layer protects the next one.",
+            items: [
+              {
+                label: "Plan",
+                value: "Know the setup",
+                detail: "Trade only the patterns and conditions you actually studied.",
+              },
+              {
+                label: "Risk",
+                value: "Cap downside",
+                detail: "Use a fixed max loss and position size that respects the stop.",
+              },
+              {
+                label: "Review",
+                value: "Audit behavior",
+                detail: "Judge whether you followed the process before judging profit.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Discipline gets easier when the routine is simple and specific.",
+      "Checklists help preserve setup quality and risk discipline.",
+      "Consistency comes from process repetition, not from mood.",
+    ],
+    botBuilderSignals: ["Pre-market checklist", "Allowed setup list", "Daily max loss", "Review log"],
+    nextLessonSlug: "common-beginner-mistakes",
+  },
+  {
+    slug: "common-beginner-mistakes",
+    moduleSlug: "psychology-and-discipline",
+    title: "Common Beginner Mistakes",
+    summary:
+      "New traders usually do not fail because the market hides all the answers. They fail because they repeat a small set of avoidable mistakes.",
+    objective: "Spot the most common early mistakes and understand the process fix behind each one.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Overtrading", "Chasing", "Oversizing", "No plan"],
+    sections: [
+      {
+        id: "mistake-cluster",
+        eyebrow: "Error Pattern",
+        title: "Most beginner mistakes are quality-control failures",
+        summary: "The common theme is taking trades without enough edge or structure.",
+        blocks: [
+          {
+            id: "mistake-cluster-text",
+            type: "text",
+            body:
+              "Overtrading, oversizing, moving stops, and chasing late entries often look different on the surface, but they come from the same root problem: acting without respecting setup quality and risk logic.",
+            bullets: [
+              "Overtrading lowers average setup quality.",
+              "Oversizing turns normal market noise into emotional stress.",
+              "Moving stops usually means you are changing the plan after the fact.",
+            ],
+          },
+          {
+            id: "mistake-cluster-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Reality check",
+            body: "You do not need more trades. You need better filters on which trades deserve capital.",
+          },
+        ],
+      },
+      {
+        id: "fixes-map",
+        eyebrow: "Corrections",
+        title: "Each mistake gets fixed by a rule, not by a motivational speech",
+        summary: "Translate bad habits into clear guardrails.",
+        blocks: [
+          {
+            id: "fixes-map-diagram",
+            type: "diagram",
+            title: "Mistake to rule map",
+            caption: "Guardrails keep repeated damage from compounding.",
+            items: [
+              {
+                label: "Chasing",
+                value: "Use entry zones",
+                detail: "If the trade is too extended, the rule says wait or skip.",
+              },
+              {
+                label: "Oversizing",
+                value: "Risk cap",
+                detail: "Position size should come from max dollar risk, not confidence.",
+              },
+              {
+                label: "Moving stops",
+                value: "Predefined invalidation",
+                detail: "The stop belongs where the trade thesis fails, and it does not move farther away.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Most beginner damage comes from a few repeated mistakes, not from mystery market forces.",
+      "The fix for a bad habit should be written as a specific rule or guardrail.",
+      "Better trade selection is usually more important than more activity.",
+    ],
+    botBuilderSignals: ["Skip if extended", "Max position risk", "Hard stop rule", "Trade frequency cap"],
+    nextLessonSlug: "strategy-blueprint-basics",
+  },
+  {
+    slug: "strategy-blueprint-basics",
+    moduleSlug: "psychology-and-discipline",
+    title: "Strategy Blueprint Basics",
+    summary:
+      "A strategy is a repeatable way to describe when you trade, why you enter, where you are wrong, and how you manage the outcome.",
+    objective: "Turn the ideas from earlier modules into a simple playbook structure that can later evolve into system logic.",
+    estimatedMinutes: 9,
+    xpReward: 85,
+    keyTerms: ["Setup", "Trigger", "Risk rule", "Playbook"],
+    sections: [
+      {
+        id: "blueprint-core",
+        eyebrow: "Playbook Design",
+        title: "A simple strategy answers the same questions every time",
+        summary: "This is the bridge from learning concepts to building a repeatable method.",
+        blocks: [
+          {
+            id: "blueprint-core-text",
+            type: "text",
+            body:
+              "A trading blueprint does not need to be complicated. It just needs to be clear. Define the market condition you want, the setup pattern, the trigger, the stop location, the target logic, and the conditions that make you skip the trade.",
+            bullets: [
+              "Market condition: trend, range, or volatility state.",
+              "Setup: level, pattern, or pullback you are waiting for.",
+              "Trigger: the exact event that tells you to enter.",
+              "Risk: stop placement, size, and max loss.",
+            ],
+          },
+          {
+            id: "blueprint-core-callout",
+            type: "callout",
+            tone: "bot",
+            title: "Systems thinking",
+            body: "If you cannot describe the setup as rules, you are not ready to test or automate it yet.",
+          },
+        ],
+      },
+      {
+        id: "blueprint-template",
+        eyebrow: "Template",
+        title: "Use a short template to keep your strategy honest",
+        summary: "A repeatable structure makes review and automation much easier later.",
+        blocks: [
+          {
+            id: "blueprint-template-diagram",
+            type: "diagram",
+            title: "Starter strategy template",
+            caption: "This is the skeleton behind a simple playbook.",
+            items: [
+              {
+                label: "Find",
+                value: "Market condition",
+                detail: "Only look for setups in the environments where they make sense.",
+              },
+              {
+                label: "Act",
+                value: "Trigger plus risk",
+                detail: "Enter only when confirmation appears and the stop is logical.",
+              },
+              {
+                label: "Manage",
+                value: "Target and exit rules",
+                detail: "Know in advance how you take profit, cut risk, or skip low-quality action.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "A strategy is a repeatable process, not a vague idea.",
+      "Good playbooks define setup, trigger, stop, target, and skip conditions clearly.",
+      "This blueprint is the direct on-ramp to future strategy testing and bot-building work.",
+    ],
+    botBuilderSignals: ["Market condition filter", "Entry trigger", "Stop rule", "Exit logic"],
   },
 ];
 
@@ -1350,6 +1674,71 @@ export const quizzes: Quiz[] = [
         explanation:
           "Volume adds confidence when it supports the structure and trigger you already see, but it should not replace them.",
         coaching: "Use volume as confirmation, not as a shortcut.",
+      },
+    ],
+  },
+  {
+    slug: "psychology-discipline-quiz",
+    moduleSlug: "psychology-and-discipline",
+    title: "Psychology and Discipline Quiz",
+    summary:
+      "Check whether you can spot emotional mistakes, routine gaps, and the guardrails that keep decision quality intact.",
+    xpReward: 120,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What is the best definition of FOMO in trading?",
+        choices: [
+          { id: "a", label: "Entering because the setup meets your plan exactly." },
+          { id: "b", label: "Entering because you feel urgent pressure not to miss a move." },
+          { id: "c", label: "Reducing size because volatility increased." },
+        ],
+        correctChoiceId: "b",
+        explanation:
+          "FOMO is urgency-driven action. It usually pushes traders into late entries or low-quality setups.",
+        coaching: "When urgency becomes the reason, step back and re-check the setup quality.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: discipline mostly means using strong willpower in the moment instead of having a routine.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "false",
+        explanation:
+          "Discipline gets much easier when routine removes avoidable choices before the pressure shows up.",
+        coaching: "Systems beat willpower when the market is moving fast.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which guardrail best fixes a chasing habit?",
+        choices: [
+          { id: "a", label: "A rule that only allows entries inside planned zones or after retests." },
+          { id: "b", label: "Taking larger size so late entries still feel worthwhile." },
+          { id: "c", label: "Removing the stop so the trade has more room." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Chasing is best fixed by a location rule that says the trade must still offer valid structure and risk.",
+        coaching: "The correction should be a rule, not a promise to feel different next time.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "If you cannot clearly define the setup, trigger, stop, and skip conditions, what is the best conclusion?",
+        choices: [
+          { id: "a", label: "The strategy is not clear enough yet for consistent execution or automation." },
+          { id: "b", label: "The idea is still ready for full-size live trading." },
+          { id: "c", label: "Rules are unnecessary if the chart feels obvious." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A vague strategy is hard to execute consistently and almost impossible to test or automate responsibly.",
+        coaching: "Clarity is the bridge between intuition and a real system.",
       },
     ],
   },
@@ -1622,6 +2011,94 @@ export const chartChallenges: ChartChallenge[] = [
       "This sequence maps directly to trading logic later: level, breakout close, retest hold, then trigger.",
     ],
   },
+  {
+    slug: "a-plus-or-skip-challenge",
+    moduleSlug: "psychology-and-discipline",
+    title: "A+ or Skip Challenge",
+    summary:
+      "Read a simple chart, decide whether the setup quality is still strong enough, and identify the area where emotion is most likely to cause a chase.",
+    xpReward: 125,
+    candles: [
+      { open: 64.2, high: 64.5, low: 63.9, close: 64.4 },
+      { open: 64.4, high: 64.8, low: 64.1, close: 64.7 },
+      { open: 64.7, high: 65.0, low: 64.5, close: 64.9 },
+      { open: 64.9, high: 65.2, low: 64.6, close: 65.1 },
+      { open: 65.1, high: 65.4, low: 64.9, close: 65.3 },
+      { open: 65.3, high: 66.1, low: 65.2, close: 65.9 },
+      { open: 65.9, high: 66.5, low: 65.8, close: 66.3 },
+      { open: 66.3, high: 66.8, low: 66.0, close: 66.6 },
+      { open: 66.6, high: 66.7, low: 66.1, close: 66.2 },
+      { open: 66.2, high: 66.3, low: 65.7, close: 65.9 },
+      { open: 65.9, high: 66.0, low: 65.4, close: 65.6 },
+      { open: 65.6, high: 65.8, low: 65.1, close: 65.3 },
+    ],
+    questions: [
+      {
+        id: "quality-read",
+        type: "multiple-choice",
+        prompt: "What is the cleanest decision after the late extension and rollover?",
+        instruction: "Choose the answer that respects setup quality instead of urgency.",
+        explanation:
+          "The best read is to skip the late chase. The move already stretched, then began rolling over, which means the clean risk location is gone.",
+        coaching: "When the entry is late and the stop becomes messy, discipline usually means passing.",
+        choices: [
+          { id: "skip-low-quality", label: "Skip the trade because the clean location is gone" },
+          { id: "buy-extension", label: "Buy the extension because momentum already proved itself" },
+          { id: "full-size-fade", label: "Short full size immediately with no defined structure" },
+        ],
+        correctChoiceId: "skip-low-quality",
+      },
+      {
+        id: "chase-zone",
+        type: "hotspot",
+        prompt: "Where is the chart most likely to tempt a FOMO chase?",
+        instruction: "Click the area where emotion is most likely to push a late entry.",
+        explanation:
+          "The highest-risk chase area is the top extension zone after multiple strong candles in a row. That is where late buyers usually have the worst location and weakest stop efficiency.",
+        coaching: "The more stretched the move becomes, the more you should ask whether the setup still offers a clean invalidation point.",
+        hotspots: [
+          {
+            id: "early-base",
+            label: "Early base",
+            candleStart: 0,
+            candleEnd: 3,
+            priceLow: 64.0,
+            priceHigh: 65.1,
+            correct: false,
+            explanation:
+              "This earlier base is where the structure was cleaner, not where FOMO pressure is highest.",
+          },
+          {
+            id: "late-extension",
+            label: "Late extension",
+            candleStart: 6,
+            candleEnd: 8,
+            priceLow: 66.0,
+            priceHigh: 66.8,
+            correct: true,
+            explanation:
+              "This is the chase zone. The move is stretched, traders feel urgency, and the stop location is much less efficient.",
+          },
+          {
+            id: "post-fade",
+            label: "Post-fade drift",
+            candleStart: 9,
+            candleEnd: 11,
+            priceLow: 65.1,
+            priceHigh: 66.0,
+            correct: false,
+            explanation:
+              "This area is already after the extension failed. It is no longer the classic FOMO entry point.",
+          },
+        ],
+      },
+    ],
+    coachDebrief: [
+      "Many bad trades are not bad because the chart was unreadable. They are bad because the location degraded and the trader entered anyway.",
+      "A quality filter is one of the most valuable forms of discipline you can build.",
+      "This maps directly into automation later: define when a setup is valid, and define when it is already too extended to touch.",
+    ],
+  },
 ];
 
 export const scenarios: Scenario[] = [
@@ -1827,6 +2304,125 @@ export const scenarios: Scenario[] = [
       "Structure gives the setup. The retest gives the location. The trigger gives the entry.",
       "Breakout trades become cleaner when you stop treating every impulse candle like a mandatory chase.",
       "This simulator maps directly to system design later: level detection, acceptance test, retest trigger, stop, and management.",
+    ],
+  },
+  {
+    slug: "revenge-trade-reset-simulator",
+    moduleSlug: "psychology-and-discipline",
+    title: "Revenge Trade Reset Simulator",
+    summary:
+      "Practice what to do after frustration builds so you can protect process instead of forcing trades to repair emotion.",
+    xpReward: 135,
+    setup:
+      "You just took two small losses in a row. A stock is moving fast, but the current chart is extended and no longer matches the clean setup you planned before the session.",
+    steps: [
+      {
+        id: "reset-step-1",
+        title: "Emotional pressure builds",
+        marketContext:
+          "The market is moving quickly and you feel the urge to make the losses back before the next move disappears.",
+        tapeRead: [
+          "The chart is no longer at the planned entry area.",
+          "The current urge is coming from frustration and urgency.",
+          "Your process says setup quality matters more than emotional timing.",
+        ],
+        riskCallout: "Trying to win back money fast usually lowers setup quality and increases damage.",
+        actions: [
+          {
+            id: "jump-back-in",
+            label: "Jump into the current move so you do not miss the recovery",
+            rationale: "Speed matters more than setup quality after losses.",
+          },
+          {
+            id: "pause-and-recheck",
+            label: "Pause, reset, and re-check whether the setup still meets the plan",
+            rationale: "Break the emotional loop before taking another trade.",
+          },
+          {
+            id: "double-size",
+            label: "Double size on the next trade to recover faster",
+            rationale: "A bigger win solves the emotional pressure immediately.",
+          },
+        ],
+        correctActionId: "pause-and-recheck",
+        feedback:
+          "Pausing is the correct move. The next trade must still qualify on its own merit, not because you want emotional repair.",
+        outcome:
+          "You step back, review the chart, and realize the current move is too extended to offer the planned entry quality.",
+      },
+      {
+        id: "reset-step-2",
+        title: "The setup is no longer clean",
+        marketContext:
+          "Price keeps running, but the stop would now be wide and the trade location no longer matches your plan.",
+        tapeRead: [
+          "The market may still move higher, but that does not make it your trade.",
+          "The structure no longer offers efficient risk.",
+          "A skip can be a high-quality decision.",
+        ],
+        riskCallout: "A bad trade can still win. That does not make the decision good.",
+        actions: [
+          {
+            id: "skip-and-wait",
+            label: "Skip this setup and wait for a cleaner opportunity",
+            rationale: "Protect process when the location is no longer valid.",
+          },
+          {
+            id: "enter-because-hot",
+            label: "Enter anyway because the stock is obviously strong",
+            rationale: "Momentum alone is enough reason now.",
+          },
+          {
+            id: "move-stop-later",
+            label: "Enter now and decide on the stop later",
+            rationale: "You can solve the risk after the trade starts working.",
+          },
+        ],
+        correctActionId: "skip-and-wait",
+        feedback:
+          "Skipping is disciplined execution. You are protecting capital and protecting the habit of only taking setups with real structure.",
+        outcome:
+          "The stock extends briefly, then reverses sharply. By skipping, you avoid a low-quality chase and keep your decision standard intact.",
+      },
+      {
+        id: "reset-step-3",
+        title: "End-of-sequence review",
+        marketContext:
+          "You did not force the next trade. The session is still emotionally active, but your process stayed intact.",
+        tapeRead: [
+          "Losses did not automatically produce more losses.",
+          "The decision quality stayed higher because you reset before acting.",
+          "This is how discipline protects both capital and confidence over time.",
+        ],
+        riskCallout: "The main goal after emotional disruption is often preservation, not immediate recovery.",
+        actions: [
+          {
+            id: "log-and-reset",
+            label: "Log the situation, keep size normal later, and wait for the next valid setup",
+            rationale: "Use review and process to stay grounded.",
+          },
+          {
+            id: "force-one-more",
+            label: "Force one more trade to finish the session green",
+            rationale: "The day only counts if the P&L turns positive.",
+          },
+          {
+            id: "abandon-plan",
+            label: "Drop the checklist because flexibility matters more after losses",
+            rationale: "Rules get in the way when the pressure rises.",
+          },
+        ],
+        correctActionId: "log-and-reset",
+        feedback:
+          "This is the mature choice. Review the sequence, keep your size and rules normal, and wait for actual quality instead of emotional closure.",
+        outcome:
+          "You end the sequence in control. The session stays manageable because the process remained stronger than the impulse.",
+      },
+    ],
+    closingNotes: [
+      "Discipline is often invisible because it shows up as a trade you did not take.",
+      "Good process can still include losses. Bad process can still include winners. Judge the decision first.",
+      "This simulator is also system design training: define emotional guardrails, skip conditions, and recovery rules clearly.",
     ],
   },
 ];
