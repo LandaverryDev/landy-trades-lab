@@ -2533,47 +2533,16 @@ export const chartChallenges: ChartChallenge[] = [
       },
       {
         id: "filter-zone",
-        type: "hotspot",
-        prompt: "Which highlighted area is where a late-entry filter should block the trade?",
-        instruction: "Click the zone where the move is too extended for the original setup quality.",
+        type: "price-zone",
+        prompt: "Where on the chart should a late-entry filter block the trade?",
+        instruction: "Mark the full zone where the move is too extended for the original setup quality.",
         explanation:
           "The correct filter zone is the late extension after the move already confirmed and stretched. That area often deserves a skip rule because the original reward-to-risk has degraded.",
         coaching: "A strong signal still needs a filter that says when the opportunity is already too late.",
-        hotspots: [
-          {
-            id: "base-zone",
-            label: "Early base",
-            candleStart: 0,
-            candleEnd: 4,
-            priceLow: 72.2,
-            priceHigh: 73.3,
-            correct: false,
-            explanation:
-              "This area is where the setup started forming. It is not the zone a late-entry filter is trying to block.",
-          },
-          {
-            id: "retest-zone",
-            label: "Retest zone",
-            candleStart: 7,
-            candleEnd: 9,
-            priceLow: 73.1,
-            priceHigh: 73.7,
-            correct: false,
-            explanation:
-              "This is the high-quality retest area where the setup is actually becoming more structured.",
-          },
-          {
-            id: "late-extension-zone",
-            label: "Late extension",
-            candleStart: 10,
-            candleEnd: 11,
-            priceLow: 74.0,
-            priceHigh: 74.6,
-            correct: true,
-            explanation:
-              "This is the area a good late-entry filter would reject. Price already moved, and the original stop efficiency is no longer as strong.",
-          },
-        ],
+        correctZoneLow: 74.0,
+        correctZoneHigh: 74.6,
+        tolerance: 0.2,
+        selectionLabel: "Filter zone",
       },
     ],
     coachDebrief: [

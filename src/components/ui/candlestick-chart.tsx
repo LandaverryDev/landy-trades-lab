@@ -4,6 +4,11 @@ import { useState } from "react";
 
 import type { Candle, ChartHotspot } from "@/types/trading";
 
+interface PriceZoneSelection {
+  low: number;
+  high: number;
+}
+
 interface CandlestickChartProps {
   candles: Candle[];
   hotspots?: ChartHotspot[];
@@ -16,6 +21,14 @@ interface CandlestickChartProps {
   revealPriceAnswer?: boolean;
   onPriceSelect?: (price: number) => void;
   priceSelectionLabel?: string;
+  selectedZone?: PriceZoneSelection | null;
+  correctZone?: PriceZoneSelection | null;
+  zoneDraftPrice?: number | null;
+  zoneTolerance?: number;
+  revealZoneAnswer?: boolean;
+  onZoneDraftSelect?: (price: number) => void;
+  onZoneSelect?: (zone: PriceZoneSelection) => void;
+  zoneSelectionLabel?: string;
   height?: number;
 }
 
@@ -31,6 +44,14 @@ export function CandlestickChart({
   revealPriceAnswer = false,
   onPriceSelect,
   priceSelectionLabel = "Selected level",
+  selectedZone,
+  correctZone,
+  zoneDraftPrice,
+  zoneTolerance = 0.2,
+  revealZoneAnswer = false,
+  onZoneDraftSelect,
+  onZoneSelect,
+  zoneSelectionLabel = "Selected zone",
   height = 360,
 }: CandlestickChartProps) {
   const [hoverPrice, setHoverPrice] = useState<number | null>(null);
@@ -55,6 +76,7 @@ export function CandlestickChart({
   const plotHeight = height - paddingY * 2;
 
   const guidePrices = Array.from({ length: 5 }, (_, index) => minPrice + (priceRange / 4) * index);
+  const zoneSelectionActive = Boolean(onZoneDraftSelect || onZoneSelect);
   const selectedPriceCorrect =
     selectedPrice !== null &&
     selectedPrice !== undefined &&
@@ -69,6 +91,30 @@ export function CandlestickChart({
           height: Math.abs(priceToY(correctPrice - priceTolerance) - priceToY(correctPrice + priceTolerance)),
         }
       : null;
+  const normalizedSelectedZone = selectedZone
+    ? {
+        low: Math.min(selectedZone.low, selectedZone.high),
+        high: Math.max(selectedZone.low, selectedZone.high),
+      }
+    : null;
+  const normalizedCorrectZone = correctZone
+    ? {
+        low: Math.min(correctZone.low, correctZone.high),
+        high: Math.max(correctZone.low, correctZone.high),
+      }
+    : null;
+  const draftZone =
+    zoneDraftPrice !== null && zoneDraftPrice !== undefined && hoverPrice !== null
+      ? {
+          low: Math.min(zoneDraftPrice, hoverPrice),
+          high: Math.max(zoneDraftPrice, hoverPrice),
+        }
+      : null;
+  const selectedZoneCorrect =
+    normalizedSelectedZone &&
+    normalizedCorrectZone &&
+    Math.abs(normalizedSelectedZone.low - normalizedCorrectZone.low) <= zoneTolerance &&
+    Math.abs(normalizedSelectedZone.high - normalizedCorrectZone.high) <= zoneTolerance;
 
   function clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
@@ -86,7 +132,7 @@ export function CandlestickChart({
   }
 
   function handlePricePointerMove(event: React.PointerEvent<SVGRectElement>) {
-    if (!onPriceSelect) {
+    if (!onPriceSelect && !zoneSelectionActive) {
       return;
     }
 
@@ -99,12 +145,23 @@ export function CandlestickChart({
   }
 
   function handlePriceSelect(event: React.PointerEvent<SVGRectElement>) {
-    if (!onPriceSelect) {
+    const point = resolveSvgPoint(event);
+    const price = Number(yToPrice(point.y).toFixed(2));
+
+    if (onPriceSelect) {
+      onPriceSelect(price);
       return;
     }
 
-    const point = resolveSvgPoint(event);
-    onPriceSelect(Number(yToPrice(point.y).toFixed(2)));
+    if (onZoneSelect && zoneDraftPrice !== null && zoneDraftPrice !== undefined) {
+      onZoneSelect({
+        low: Math.min(zoneDraftPrice, price),
+        high: Math.max(zoneDraftPrice, price),
+      });
+      return;
+    }
+
+    onZoneDraftSelect?.(price);
   }
 
   return (
@@ -152,7 +209,7 @@ export function CandlestickChart({
           );
         })}
 
-        {onPriceSelect ? (
+        {onPriceSelect || zoneSelectionActive ? (
           <rect
             x={paddingX}
             y={paddingY}
@@ -164,6 +221,32 @@ export function CandlestickChart({
             onPointerMove={handlePricePointerMove}
             onPointerLeave={handlePricePointerLeave}
             onClick={handlePriceSelect}
+          />
+        ) : null}
+
+        {revealZoneAnswer && normalizedCorrectZone ? (
+          <rect
+            x={paddingX}
+            y={priceToY(normalizedCorrectZone.high)}
+            width={plotWidth}
+            height={Math.max(priceToY(normalizedCorrectZone.low) - priceToY(normalizedCorrectZone.high), 8)}
+            fill="rgba(34,197,94,0.12)"
+            stroke="rgba(34,197,94,0.4)"
+            strokeDasharray="10 8"
+            rx="18"
+          />
+        ) : null}
+
+        {draftZone ? (
+          <rect
+            x={paddingX}
+            y={priceToY(draftZone.high)}
+            width={plotWidth}
+            height={Math.max(priceToY(draftZone.low) - priceToY(draftZone.high), 8)}
+            fill="rgba(56,189,248,0.08)"
+            stroke="rgba(56,189,248,0.45)"
+            strokeDasharray="8 8"
+            rx="18"
           />
         ) : null}
 
@@ -215,7 +298,7 @@ export function CandlestickChart({
           );
         })}
 
-        {hoverPrice !== null && onPriceSelect ? (
+        {hoverPrice !== null && (onPriceSelect || zoneSelectionActive) ? (
           <g pointerEvents="none">
             <line
               x1={paddingX}
@@ -324,6 +407,61 @@ export function CandlestickChart({
               {priceSelectionLabel} {selectedPrice.toFixed(2)}
             </text>
           </g>
+        ) : null}
+
+        {normalizedSelectedZone ? (
+          <g pointerEvents="none">
+            <rect
+              x={paddingX}
+              y={priceToY(normalizedSelectedZone.high)}
+              width={plotWidth}
+              height={Math.max(priceToY(normalizedSelectedZone.low) - priceToY(normalizedSelectedZone.high), 8)}
+              fill={
+                revealZoneAnswer
+                  ? selectedZoneCorrect
+                    ? "rgba(34,197,94,0.12)"
+                    : "rgba(251,113,133,0.12)"
+                  : "rgba(56,189,248,0.1)"
+              }
+              stroke={
+                revealZoneAnswer
+                  ? selectedZoneCorrect
+                    ? "rgba(34,197,94,0.95)"
+                    : "rgba(251,113,133,0.95)"
+                  : "rgba(56,189,248,0.95)"
+              }
+              strokeWidth="2"
+              rx="18"
+            />
+            <text
+              x={paddingX + 8}
+              y={priceToY(normalizedSelectedZone.high) - 8}
+              fill={
+                revealZoneAnswer
+                  ? selectedZoneCorrect
+                    ? "rgba(187,247,208,0.95)"
+                    : "rgba(254,205,211,0.95)"
+                  : "rgba(186,230,253,0.95)"
+              }
+              fontSize="14"
+              fontWeight="600"
+            >
+              {zoneSelectionLabel} {normalizedSelectedZone.low.toFixed(2)} - {normalizedSelectedZone.high.toFixed(2)}
+            </text>
+          </g>
+        ) : null}
+
+        {revealZoneAnswer && normalizedCorrectZone ? (
+          <text
+            x={width - paddingX - 8}
+            y={priceToY(normalizedCorrectZone.high) - 8}
+            textAnchor="end"
+            fill="rgba(187,247,208,0.95)"
+            fontSize="14"
+            fontWeight="600"
+          >
+            Answer zone {normalizedCorrectZone.low.toFixed(2)} - {normalizedCorrectZone.high.toFixed(2)}
+          </text>
         ) : null}
 
         <rect

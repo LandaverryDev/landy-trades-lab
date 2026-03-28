@@ -14,6 +14,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
   const [selectedHotspotId, setSelectedHotspotId] = useState<string | null>(null);
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+  const [zoneDraftPrice, setZoneDraftPrice] = useState<number | null>(null);
+  const [selectedZone, setSelectedZone] = useState<{ low: number; high: number } | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -33,9 +35,17 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
       ? selectedChoiceId === question.correctChoiceId
       : question.type === "hotspot"
         ? Boolean(selectedHotspot?.correct)
-        : selectedPrice !== null &&
-          question.correctPrice !== undefined &&
-          Math.abs(selectedPrice - question.correctPrice) <= (question.tolerance ?? 0.25);
+        : question.type === "price-line"
+          ? selectedPrice !== null &&
+            question.correctPrice !== undefined &&
+            Math.abs(selectedPrice - question.correctPrice) <= (question.tolerance ?? 0.25)
+          : selectedZone !== null &&
+            question.correctZoneLow !== undefined &&
+            question.correctZoneHigh !== undefined &&
+            Math.abs(selectedZone.low - Math.min(question.correctZoneLow, question.correctZoneHigh)) <=
+              (question.tolerance ?? 0.25) &&
+            Math.abs(selectedZone.high - Math.max(question.correctZoneLow, question.correctZoneHigh)) <=
+              (question.tolerance ?? 0.25);
 
   function handleSubmit() {
     if (submitted) {
@@ -51,6 +61,10 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     }
 
     if (question.type === "price-line" && selectedPrice === null) {
+      return;
+    }
+
+    if (question.type === "price-zone" && !selectedZone) {
       return;
     }
 
@@ -73,6 +87,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setSelectedChoiceId(null);
     setSelectedHotspotId(null);
     setSelectedPrice(null);
+    setZoneDraftPrice(null);
+    setSelectedZone(null);
     setSubmitted(false);
   }
 
@@ -81,6 +97,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
     setSelectedChoiceId(null);
     setSelectedHotspotId(null);
     setSelectedPrice(null);
+    setZoneDraftPrice(null);
+    setSelectedZone(null);
     setSubmitted(false);
     setCorrectCount(0);
     setCompleted(false);
@@ -96,8 +114,8 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
           <p className="text-sm uppercase tracking-[0.28em] text-fuchsia-300">Chart Challenge Complete</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">{percent}% chart accuracy</h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">
-            You completed a chart drill that mixed directional reading, direct level placement, and setup-quality
-            decisions on the chart itself.
+            You completed a chart drill that mixed directional reading, direct level placement, zone marking, and
+            setup-quality decisions on the chart itself.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             <SummaryStat label="Correct" value={`${correctCount}/${challenge.questions.length}`} />
@@ -179,6 +197,23 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
             revealPriceAnswer={question.type === "price-line" ? submitted : false}
             onPriceSelect={question.type === "price-line" && !submitted ? setSelectedPrice : undefined}
             priceSelectionLabel={question.selectionLabel}
+            selectedZone={question.type === "price-zone" ? selectedZone : null}
+            correctZone={
+              question.type === "price-zone" &&
+              question.correctZoneLow !== undefined &&
+              question.correctZoneHigh !== undefined
+                ? {
+                    low: question.correctZoneLow,
+                    high: question.correctZoneHigh,
+                  }
+                : null
+            }
+            zoneDraftPrice={question.type === "price-zone" ? zoneDraftPrice : null}
+            zoneTolerance={question.type === "price-zone" ? question.tolerance : undefined}
+            revealZoneAnswer={question.type === "price-zone" ? submitted : false}
+            onZoneDraftSelect={question.type === "price-zone" && !submitted ? setZoneDraftPrice : undefined}
+            onZoneSelect={question.type === "price-zone" && !submitted ? setSelectedZone : undefined}
+            zoneSelectionLabel={question.selectionLabel}
           />
 
           {question.type === "multiple-choice" ? (
@@ -225,6 +260,34 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
               </p>
             </div>
           ) : null}
+
+          {question.type === "price-zone" ? (
+            <div className="rounded-[24px] border border-fuchsia-400/12 bg-fuchsia-400/[0.05] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-fuchsia-100/70">Zone Markup</p>
+              <p className="mt-3 text-sm leading-6 text-slate-200">
+                Click once for one edge of the zone, then click again for the opposite edge.
+              </p>
+              <p className="mt-3 text-sm text-slate-300">
+                {selectedZone
+                  ? `${question.selectionLabel ?? "Selected zone"}: ${selectedZone.low.toFixed(2)} - ${selectedZone.high.toFixed(2)}`
+                  : zoneDraftPrice !== null
+                    ? `First edge set at ${zoneDraftPrice.toFixed(2)}. Click again to complete the zone.`
+                    : "No zone marked yet."}
+              </p>
+              {(selectedZone || zoneDraftPrice !== null) && !submitted ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setZoneDraftPrice(null);
+                    setSelectedZone(null);
+                  }}
+                  className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/[0.05]"
+                >
+                  Reset zone
+                </button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-5">
@@ -236,7 +299,9 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                   ? "Pick the best answer before revealing feedback."
                   : question.type === "hotspot"
                     ? "Click a highlighted zone on the chart, then reveal the answer."
-                    : "Place a line directly on the chart where you believe the key level belongs."}
+                    : question.type === "price-line"
+                      ? "Place a line directly on the chart where you believe the key level belongs."
+                      : "Mark the full support or resistance band by placing both edges directly on the chart."}
               </p>
             ) : (
               <>
@@ -262,7 +327,9 @@ export function ChartChallengePlayer({ challenge }: { challenge: ChartChallenge 
                     ? !selectedChoiceId
                     : question.type === "hotspot"
                       ? !selectedHotspotId
-                      : selectedPrice === null
+                      : question.type === "price-line"
+                        ? selectedPrice === null
+                        : selectedZone === null
                 }
                 onClick={handleSubmit}
                 className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(90deg,#12eca7,#38bdf8)] px-4 py-3 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
