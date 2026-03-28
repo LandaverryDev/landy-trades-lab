@@ -281,6 +281,7 @@ export const learningModules: LearningModule[] = [
     ],
     quizSlug: "psychology-discipline-quiz",
     chartChallengeSlug: "a-plus-or-skip-challenge",
+    reviewChartChallengeSlugs: ["discipline-filter-review-challenge"],
     simulatorSlug: "revenge-trade-reset-simulator",
   },
   {
@@ -310,6 +311,7 @@ export const learningModules: LearningModule[] = [
     ],
     quizSlug: "strategy-systems-bots-quiz",
     chartChallengeSlug: "rules-on-chart-challenge",
+    reviewChartChallengeSlugs: ["signal-filter-review-challenge"],
     simulatorSlug: "signal-stack-simulator",
   },
 ];
@@ -5142,6 +5144,61 @@ export const chartChallenges: ChartChallenge[] = [
     ],
   },
   {
+    slug: "discipline-filter-review-challenge",
+    moduleSlug: "psychology-and-discipline",
+    title: "Discipline Filter Review",
+    summary:
+      "Reinforce the difference between a clean setup and an emotionally tempting extension that should be filtered out.",
+    xpReward: 95,
+    candles: [
+      { open: 58.1, high: 58.5, low: 57.9, close: 58.4 },
+      { open: 58.4, high: 58.9, low: 58.2, close: 58.8 },
+      { open: 58.8, high: 59.3, low: 58.7, close: 59.2 },
+      { open: 59.2, high: 59.8, low: 59.0, close: 59.6 },
+      { open: 59.6, high: 60.4, low: 59.5, close: 60.1 },
+      { open: 60.1, high: 60.8, low: 59.9, close: 60.6 },
+      { open: 60.6, high: 61.0, low: 60.3, close: 60.4 },
+      { open: 60.4, high: 60.5, low: 59.9, close: 60.0 },
+      { open: 60.0, high: 60.2, low: 59.5, close: 59.7 },
+      { open: 59.7, high: 59.9, low: 59.2, close: 59.4 },
+    ],
+    questions: [
+      {
+        id: "discipline-decision",
+        type: "multiple-choice",
+        prompt: "What is the cleanest disciplined read once the move becomes stretched and starts hesitating?",
+        instruction: "Choose the answer that protects process instead of chasing urgency.",
+        explanation:
+          "The best read is to stop treating the extension like a clean long entry. The setup may have been good earlier, but the location has degraded and the chart is starting to lose momentum.",
+        coaching: "Discipline is often the choice to stop reaching after the market already gave the clean entry somewhere else.",
+        choices: [
+          { id: "skip-extension", label: "Skip the late extension because the clean location is gone" },
+          { id: "buy-because-strong", label: "Buy immediately because the trend was strong a few candles ago" },
+          { id: "double-down", label: "Increase size because hesitation means the breakout is about to rip again" },
+        ],
+        correctChoiceId: "skip-extension",
+      },
+      {
+        id: "fomo-zone",
+        type: "price-zone",
+        prompt: "Mark the extension zone where a discipline filter should block the trade.",
+        instruction: "Mark the full area where the move is too stretched for the original setup quality.",
+        explanation:
+          "The correct zone is the late extension near the highs, where urgency is highest and the stop efficiency is worst. That is the exact area a discipline filter should protect against.",
+        coaching: "If the move is already extended, the filter should do the thinking for you before emotion takes over.",
+        correctZoneLow: 60.1,
+        correctZoneHigh: 61.0,
+        tolerance: 0.18,
+        selectionLabel: "Discipline filter zone",
+      },
+    ],
+    coachDebrief: [
+      "The emotional trap is usually not hidden. It is often the obvious late extension everyone feels pressure to chase.",
+      "A discipline filter turns a vague promise into a concrete skip rule.",
+      "This is the bridge from trading psychology into system guardrails.",
+    ],
+  },
+  {
     slug: "rules-on-chart-challenge",
     moduleSlug: "strategy-systems-and-bots",
     title: "Rules on Chart Challenge",
@@ -5196,6 +5253,63 @@ export const chartChallenges: ChartChallenge[] = [
       "A useful strategy does not just define when to enter. It also defines when the same idea is already too late.",
       "Entry signals and skip filters work together to create cleaner automation behavior.",
       "This is the bridge from chart reading to executable logic: setup zone, trigger, and disqualifying extension.",
+    ],
+  },
+  {
+    slug: "signal-filter-review-challenge",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Signal and Filter Review",
+    summary:
+      "Reinforce the split between the valid setup zone and the later extension where the filter should block automation.",
+    xpReward: 100,
+    candles: [
+      { open: 84.1, high: 84.5, low: 83.9, close: 84.4 },
+      { open: 84.4, high: 84.9, low: 84.2, close: 84.7 },
+      { open: 84.7, high: 85.1, low: 84.4, close: 84.9 },
+      { open: 84.9, high: 85.0, low: 84.6, close: 84.8 },
+      { open: 84.8, high: 85.5, low: 84.7, close: 85.3 },
+      { open: 85.3, high: 85.9, low: 85.1, close: 85.7 },
+      { open: 85.7, high: 85.8, low: 85.2, close: 85.4 },
+      { open: 85.4, high: 85.5, low: 85.0, close: 85.1 },
+      { open: 85.1, high: 85.7, low: 85.0, close: 85.6 },
+      { open: 85.6, high: 86.1, low: 85.5, close: 86.0 },
+      { open: 86.0, high: 86.4, low: 85.9, close: 86.3 },
+      { open: 86.3, high: 86.6, low: 86.1, close: 86.5 },
+    ],
+    questions: [
+      {
+        id: "signal-zone",
+        type: "price-zone",
+        prompt: "Mark the valid setup zone where the system's original breakout-retest logic actually belongs.",
+        instruction: "Mark the retest area that creates the cleanest signal-plus-stop structure.",
+        explanation:
+          "The valid setup zone is the breakout retest area in the middle of the chart, not the later extension. That zone is where structure, trigger, and invalidation line up properly.",
+        coaching: "A system's signal zone is where the trade becomes structured, not where the move merely looks exciting.",
+        correctZoneLow: 85.0,
+        correctZoneHigh: 85.4,
+        tolerance: 0.16,
+        selectionLabel: "Signal zone",
+      },
+      {
+        id: "filter-decision",
+        type: "multiple-choice",
+        prompt: "What should the filter do once price is already pushing through the final late extension?",
+        instruction: "Choose the answer that reflects how good systems avoid low-quality late entries.",
+        explanation:
+          "The filter should block the late extension. The setup was valid earlier near the retest, but the final push is already too stretched to offer the same structure and reward-to-risk.",
+        coaching: "Good automation is often better at saying no than it is at finding more entries.",
+        choices: [
+          { id: "block-late-extension", label: "Block the entry because the move is already too extended" },
+          { id: "allow-any-breakout", label: "Allow the trade because momentum is strongest at the end of the move" },
+          { id: "ignore-location", label: "Ignore location because the trigger happened at some point earlier" },
+        ],
+        correctChoiceId: "block-late-extension",
+      },
+    ],
+    coachDebrief: [
+      "A strategy needs both a signal zone and a disqualifying extension filter.",
+      "The best systems are selective because they remember what the original setup required.",
+      "This is one of the cleanest repeated lessons in bot-builder thinking: define when the same chart idea is valid, then define when it is already too late.",
     ],
   },
 ];
