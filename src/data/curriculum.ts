@@ -149,14 +149,23 @@ export const learningModules: LearningModule[] = [
     summary:
       "Package setups into rules, signals, filters, and risk controls that can later power automation tools.",
     xpReward: 620,
-    lessonCount: 6,
-    estimatedMinutes: 58,
+    lessonCount: 5,
+    estimatedMinutes: 45,
     progressPercent: 0,
     focusAreas: ["Signals", "Logic", "Risk engine", "Automation"],
     botBuilderHook:
       "Every earlier module feeds directly into this systems layer.",
     unlockRule: "Unlock after Psychology and Discipline",
-    lessonSlugs: [],
+    lessonSlugs: [
+      "from-chart-to-rule",
+      "signals-and-filters",
+      "risk-engine-basics",
+      "automation-state-machine",
+      "strategy-testing-basics",
+    ],
+    quizSlug: "strategy-systems-bots-quiz",
+    chartChallengeSlug: "rules-on-chart-challenge",
+    simulatorSlug: "signal-stack-simulator",
   },
 ];
 
@@ -1414,6 +1423,391 @@ export const lessons: Lesson[] = [
       "This blueprint is the direct on-ramp to future strategy testing and bot-building work.",
     ],
     botBuilderSignals: ["Market condition filter", "Entry trigger", "Stop rule", "Exit logic"],
+    nextLessonSlug: "from-chart-to-rule",
+  },
+  {
+    slug: "from-chart-to-rule",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "From Chart Idea to Rule",
+    summary:
+      "The first step in automation is translating a visual setup into conditions a system can actually test.",
+    objective: "Convert a chart concept into rule language with clear conditions, triggers, and invalidation.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["Condition", "Trigger", "Rule", "Invalidation"],
+    sections: [
+      {
+        id: "rule-translation",
+        eyebrow: "Rule Translation",
+        title: "A setup must be measurable before a system can use it",
+        summary: "Loose language sounds useful until you try to code or test it.",
+        blocks: [
+          {
+            id: "rule-translation-text",
+            type: "text",
+            body:
+              "Statements like 'looks strong' or 'feels weak' are not enough for a strategy engine. A usable rule needs clear conditions, such as price above a level, a breakout close, a pullback into a zone, or a stop below structure.",
+            bullets: [
+              "Condition: what must already be true before the setup matters.",
+              "Trigger: the exact event that causes the entry.",
+              "Invalidation: the level that proves the idea failed.",
+            ],
+          },
+          {
+            id: "rule-translation-callout",
+            type: "callout",
+            tone: "bot",
+            title: "Automation test",
+            body: "If two people would code your rule differently, the rule is still too vague.",
+          },
+        ],
+      },
+      {
+        id: "rule-stack",
+        eyebrow: "Template",
+        title: "Think in condition, trigger, risk, and exit",
+        summary: "That sequence is simple enough to trade and clear enough to automate later.",
+        blocks: [
+          {
+            id: "rule-stack-diagram",
+            type: "diagram",
+            title: "Rule stack",
+            caption: "Every reusable setup can be reduced into this skeleton.",
+            items: [
+              {
+                label: "Condition",
+                value: "Market state",
+                detail: "Trend, range, level context, or volatility environment.",
+              },
+              {
+                label: "Trigger",
+                value: "Entry event",
+                detail: "Breakout close, reclaim, pullback response, or pattern confirmation.",
+              },
+              {
+                label: "Risk and exit",
+                value: "Protection plus payoff",
+                detail: "Stop, size, target, and management rule.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Visual ideas become useful systems only when they are measurable.",
+      "Every setup needs a condition, trigger, invalidation, and exit plan.",
+      "Clear rule language is the foundation of both testing and automation.",
+    ],
+    botBuilderSignals: ["Condition rule", "Trigger event", "Invalidation level", "Exit rule"],
+    nextLessonSlug: "signals-and-filters",
+  },
+  {
+    slug: "signals-and-filters",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Signals and Filters",
+    summary:
+      "Signals tell the system when to act. Filters tell it when not to act. Good automation needs both.",
+    objective: "Separate entry signals from quality filters so the system does not fire in every bad market condition.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["Signal", "Filter", "Regime", "Selectivity"],
+    sections: [
+      {
+        id: "signal-vs-filter",
+        eyebrow: "System Design",
+        title: "A signal is not enough if the environment is wrong",
+        summary: "The same setup can behave differently depending on context.",
+        blocks: [
+          {
+            id: "signal-vs-filter-text",
+            type: "text",
+            body:
+              "A breakout trigger might be your signal, but you may still want filters such as trend direction, volume expansion, or time-of-day constraints. Filters improve selectivity by reducing lower-quality situations.",
+            bullets: [
+              "Signal answers: should the system consider entry now?",
+              "Filter answers: is this the right environment for that signal?",
+              "Too few filters creates noise. Too many filters can remove too many trades.",
+            ],
+          },
+          {
+            id: "signal-vs-filter-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Practical rule",
+            body: "Build the entry logic first, then add filters only when they improve quality for a clear reason.",
+          },
+        ],
+      },
+      {
+        id: "filter-map",
+        eyebrow: "Examples",
+        title: "Filters are how you say no to weak trades",
+        summary: "A good strategy often improves more from better filters than from more entries.",
+        blocks: [
+          {
+            id: "filter-map-diagram",
+            type: "diagram",
+            title: "Common filters",
+            caption: "Filters shape when the signal is allowed to matter.",
+            items: [
+              {
+                label: "Trend filter",
+                value: "Direction aligned",
+                detail: "Only allow longs when higher timeframe direction supports them.",
+              },
+              {
+                label: "Participation filter",
+                value: "Volume present",
+                detail: "Require enough activity so the move is not running on weak conviction.",
+              },
+              {
+                label: "Session filter",
+                value: "Time window",
+                detail: "Only trade when liquidity and behavior fit the setup.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Signals create action. Filters improve selectivity.",
+      "Context matters because not every valid-looking trigger is worth taking.",
+      "The best filters are specific and defensible, not random complexity.",
+    ],
+    botBuilderSignals: ["Entry signal", "Trend filter", "Volume filter", "Session filter"],
+    nextLessonSlug: "risk-engine-basics",
+  },
+  {
+    slug: "risk-engine-basics",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Risk Engine Basics",
+    summary:
+      "A strategy is incomplete until risk control is embedded directly into the logic rather than treated as an afterthought.",
+    objective: "Define the risk rules that control size, stops, max loss, and exposure at the system level.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["Risk engine", "Exposure", "Max loss", "Position sizing"],
+    sections: [
+      {
+        id: "risk-engine-core",
+        eyebrow: "Control Layer",
+        title: "The risk engine decides how much the strategy is allowed to do",
+        summary: "Good strategies survive because the risk layer constrains damage.",
+        blocks: [
+          {
+            id: "risk-engine-core-text",
+            type: "text",
+            body:
+              "The setup logic decides when there may be an opportunity. The risk engine decides whether the strategy is still allowed to take it, how large it can be, and when trading should stop for the day.",
+            bullets: [
+              "Per-trade risk keeps one idea from causing outsized damage.",
+              "Daily max loss prevents emotional or systematic spirals.",
+              "Exposure limits stop multiple positions from stacking hidden risk.",
+            ],
+          },
+          {
+            id: "risk-engine-core-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Missing piece",
+            body: "Many new strategies fail because they focus only on entries and ignore how risk compounds across a session.",
+          },
+        ],
+      },
+      {
+        id: "risk-engine-template",
+        eyebrow: "Design Template",
+        title: "Risk rules should exist above any single setup",
+        summary: "They are portfolio behavior rules, not just entry details.",
+        blocks: [
+          {
+            id: "risk-engine-template-diagram",
+            type: "diagram",
+            title: "Core risk engine checks",
+            caption: "These checks decide whether the strategy can act at all.",
+            items: [
+              {
+                label: "Can enter?",
+                value: "Risk available",
+                detail: "Only act if the daily and per-trade limits allow it.",
+              },
+              {
+                label: "How large?",
+                value: "Size from stop",
+                detail: "Compute size from max risk and invalidation distance.",
+              },
+              {
+                label: "When stop?",
+                value: "Session guardrail",
+                detail: "Pause trading after max loss or abnormal conditions.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Risk control belongs inside the strategy design, not outside it.",
+      "Per-trade, per-session, and exposure rules all matter.",
+      "A strong risk engine is one of the biggest differences between ideas and real systems.",
+    ],
+    botBuilderSignals: ["Max trade risk", "Daily stop", "Exposure cap", "Size calculation"],
+    nextLessonSlug: "automation-state-machine",
+  },
+  {
+    slug: "automation-state-machine",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Automation State Logic",
+    summary:
+      "Automated trading systems often behave like state machines: waiting, watching, triggering, managing, and stopping.",
+    objective: "Understand how trading automation moves through states instead of reacting to every tick the same way.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["State machine", "Waiting", "Triggered", "Managing"],
+    sections: [
+      {
+        id: "state-machine-core",
+        eyebrow: "Execution Logic",
+        title: "Systems work best when each market situation maps to a clear state",
+        summary: "This keeps the logic readable and prevents conflicting actions.",
+        blocks: [
+          {
+            id: "state-machine-core-text",
+            type: "text",
+            body:
+              "A bot may spend most of its time waiting. Then it detects a valid condition, watches for a trigger, enters, manages the open position, and finally exits or pauses. Thinking in states makes strategy behavior easier to debug and improve.",
+            bullets: [
+              "Waiting state: no setup or no permission to trade.",
+              "Setup state: conditions are close but not confirmed.",
+              "Active state: a position is open and management logic now matters.",
+            ],
+          },
+          {
+            id: "state-machine-core-callout",
+            type: "callout",
+            tone: "bot",
+            title: "Why it matters",
+            body: "State-based logic reduces contradictions, such as entering twice, managing too early, or ignoring a stop condition.",
+          },
+        ],
+      },
+      {
+        id: "state-machine-flow",
+        eyebrow: "Flow Design",
+        title: "State transitions are the real logic map of a strategy",
+        summary: "This is how the strategy decides what happens next.",
+        blocks: [
+          {
+            id: "state-machine-flow-diagram",
+            type: "diagram",
+            title: "Starter state flow",
+            caption: "Each transition requires a clear reason.",
+            items: [
+              {
+                label: "Wait",
+                value: "No edge yet",
+                detail: "The system stays idle until the setup and filters align.",
+              },
+              {
+                label: "Trigger",
+                value: "Entry event",
+                detail: "A confirmed signal moves the system from watching to acting.",
+              },
+              {
+                label: "Manage and exit",
+                value: "Open position logic",
+                detail: "Once active, the system follows stop, target, and fail-safe rules.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Bots should react differently depending on the current state of the setup or trade.",
+      "State logic makes strategies easier to reason about and debug.",
+      "Clear transitions help prevent contradictory or duplicate actions.",
+    ],
+    botBuilderSignals: ["State transition", "Setup watcher", "Active position manager", "Fail-safe stop"],
+    nextLessonSlug: "strategy-testing-basics",
+  },
+  {
+    slug: "strategy-testing-basics",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Strategy Testing Basics",
+    summary:
+      "A strategy idea becomes trustworthy only after you test how it behaves across many trades and different market conditions.",
+    objective: "Understand the first testing questions that matter before trusting a strategy or automation idea.",
+    estimatedMinutes: 9,
+    xpReward: 95,
+    keyTerms: ["Backtest", "Sample size", "Expectancy", "Review loop"],
+    sections: [
+      {
+        id: "testing-core",
+        eyebrow: "Validation",
+        title: "Testing is how you learn whether the rules have real edge",
+        summary: "A few winning trades do not prove anything by themselves.",
+        blocks: [
+          {
+            id: "testing-core-text",
+            type: "text",
+            body:
+              "Testing asks whether the strategy can survive repetition. You want to know how often it wins, how large the wins and losses tend to be, how deep the drawdowns get, and whether the rules still make sense after real review.",
+            bullets: [
+              "Sample size matters more than a few memorable wins.",
+              "Expectancy matters more than raw win rate alone.",
+              "Review matters because bad assumptions can hide inside a decent-looking result.",
+            ],
+          },
+          {
+            id: "testing-core-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Useful habit",
+            body: "Treat every test result as feedback about the rules, not as proof that you found a magic setup.",
+          },
+        ],
+      },
+      {
+        id: "testing-loop",
+        eyebrow: "Improvement Loop",
+        title: "Good strategy work is a loop of define, test, review, and refine",
+        summary: "The edge is built iteratively, not all at once.",
+        blocks: [
+          {
+            id: "testing-loop-diagram",
+            type: "diagram",
+            title: "Testing loop",
+            caption: "Each pass should improve clarity, not just add more complexity.",
+            items: [
+              {
+                label: "Define",
+                value: "Write the rules",
+                detail: "Make the setup measurable enough to test fairly.",
+              },
+              {
+                label: "Test",
+                value: "Review outcomes",
+                detail: "Measure win rate, payoff, drawdown, and consistency.",
+              },
+              {
+                label: "Refine",
+                value: "Improve intelligently",
+                detail: "Adjust the logic only when the reason is defensible, not emotional.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Testing is what turns a story into evidence.",
+      "Sample size, expectancy, and drawdown all matter when judging a strategy.",
+      "Refinement should make the rules clearer and stronger, not just more complicated.",
+    ],
+    botBuilderSignals: ["Backtest input", "Expectancy review", "Drawdown guardrail", "Refinement loop"],
   },
 ];
 
@@ -1739,6 +2133,71 @@ export const quizzes: Quiz[] = [
         explanation:
           "A vague strategy is hard to execute consistently and almost impossible to test or automate responsibly.",
         coaching: "Clarity is the bridge between intuition and a real system.",
+      },
+    ],
+  },
+  {
+    slug: "strategy-systems-bots-quiz",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Strategy Systems and Bots Quiz",
+    summary:
+      "Check whether you can translate setups into rules, distinguish signals from filters, and think in risk and state logic.",
+    xpReward: 130,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What makes a chart idea usable for automation?",
+        choices: [
+          { id: "a", label: "It can be described with measurable conditions, triggers, and risk rules." },
+          { id: "b", label: "It feels obvious to an experienced trader." },
+          { id: "c", label: "It worked once in a fast market." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A system needs measurable logic. Visual intuition alone is not enough for testing or automation.",
+        coaching: "If the setup cannot be written clearly, it cannot be tested clearly.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: a signal and a filter are basically the same thing.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "false",
+        explanation:
+          "Signals tell the strategy when an entry event appears. Filters decide whether the environment is good enough to allow that signal.",
+        coaching: "Good systems usually need both an action trigger and a context gate.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which item belongs most clearly to the risk engine?",
+        choices: [
+          { id: "a", label: "Daily max loss and position sizing rules" },
+          { id: "b", label: "Whether a candle looks exciting" },
+          { id: "c", label: "A vague sense that the market is hot" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "The risk engine governs whether the strategy may trade and how much damage it is allowed to take.",
+        coaching: "Risk rules sit above any single setup and protect the system as a whole.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "Why is state logic useful in an automated strategy?",
+        choices: [
+          { id: "a", label: "It helps the system behave differently when waiting, entering, managing, or exiting." },
+          { id: "b", label: "It makes stops unnecessary." },
+          { id: "c", label: "It guarantees that any signal will be profitable." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "State logic keeps the strategy organized and prevents conflicting actions across different stages of a trade.",
+        coaching: "A clean state map makes automation easier to debug and safer to run.",
       },
     ],
   },
@@ -2099,6 +2558,94 @@ export const chartChallenges: ChartChallenge[] = [
       "This maps directly into automation later: define when a setup is valid, and define when it is already too extended to touch.",
     ],
   },
+  {
+    slug: "rules-on-chart-challenge",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Rules on Chart Challenge",
+    summary:
+      "Practice turning a chart into explicit rule logic by identifying the valid setup zone and the filter that should block a weak late entry.",
+    xpReward: 130,
+    candles: [
+      { open: 72.4, high: 72.9, low: 72.1, close: 72.7 },
+      { open: 72.7, high: 73.1, low: 72.5, close: 72.9 },
+      { open: 72.9, high: 73.3, low: 72.6, close: 73.1 },
+      { open: 73.1, high: 73.4, low: 72.8, close: 73.0 },
+      { open: 73.0, high: 73.2, low: 72.7, close: 72.9 },
+      { open: 72.9, high: 73.8, low: 72.8, close: 73.6 },
+      { open: 73.6, high: 74.1, low: 73.4, close: 73.9 },
+      { open: 73.9, high: 74.0, low: 73.3, close: 73.5 },
+      { open: 73.5, high: 73.7, low: 73.1, close: 73.2 },
+      { open: 73.2, high: 73.9, low: 73.1, close: 73.8 },
+      { open: 73.8, high: 74.4, low: 73.7, close: 74.2 },
+      { open: 74.2, high: 74.6, low: 74.0, close: 74.5 },
+    ],
+    questions: [
+      {
+        id: "signal-read",
+        type: "multiple-choice",
+        prompt: "Which description best matches the entry logic here?",
+        instruction: "Choose the answer that reads the chart as a condition-plus-trigger sequence.",
+        explanation:
+          "The strongest read is a breakout followed by a controlled retest and confirmation. That creates a condition, a trigger, and a cleaner stop location.",
+        coaching: "Good system logic usually starts with structure, then waits for confirmation before acting.",
+        choices: [
+          { id: "retest-trigger", label: "Breakout, retest hold, then response candle trigger" },
+          { id: "buy-any-green", label: "Buy any green candle during the move" },
+          { id: "no-logic", label: "There is no usable rule structure in this chart" },
+        ],
+        correctChoiceId: "retest-trigger",
+      },
+      {
+        id: "filter-zone",
+        type: "hotspot",
+        prompt: "Which highlighted area is where a late-entry filter should block the trade?",
+        instruction: "Click the zone where the move is too extended for the original setup quality.",
+        explanation:
+          "The correct filter zone is the late extension after the move already confirmed and stretched. That area often deserves a skip rule because the original reward-to-risk has degraded.",
+        coaching: "A strong signal still needs a filter that says when the opportunity is already too late.",
+        hotspots: [
+          {
+            id: "base-zone",
+            label: "Early base",
+            candleStart: 0,
+            candleEnd: 4,
+            priceLow: 72.2,
+            priceHigh: 73.3,
+            correct: false,
+            explanation:
+              "This area is where the setup started forming. It is not the zone a late-entry filter is trying to block.",
+          },
+          {
+            id: "retest-zone",
+            label: "Retest zone",
+            candleStart: 7,
+            candleEnd: 9,
+            priceLow: 73.1,
+            priceHigh: 73.7,
+            correct: false,
+            explanation:
+              "This is the high-quality retest area where the setup is actually becoming more structured.",
+          },
+          {
+            id: "late-extension-zone",
+            label: "Late extension",
+            candleStart: 10,
+            candleEnd: 11,
+            priceLow: 74.0,
+            priceHigh: 74.6,
+            correct: true,
+            explanation:
+              "This is the area a good late-entry filter would reject. Price already moved, and the original stop efficiency is no longer as strong.",
+          },
+        ],
+      },
+    ],
+    coachDebrief: [
+      "A useful strategy does not just define when to enter. It also defines when the same idea is already too late.",
+      "Entry signals and skip filters work together to create cleaner automation behavior.",
+      "This is the bridge from chart reading to executable logic: setup zone, trigger, and disqualifying extension.",
+    ],
+  },
 ];
 
 export const scenarios: Scenario[] = [
@@ -2423,6 +2970,125 @@ export const scenarios: Scenario[] = [
       "Discipline is often invisible because it shows up as a trade you did not take.",
       "Good process can still include losses. Bad process can still include winners. Judge the decision first.",
       "This simulator is also system design training: define emotional guardrails, skip conditions, and recovery rules clearly.",
+    ],
+  },
+  {
+    slug: "signal-stack-simulator",
+    moduleSlug: "strategy-systems-and-bots",
+    title: "Signal Stack Simulator",
+    summary:
+      "Walk through the logic of a simple trading system by deciding when the signal is valid, when filters should block it, and how the risk engine should respond.",
+    xpReward: 145,
+    setup:
+      "A stock is trending up and approaching a breakout area. You are evaluating it as if you were designing the logic for a simple automated strategy rather than taking a discretionary trade.",
+    steps: [
+      {
+        id: "stack-step-1",
+        title: "Signal appears",
+        marketContext:
+          "Price breaks above the recent range high, but the move is happening with moderate participation and no retest yet.",
+        tapeRead: [
+          "The breakout condition may be starting to appear.",
+          "The location is still a little extended for immediate entry.",
+          "A clean system often waits for either acceptance or a better location.",
+        ],
+        riskCallout: "A raw signal is not automatically a finished trade decision.",
+        actions: [
+          {
+            id: "enter-on-first-poke",
+            label: "Trigger entry immediately because the breakout line was touched",
+            rationale: "Any break above resistance is enough.",
+          },
+          {
+            id: "wait-for-confirmation",
+            label: "Wait for confirmation or a retest before calling the signal fully valid",
+            rationale: "Let the setup become structured enough for clearer rule logic.",
+          },
+          {
+            id: "disable-all-breakouts",
+            label: "Reject all breakout ideas permanently",
+            rationale: "One uncertain signal means the whole concept is invalid.",
+          },
+        ],
+        correctActionId: "wait-for-confirmation",
+        feedback:
+          "Waiting is the cleaner systems decision. The signal may become valid, but the rules should still demand better structure before entry.",
+        outcome:
+          "Price pulls back slightly, then holds above the old level while volume improves on the response.",
+      },
+      {
+        id: "stack-step-2",
+        title: "Filters align",
+        marketContext:
+          "The retest holds, the trend is still up, and the response candle closes well from the pullback.",
+        tapeRead: [
+          "Signal now has stronger confirmation.",
+          "Trend and structure filters are aligned.",
+          "The stop can now sit beneath the retest rather than in a random spot.",
+        ],
+        riskCallout: "This is where signal plus filters creates real trade quality.",
+        actions: [
+          {
+            id: "allow-entry-with-risk",
+            label: "Allow the entry and size it from the stop distance",
+            rationale: "The system now has a valid trigger and a logical risk point.",
+          },
+          {
+            id: "enter-max-size",
+            label: "Enter max size because more confirmation means less need for risk control",
+            rationale: "Strong setup removes the need for sizing discipline.",
+          },
+          {
+            id: "ignore-filters",
+            label: "Treat filters as optional because the chart already looks good",
+            rationale: "Only the trigger matters now.",
+          },
+        ],
+        correctActionId: "allow-entry-with-risk",
+        feedback:
+          "This is the right systems move. The signal is now qualified by filters, and the risk engine can size the trade from a real invalidation level.",
+        outcome:
+          "The position opens with controlled size and a stop under the retest zone.",
+      },
+      {
+        id: "stack-step-3",
+        title: "Risk engine decision",
+        marketContext:
+          "A second setup appears later in the same session, but the strategy has already taken one trade and is close to its session risk cap.",
+        tapeRead: [
+          "The new setup may be valid on its own.",
+          "Session-level risk still matters across multiple trades.",
+          "A real system must decide based on portfolio rules, not just setup quality.",
+        ],
+        riskCallout: "Good systems can reject valid setups when portfolio or session risk says no.",
+        actions: [
+          {
+            id: "respect-risk-cap",
+            label: "Respect the session risk cap and skip the extra exposure",
+            rationale: "Strategy-level protection overrides the desire to take every setup.",
+          },
+          {
+            id: "always-take-valid-signal",
+            label: "Always take every valid signal regardless of current exposure",
+            rationale: "A valid setup should never be blocked.",
+          },
+          {
+            id: "remove-stop-limits",
+            label: "Ignore the risk cap because the day has gone well",
+            rationale: "Good earlier trades justify more freedom now.",
+          },
+        ],
+        correctActionId: "respect-risk-cap",
+        feedback:
+          "This is the mature systems choice. The setup logic and the risk engine are both part of the strategy, and the higher-level guardrail wins here.",
+        outcome:
+          "The strategy stays within its defined limits and avoids letting one session drift outside the intended risk profile.",
+      },
+    ],
+    closingNotes: [
+      "Automation logic is not just entry code. It is condition logic, filter logic, and risk logic working together.",
+      "The best system decisions often come from saying no at the right time, not just from finding more signals.",
+      "This simulator is the product bridge from trading lessons into real strategy architecture.",
     ],
   },
 ];
