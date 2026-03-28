@@ -29,6 +29,37 @@ export function DashboardHome() {
       : activeModule
         ? `/module/${activeModule.slug}`
         : "/learn";
+  const startHereSteps = [
+    {
+      id: "primary",
+      eyebrow: "Start here",
+      title: upcomingLesson?.title ?? activeModule?.title ?? "Open the curriculum",
+      detail:
+        upcomingLesson?.summary ??
+        activeModule?.summary ??
+        "Jump into the first unlocked module so the course can guide the order for you.",
+      href: resumeHref,
+      cta: upcomingLesson ? "Open lesson" : activeModule ? "Open module" : "Open curriculum",
+    },
+    {
+      id: "review",
+      eyebrow: "Then reinforce",
+      title: reviewQueue[0]?.title ?? "Clear your due review queue",
+      detail:
+        reviewQueue[0]?.reason ??
+        "If anything is due, review it before pushing too far forward. That is how the app keeps concepts from fading.",
+      href: reviewQueue[0]?.href ?? "/progress",
+      cta: reviewQueue[0] ? "Open review" : "Open progress",
+    },
+    {
+      id: "practice",
+      eyebrow: "Then apply it",
+      title: sampleChart.title,
+      detail: "Once the concept is fresh, use a visual drill or scenario to prove you can apply it and not just recognize the words.",
+      href: `/chart-challenge/${sampleChart.slug}`,
+      cta: "Open practice",
+    },
+  ];
 
   return (
     <div className="space-y-8">
@@ -121,6 +152,20 @@ export function DashboardHome() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-3">
+        {startHereSteps.map((step) => (
+          <Link key={step.id} href={step.href} className="course-card focus-visible-ring rounded-[28px] p-5 transition hover:bg-white/[0.05]">
+            <p className="eyebrow-label">{step.eyebrow}</p>
+            <h2 className="mt-3 text-2xl font-semibold text-white">{step.title}</h2>
+            <p className="mt-3 text-sm leading-7 text-slate-300">{step.detail}</p>
+            <div className="course-button-secondary mt-5 px-4 py-3 text-sm">
+              {step.cta}
+              <ArrowRight className="h-4 w-4" />
+            </div>
+          </Link>
+        ))}
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">

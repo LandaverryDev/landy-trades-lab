@@ -5,7 +5,8 @@ import type { ComponentType } from "react";
 import { ArrowRight, BrainCircuit, CheckCircle2 } from "lucide-react";
 
 import { LessonBlocks } from "@/features/lesson/lesson-blocks";
-import { getLessonBySlug, getModuleBySlug } from "@/lib/course";
+import { LessonCheckpointCard } from "@/features/lesson/lesson-checkpoint";
+import { getLessonBySlug, getLessonCheckpointBySlug, getModuleBySlug } from "@/lib/course";
 import { recordLessonCompletion, useLearningProgress } from "@/lib/learning-progress";
 
 export function LessonView({ lessonSlug }: { lessonSlug: string }) {
@@ -17,6 +18,7 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
   }
 
   const learningModule = getModuleBySlug(lesson.moduleSlug);
+  const checkpoint = getLessonCheckpointBySlug(lesson.slug);
   const isCompleted = raw.completedLessonSlugs.includes(lesson.slug);
 
   return (
@@ -74,6 +76,8 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
               <LessonBlocks blocks={section.blocks} />
             </article>
           ))}
+
+          {checkpoint ? <LessonCheckpointCard checkpoint={checkpoint} /> : null}
         </div>
 
         <div className="space-y-5">

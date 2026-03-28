@@ -119,6 +119,27 @@ export interface Lesson {
   nextLessonSlug?: string;
 }
 
+export interface LessonCheckpointChoice {
+  id: string;
+  label: string;
+}
+
+export interface LessonCheckpointQuestion {
+  id: string;
+  prompt: string;
+  choices: LessonCheckpointChoice[];
+  correctChoiceId: string;
+  explanation: string;
+  coaching: string;
+}
+
+export interface LessonCheckpoint {
+  lessonSlug: string;
+  title: string;
+  summary: string;
+  questions: LessonCheckpointQuestion[];
+}
+
 export interface QuizChoice {
   id: string;
   label: string;

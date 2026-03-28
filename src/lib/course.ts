@@ -7,6 +7,7 @@ import {
   scenarios,
   tiers,
 } from "@/data/curriculum";
+import { lessonCheckpoints } from "@/data/lesson-checkpoints";
 
 export function getModuleBySlug(slug: string) {
   return learningModules.find((module) => module.slug === slug);
@@ -14,6 +15,10 @@ export function getModuleBySlug(slug: string) {
 
 export function getLessonBySlug(slug: string) {
   return lessons.find((lesson) => lesson.slug === slug);
+}
+
+export function getLessonCheckpointBySlug(slug: string) {
+  return lessonCheckpoints.find((checkpoint) => checkpoint.lessonSlug === slug);
 }
 
 export function getQuizBySlug(slug: string) {
@@ -39,6 +44,7 @@ export function getModuleLessons(moduleSlug: string) {
 export {
   chartChallenges,
   drillSets,
+  lessonCheckpoints,
   learningModules,
   lessons,
   quizzes,
