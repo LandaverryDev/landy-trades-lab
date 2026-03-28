@@ -168,6 +168,87 @@ export const learningModules: LearningModule[] = [
   },
   {
     id: "module-06",
+    slug: "stocks-and-equity-playbooks",
+    tier: "intermediate",
+    level: 2,
+    order: 2,
+    status: "locked",
+    title: "Stocks and Equity Playbooks",
+    summary:
+      "Learn how liquid stocks and ETFs behave around watchlists, gaps, sector context, and opening-drive opportunities.",
+    xpReward: 460,
+    lessonCount: 3,
+    estimatedMinutes: 34,
+    progressPercent: 0,
+    focusAreas: ["Watchlists", "Relative strength", "Gaps", "Sector context"],
+    botBuilderHook:
+      "Equity strategies often start with universe filters, premarket context, and opening-flow rules before they ever think about entries.",
+    unlockRule: "Unlock after Structure and Execution",
+    lessonSlugs: [
+      "watchlists-and-relative-strength",
+      "gap-and-opening-drive-basics",
+      "etf-and-sector-context",
+    ],
+    quizSlug: "equity-playbooks-quiz",
+    chartChallengeSlug: "gap-and-relative-strength-challenge",
+    simulatorSlug: "opening-drive-equity-simulator",
+  },
+  {
+    id: "module-07",
+    slug: "options-and-derivatives-playbooks",
+    tier: "intermediate",
+    level: 2,
+    order: 3,
+    status: "locked",
+    title: "Options and Derivatives Playbooks",
+    summary:
+      "Go deeper on options structure, futures behavior, and forex pair logic so leveraged products stop feeling mysterious.",
+    xpReward: 500,
+    lessonCount: 3,
+    estimatedMinutes: 36,
+    progressPercent: 0,
+    focusAreas: ["Greeks", "Futures playbooks", "Forex pairs", "Leverage discipline"],
+    botBuilderHook:
+      "Derivatives systems need contract-aware rules, session-aware execution, and stronger risk assumptions than plain equity ideas.",
+    unlockRule: "Unlock after Stocks and Equity Playbooks",
+    lessonSlugs: [
+      "option-chain-and-greeks-basics",
+      "futures-contract-playbooks",
+      "forex-pair-structure",
+    ],
+    quizSlug: "derivatives-playbooks-quiz",
+    chartChallengeSlug: "leverage-and-contract-fit-challenge",
+    simulatorSlug: "derivatives-choice-simulator",
+  },
+  {
+    id: "module-08",
+    slug: "crypto-trading-playbooks",
+    tier: "intermediate",
+    level: 2,
+    order: 4,
+    status: "locked",
+    title: "Crypto Trading Playbooks",
+    summary:
+      "Study crypto-specific regime shifts, perpetuals mechanics, funding pressure, and the extra risk filters fragmented venues require.",
+    xpReward: 500,
+    lessonCount: 3,
+    estimatedMinutes: 34,
+    progressPercent: 0,
+    focusAreas: ["Regimes", "Perpetuals", "Funding", "Venue risk"],
+    botBuilderHook:
+      "Crypto systems need venue filters, funding awareness, and stronger liquidity rules because the market never really sleeps.",
+    unlockRule: "Unlock after Options and Derivatives Playbooks",
+    lessonSlugs: [
+      "crypto-regimes-and-liquidity",
+      "perpetuals-and-funding-basics",
+      "crypto-risk-playbook",
+    ],
+    quizSlug: "crypto-playbooks-quiz",
+    chartChallengeSlug: "crypto-regime-shift-challenge",
+    simulatorSlug: "crypto-venue-risk-simulator",
+  },
+  {
+    id: "module-09",
     slug: "psychology-and-discipline",
     tier: "advanced",
     level: 3,
@@ -183,7 +264,7 @@ export const learningModules: LearningModule[] = [
     focusAreas: ["Discipline", "Bias", "Routine", "Common mistakes"],
     botBuilderHook:
       "Bots remove impulse, but only after you identify the impulses and guardrails clearly.",
-    unlockRule: "Unlock after Structure and Execution",
+    unlockRule: "Unlock after Crypto Trading Playbooks",
     lessonSlugs: [
       "trading-psychology-basics",
       "discipline-and-routine",
@@ -195,7 +276,7 @@ export const learningModules: LearningModule[] = [
     simulatorSlug: "revenge-trade-reset-simulator",
   },
   {
-    id: "module-07",
+    id: "module-10",
     slug: "strategy-systems-and-bots",
     tier: "advanced",
     level: 3,
@@ -1779,6 +1860,734 @@ export const lessons: Lesson[] = [
       "Confirmation layers are what make strategy logic more selective and robust.",
     ],
     botBuilderSignals: ["Volume filter", "Participation threshold", "Trigger quality", "Setup quality"],
+    nextLessonSlug: "watchlists-and-relative-strength",
+  },
+  {
+    slug: "watchlists-and-relative-strength",
+    moduleSlug: "stocks-and-equity-playbooks",
+    title: "Watchlists and Relative Strength",
+    summary:
+      "Stock traders do not scan the whole market equally. They narrow the universe to names already showing clean movement, volume, and relative strength.",
+    objective: "Build the habit of choosing better stock candidates before worrying about entries.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["Watchlist", "Relative strength", "Catalyst", "Universe"],
+    sections: [
+      {
+        id: "stock-universe",
+        eyebrow: "Selection Edge",
+        title: "Good equity trading starts with better names, not more names",
+        summary: "A focused watchlist improves both chart quality and execution quality.",
+        blocks: [
+          {
+            id: "stock-universe-text",
+            type: "text",
+            body:
+              "Most stocks are not worth your attention on any given day. A watchlist should favor products with liquidity, clean structure, useful volume, and some reason they are already moving better than the crowd.",
+            bullets: [
+              "Relative strength means a stock is behaving better than its peers or the broad market.",
+              "Catalysts like earnings or news often create the attention that fuels cleaner movement.",
+              "A smaller, higher-quality list is usually more useful than a giant random list.",
+            ],
+          },
+          {
+            id: "stock-universe-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Pre-market rule",
+            body: "Do the filtering before the bell. Watchlists built after the move starts are usually emotion-driven.",
+          },
+        ],
+      },
+      {
+        id: "relative-strength-map",
+        eyebrow: "Market Read",
+        title: "Relative strength tells you where attention is already concentrated",
+        summary: "Strong names often stay strong longer than weak names stay weakly ignored.",
+        blocks: [
+          {
+            id: "relative-strength-map-diagram",
+            type: "diagram",
+            title: "Simple stock selection stack",
+            caption: "The best candidates usually align multiple quality clues.",
+            items: [
+              {
+                label: "Liquidity",
+                value: "Clean tape",
+                detail: "You want products that can actually be entered and exited efficiently.",
+              },
+              {
+                label: "Relative strength",
+                value: "Outperforming peers",
+                detail: "Names holding up while the market wobbles often deserve attention.",
+              },
+              {
+                label: "Catalyst",
+                value: "Reason to move",
+                detail: "News, earnings, or sector momentum can create sustained participation.",
+              },
+            ],
+          },
+          {
+            id: "relative-strength-map-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Stock systems often begin with a universe filter before any chart trigger is even evaluated.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "A watchlist is a filter for better opportunity, not a list of everything that moved.",
+      "Relative strength helps you find where attention and momentum are already concentrated.",
+      "Better stock selection often improves outcomes before entry logic changes at all.",
+    ],
+    botBuilderSignals: ["Universe filter", "Relative strength rank", "Catalyst flag", "Liquidity threshold"],
+    nextLessonSlug: "gap-and-opening-drive-basics",
+  },
+  {
+    slug: "gap-and-opening-drive-basics",
+    moduleSlug: "stocks-and-equity-playbooks",
+    title: "Gap and Opening Drive Basics",
+    summary:
+      "Stocks often reveal their tone early through overnight gaps and the first drive after the open. That opening behavior shapes the whole intraday playbook.",
+    objective: "Read a stock gap and opening drive without automatically chasing the first burst of speed.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["Gap", "Opening drive", "Premarket level", "Drive quality"],
+    sections: [
+      {
+        id: "gap-context",
+        eyebrow: "Opening Context",
+        title: "A gap is information, but not all gap information is bullish or bearish edge",
+        summary: "You still need to judge whether the market accepts the new price area after the open.",
+        blocks: [
+          {
+            id: "gap-context-text",
+            type: "text",
+            body:
+              "A stock may gap up on good news, but if the opening drive immediately fails, the gap alone is not enough. Good traders read whether the open confirms the new pricing or rejects it.",
+            bullets: [
+              "Gap plus hold can be powerful.",
+              "Gap plus immediate fade can become a trap.",
+              "Premarket highs and lows often become useful reference zones after the open.",
+            ],
+          },
+          {
+            id: "gap-context-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Common mistake",
+            body: "Buying every gap-up stock at the open is usually just another version of chasing.",
+          },
+        ],
+      },
+      {
+        id: "opening-drive-structure",
+        eyebrow: "Execution Read",
+        title: "The opening drive tells you whether buyers or sellers actually own the first push",
+        summary: "Direction matters, but so does how cleanly the first move holds.",
+        blocks: [
+          {
+            id: "opening-drive-structure-diagram",
+            type: "diagram",
+            title: "Opening drive checklist",
+            caption: "The open is useful when it gives structure, not just speed.",
+            items: [
+              {
+                label: "Gap reference",
+                value: "Premarket map",
+                detail: "Know the prior high, low, and major overnight pivot before the bell.",
+              },
+              {
+                label: "Drive quality",
+                value: "Strong or sloppy",
+                detail: "A clean opening drive usually separates and then holds rather than immediately unraveling.",
+              },
+              {
+                label: "Retest",
+                value: "Better location",
+                detail: "The best entry often comes after the opening move proves it can hold.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "A gap changes context, but the open still has to confirm acceptance.",
+      "Opening drive quality matters more than speed alone.",
+      "Premarket levels and opening retests create cleaner stock trade plans.",
+    ],
+    botBuilderSignals: ["Gap filter", "Premarket range", "Opening drive strength", "Retest hold"],
+    nextLessonSlug: "etf-and-sector-context",
+  },
+  {
+    slug: "etf-and-sector-context",
+    moduleSlug: "stocks-and-equity-playbooks",
+    title: "ETF and Sector Context",
+    summary:
+      "Single stocks do not trade in isolation. Sector ETFs and index context often tell you whether a stock has real tailwind or is fighting the broader tape.",
+    objective: "Use sector and index context to improve stock trade selection and timing.",
+    estimatedMinutes: 8,
+    xpReward: 85,
+    keyTerms: ["Sector ETF", "Index context", "Tailwind", "Relative weakness"],
+    sections: [
+      {
+        id: "sector-matters",
+        eyebrow: "Context Layer",
+        title: "A strong stock gets stronger when the group is helping it",
+        summary: "Context improves both confidence and selectivity.",
+        blocks: [
+          {
+            id: "sector-matters-text",
+            type: "text",
+            body:
+              "If a tech stock is setting up long while the tech sector ETF is also firm and the broad index is stable, the long has more structural support. If the whole group is weak, the stock may need to work much harder to succeed.",
+            bullets: [
+              "Sector strength can support single-name trades.",
+              "A stock fighting its own group often deserves more caution.",
+              "Index weakness can reduce follow-through even in good names.",
+            ],
+          },
+          {
+            id: "sector-matters-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "Useful question",
+            body: "Is this stock leading its group, following its group, or fighting against it?",
+          },
+        ],
+      },
+      {
+        id: "context-stack",
+        eyebrow: "Selection Stack",
+        title: "The best equity setups often align stock, sector, and market context",
+        summary: "Alignment reduces friction and disagreement in the trade idea.",
+        blocks: [
+          {
+            id: "context-stack-diagram",
+            type: "diagram",
+            title: "Three-layer equity context",
+            caption: "Alignment across layers improves odds of follow-through.",
+            items: [
+              {
+                label: "Stock",
+                value: "Clean setup",
+                detail: "The individual name still needs structure and liquidity.",
+              },
+              {
+                label: "Sector",
+                value: "Group support",
+                detail: "The ETF or peer group should not be working against the same direction.",
+              },
+              {
+                label: "Index",
+                value: "Broader tape",
+                detail: "Major market direction can amplify or suppress the move.",
+              },
+            ],
+          },
+          {
+            id: "context-stack-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Sector and index context are classic system filters because they help decide when a stock signal is worth acting on.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Single-name setups improve when sector and market context support them.",
+      "Context filters help you avoid forcing trades against the broader tape.",
+      "This is one of the clearest bridges from stock trading to multi-layer system logic.",
+    ],
+    botBuilderSignals: ["Sector ETF filter", "Index alignment", "Relative weakness filter", "Context gate"],
+    nextLessonSlug: "option-chain-and-greeks-basics",
+  },
+  {
+    slug: "option-chain-and-greeks-basics",
+    moduleSlug: "options-and-derivatives-playbooks",
+    title: "Option Chain and Greeks Basics",
+    summary:
+      "An option chart idea still lives inside a contract. The chain, strike, expiration, and Greeks decide how that contract actually behaves.",
+    objective: "Understand how the option chain and core Greeks affect trade choice before entry.",
+    estimatedMinutes: 10,
+    xpReward: 95,
+    keyTerms: ["Option chain", "Delta", "Theta", "Gamma"],
+    sections: [
+      {
+        id: "chain-read",
+        eyebrow: "Contract Choice",
+        title: "The underlying can be right while the option choice is still wrong",
+        summary: "Contract structure changes the way your directional idea pays or fails.",
+        blocks: [
+          {
+            id: "chain-read-text",
+            type: "text",
+            body:
+              "Two call options on the same stock can behave very differently if one is near expiration and the other is farther out. Contract selection changes sensitivity, decay, and responsiveness.",
+            bullets: [
+              "The option chain is the menu of strikes and expirations.",
+              "Short-dated contracts move fast but decay fast too.",
+              "Farther-dated contracts usually give more time but cost more premium.",
+            ],
+          },
+          {
+            id: "chain-read-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Beginner danger",
+            body: "Buying the cheapest contract is not smart sizing. It is often just buying the weakest structure.",
+          },
+        ],
+      },
+      {
+        id: "greeks-core",
+        eyebrow: "Behavior Map",
+        title: "Greeks are just a way to describe what pressures the contract responds to",
+        summary: "You do not need every Greek at once, but you do need the main behavior drivers.",
+        blocks: [
+          {
+            id: "greeks-core-diagram",
+            type: "diagram",
+            title: "Core Greeks for a trader",
+            caption: "Keep the first pass practical instead of academic.",
+            items: [
+              {
+                label: "Delta",
+                value: "Direction sensitivity",
+                detail: "How much the option tends to move as the underlying moves.",
+              },
+              {
+                label: "Theta",
+                value: "Time decay",
+                detail: "How much value leaks as time passes, especially near expiration.",
+              },
+              {
+                label: "Gamma",
+                value: "Speed of change",
+                detail: "How quickly delta itself can change when price moves.",
+              },
+            ],
+          },
+          {
+            id: "greeks-core-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Options systems need contract selection rules, not just chart entry rules. The instrument layer matters as much as the setup.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "The chain and contract choice can make a good chart idea trade badly.",
+      "Delta, theta, and gamma explain the first major option behavior pressures.",
+      "Options require both directional logic and contract logic.",
+    ],
+    botBuilderSignals: ["Expiration filter", "Delta band", "Theta risk", "Strike selection rule"],
+    nextLessonSlug: "futures-contract-playbooks",
+  },
+  {
+    slug: "futures-contract-playbooks",
+    moduleSlug: "options-and-derivatives-playbooks",
+    title: "Futures Contract Playbooks",
+    summary:
+      "Futures are not one market. Index, commodity, and rate contracts each have different personalities, session behavior, and sizing consequences.",
+    objective: "Respect futures playbooks as contract-specific execution systems rather than generic charts with leverage.",
+    estimatedMinutes: 9,
+    xpReward: 95,
+    keyTerms: ["Tick value", "Session profile", "Micro contract", "Contract personality"],
+    sections: [
+      {
+        id: "contract-personality",
+        eyebrow: "Playbook Fit",
+        title: "Each futures contract has its own rhythm, liquidity, and movement profile",
+        summary: "Playbooks that fit one contract can fail badly on another.",
+        blocks: [
+          {
+            id: "contract-personality-text",
+            type: "text",
+            body:
+              "Index futures often trade with one kind of pace, while crude oil or other commodities can have a very different tempo. Traders need to know what contract they are in before judging what is normal.",
+            bullets: [
+              "Tick value changes the real dollar impact of movement.",
+              "Session behavior can differ by contract and by global market hours.",
+              "Micro contracts can help reduce risk while learning the structure.",
+            ],
+          },
+          {
+            id: "contract-personality-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Fast rule",
+            body: "If you do not know the tick value and common behavior of the contract, you are not ready to size it.",
+          },
+        ],
+      },
+      {
+        id: "futures-playbook",
+        eyebrow: "Execution Fit",
+        title: "A futures playbook combines structure, session, and contract math",
+        summary: "The playbook is incomplete if any of those three parts are missing.",
+        blocks: [
+          {
+            id: "futures-playbook-diagram",
+            type: "diagram",
+            title: "Three-part futures playbook",
+            caption: "Contract choice and session choice are part of the setup itself.",
+            items: [
+              {
+                label: "Structure",
+                value: "Chart setup",
+                detail: "Levels, trend, and trigger still matter as usual.",
+              },
+              {
+                label: "Session",
+                value: "Active window",
+                detail: "Trade the contract when participation and behavior fit the playbook.",
+              },
+              {
+                label: "Math",
+                value: "Tick and size",
+                detail: "Translate stop distance into real dollar risk before entering.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Futures require contract-aware playbooks, not one-size-fits-all chart assumptions.",
+      "Tick value and session profile are part of trade planning, not side notes.",
+      "Micro contracts can be useful training tools because they reduce risk while the process develops.",
+    ],
+    botBuilderSignals: ["Contract selector", "Session window", "Tick-value risk", "Micro-vs-standard rule"],
+    nextLessonSlug: "forex-pair-structure",
+  },
+  {
+    slug: "forex-pair-structure",
+    moduleSlug: "options-and-derivatives-playbooks",
+    title: "Forex Pair Structure",
+    summary:
+      "Forex charts are always relative. You are trading one currency against another, so macro context and pair behavior matter alongside the chart setup.",
+    objective: "Read a forex pair as a relationship, not as an isolated asset with no context.",
+    estimatedMinutes: 8,
+    xpReward: 90,
+    keyTerms: ["Currency pair", "Base currency", "Quote currency", "Session overlap"],
+    sections: [
+      {
+        id: "pair-logic",
+        eyebrow: "Relative Market",
+        title: "A forex chart is one currency compared with another",
+        summary: "That means strength and weakness are always relative rather than absolute.",
+        blocks: [
+          {
+            id: "pair-logic-text",
+            type: "text",
+            body:
+              "When EUR/USD rises, the euro is strengthening relative to the dollar. That pair structure means macro context, rate expectations, and session overlap often matter more than beginners first expect.",
+            bullets: [
+              "The pair is always a relationship, not a standalone asset.",
+              "Session overlap can increase movement and liquidity.",
+              "Major pairs usually behave more cleanly than thin exotic pairs.",
+            ],
+          },
+          {
+            id: "pair-logic-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "Selection edge",
+            body: "Choosing cleaner major pairs often matters more than hunting exotic movement.",
+          },
+        ],
+      },
+      {
+        id: "forex-filter-stack",
+        eyebrow: "Execution Stack",
+        title: "Good forex playbooks combine pair choice, session overlap, and chart structure",
+        summary: "The chart matters, but pair quality and timing matter too.",
+        blocks: [
+          {
+            id: "forex-filter-stack-diagram",
+            type: "diagram",
+            title: "Forex playbook stack",
+            caption: "The cleanest pairs usually align market quality with chart quality.",
+            items: [
+              {
+                label: "Pair",
+                value: "Major and liquid",
+                detail: "Start with cleaner products before stretching into exotics.",
+              },
+              {
+                label: "Session",
+                value: "Meaningful overlap",
+                detail: "Liquidity and movement are often better when active sessions overlap.",
+              },
+              {
+                label: "Setup",
+                value: "Clear structure",
+                detail: "Trend, levels, and triggers still need to be defined normally.",
+              },
+            ],
+          },
+          {
+            id: "forex-filter-stack-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Forex systems often start with pair and session filters before looking for signals.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Forex pairs are relationships between currencies, not isolated assets.",
+      "Pair quality and session overlap can matter as much as the setup.",
+      "Major-pair focus usually creates cleaner learning conditions.",
+    ],
+    botBuilderSignals: ["Pair filter", "Session-overlap gate", "Major-pair universe", "Macro context flag"],
+    nextLessonSlug: "crypto-regimes-and-liquidity",
+  },
+  {
+    slug: "crypto-regimes-and-liquidity",
+    moduleSlug: "crypto-trading-playbooks",
+    title: "Crypto Regimes and Liquidity",
+    summary:
+      "Crypto does not move with one personality. Regime changes, liquidity shifts, and venue behavior can change how trustworthy a setup really is.",
+    objective: "Read crypto as a regime-driven market where liquidity and participation can change quickly.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["Regime", "Liquidity shift", "Risk-on", "Fragmentation"],
+    sections: [
+      {
+        id: "crypto-regimes",
+        eyebrow: "Market State",
+        title: "Crypto can shift from smooth trend to chaos faster than many other markets",
+        summary: "The same setup rules do not deserve the same confidence in every regime.",
+        blocks: [
+          {
+            id: "crypto-regimes-text",
+            type: "text",
+            body:
+              "A strong trending regime in major coins may support continuation ideas well, but a fragmented, thin, or headline-driven regime can turn the same setup unreliable quickly. Regime reading matters before entry.",
+            bullets: [
+              "Trend regime and chop regime should not be treated the same.",
+              "Liquidity can vanish quickly in weaker conditions.",
+              "Major coins often provide cleaner structure than thin altcoins.",
+            ],
+          },
+          {
+            id: "crypto-regimes-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Crypto trap",
+            body: "Continuous trading can create the illusion that opportunity is always present. Quality still varies a lot.",
+          },
+        ],
+      },
+      {
+        id: "liquidity-regime-filter",
+        eyebrow: "Quality Filter",
+        title: "Liquidity is the first filter when the market never really closes",
+        summary: "Venue and product quality matter before pattern quality.",
+        blocks: [
+          {
+            id: "liquidity-regime-filter-diagram",
+            type: "diagram",
+            title: "Crypto quality stack",
+            caption: "Start with market quality before trusting the setup.",
+            items: [
+              {
+                label: "Regime",
+                value: "Trend or chop",
+                detail: "Decide whether continuation logic or defensive logic fits the current state.",
+              },
+              {
+                label: "Liquidity",
+                value: "Major or thin",
+                detail: "Better liquidity usually means cleaner structure and better fills.",
+              },
+              {
+                label: "Venue",
+                value: "Execution quality",
+                detail: "A good chart on a poor venue is still a weak trade environment.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Crypto should be read through regime and liquidity filters, not just candle patterns.",
+      "Continuous trading does not mean continuous opportunity quality.",
+      "Market-quality filters are especially important in fragmented crypto environments.",
+    ],
+    botBuilderSignals: ["Regime filter", "Liquidity regime", "Major-coin universe", "Venue gate"],
+    nextLessonSlug: "perpetuals-and-funding-basics",
+  },
+  {
+    slug: "perpetuals-and-funding-basics",
+    moduleSlug: "crypto-trading-playbooks",
+    title: "Perpetuals and Funding Basics",
+    summary:
+      "Crypto perpetual contracts look convenient because they do not expire, but funding and leverage create their own pressure on the trade.",
+    objective: "Understand why perpetuals are not just crypto futures without complications.",
+    estimatedMinutes: 9,
+    xpReward: 90,
+    keyTerms: ["Perpetual contract", "Funding rate", "Open interest", "Liquidation"],
+    sections: [
+      {
+        id: "perp-structure",
+        eyebrow: "Contract Structure",
+        title: "Perpetuals keep traders in the game continuously, which changes incentive and risk",
+        summary: "Funding and leverage are part of the contract behavior itself.",
+        blocks: [
+          {
+            id: "perp-structure-text",
+            type: "text",
+            body:
+              "Perpetual contracts often track spot through a funding mechanism. When positioning gets crowded, funding and liquidation pressure can distort the clean chart read a beginner thinks they see.",
+            bullets: [
+              "Funding reflects imbalance between longs and shorts.",
+              "Leverage makes squeeze dynamics more violent.",
+              "A good setup can still behave badly if crowded positioning is extreme.",
+            ],
+          },
+          {
+            id: "perp-structure-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Leverage warning",
+            body: "Perpetuals let traders size too aggressively very easily. That is a structural danger, not just a personal discipline issue.",
+          },
+        ],
+      },
+      {
+        id: "funding-read",
+        eyebrow: "Positioning Lens",
+        title: "Funding and positioning help explain why some crypto moves squeeze harder than expected",
+        summary: "They do not replace the chart, but they can explain the pressure behind it.",
+        blocks: [
+          {
+            id: "funding-read-diagram",
+            type: "diagram",
+            title: "Perpetual pressure map",
+            caption: "Crowding changes how a move can accelerate or fail.",
+            items: [
+              {
+                label: "Funding",
+                value: "Positioning pressure",
+                detail: "When one side is crowded, the contract can become more fragile.",
+              },
+              {
+                label: "Open interest",
+                value: "Participation load",
+                detail: "More leveraged participation can amplify squeezes and flushes.",
+              },
+              {
+                label: "Liquidation risk",
+                value: "Forced movement",
+                detail: "Leverage can turn a normal move into a cascade when traders get squeezed.",
+              },
+            ],
+          },
+          {
+            id: "funding-read-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Crypto systems often need extra filters around funding, open interest, or leverage exposure because structure alone is not enough.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Perpetuals add funding and crowding pressures to the usual chart logic.",
+      "Leverage and liquidation dynamics can distort otherwise clean-looking setups.",
+      "Crypto derivatives need extra structural filters beyond simple trend and level reads.",
+    ],
+    botBuilderSignals: ["Funding filter", "Open-interest flag", "Leverage constraint", "Crowding guardrail"],
+    nextLessonSlug: "crypto-risk-playbook",
+  },
+  {
+    slug: "crypto-risk-playbook",
+    moduleSlug: "crypto-trading-playbooks",
+    title: "Crypto Risk Playbook",
+    summary:
+      "Crypto risk management has to account for venue quality, constant trading hours, leverage temptation, and violent liquidity shifts.",
+    objective: "Build a practical crypto-specific risk framework instead of copying stock rules blindly.",
+    estimatedMinutes: 9,
+    xpReward: 95,
+    keyTerms: ["Venue risk", "Counterparty risk", "Leverage cap", "Weekend risk"],
+    sections: [
+      {
+        id: "crypto-risk-map",
+        eyebrow: "Risk Structure",
+        title: "Crypto risk lives in more places than just the stop loss",
+        summary: "Venue, custody, leverage, and nonstop access all change the trade environment.",
+        blocks: [
+          {
+            id: "crypto-risk-map-text",
+            type: "text",
+            body:
+              "A crypto trade can fail because the chart idea failed, but it can also fail because the venue was thin, the leverage was too high, or the market changed character while the trader treated it like a normal equity day session.",
+            bullets: [
+              "Venue quality matters because execution and counterparty risk both matter.",
+              "Leverage caps are essential because crypto can move violently around the clock.",
+              "Weekend and overnight exposure need explicit rules, not vague comfort.",
+            ],
+          },
+          {
+            id: "crypto-risk-map-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Practical rule",
+            body: "If you cannot name the venue risk, leverage risk, and timing risk, the position is not fully planned yet.",
+          },
+        ],
+      },
+      {
+        id: "crypto-guardrails",
+        eyebrow: "Guardrail Design",
+        title: "The crypto playbook needs harder limits because the market is always available",
+        summary: "Constant access makes it easier to overtrade and oversize unless the rules are explicit.",
+        blocks: [
+          {
+            id: "crypto-guardrails-diagram",
+            type: "diagram",
+            title: "Crypto guardrail stack",
+            caption: "Harder guardrails protect against a market that never really closes.",
+            items: [
+              {
+                label: "Venue",
+                value: "Approved list only",
+                detail: "Trade only on venues that meet your trust and liquidity standard.",
+              },
+              {
+                label: "Leverage",
+                value: "Cap it",
+                detail: "Use a fixed leverage ceiling or avoid leverage entirely while learning.",
+              },
+              {
+                label: "Time",
+                value: "Session windows",
+                detail: "Even in 24/7 markets, define when you are allowed to engage and when you are off.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Crypto risk is multi-layered: chart, venue, leverage, and nonstop access all matter.",
+      "The best crypto playbooks use harder guardrails, not looser ones.",
+      "This module prepares you to think about crypto strategies as systems with structural risk controls.",
+    ],
+    botBuilderSignals: ["Venue allowlist", "Leverage cap", "Weekend exposure rule", "24/7 time gate"],
     nextLessonSlug: "trading-psychology-basics",
   },
   {
@@ -2874,6 +3683,210 @@ export const quizzes: Quiz[] = [
     ],
   },
   {
+    slug: "equity-playbooks-quiz",
+    moduleSlug: "stocks-and-equity-playbooks",
+    title: "Stocks and Equity Playbooks Quiz",
+    summary:
+      "Check whether you can think like a stock trader: build a watchlist, read gaps, and use sector context.",
+    xpReward: 115,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What makes a stock more worth placing on a day-trading watchlist?",
+        choices: [
+          {
+            id: "a",
+            label: "It is liquid, showing relative strength, and has a reason traders are paying attention to it.",
+          },
+          {
+            id: "b",
+            label: "It has the lowest share price on the scanner.",
+          },
+          {
+            id: "c",
+            label: "It moved once in premarket even though volume stayed weak.",
+          },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "The best watchlist names usually combine liquidity, movement quality, and a catalyst or attention driver.",
+        coaching: "The watchlist is supposed to remove junk, not collect it.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: a gap-up is automatically a long entry as soon as the open prints.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "false",
+        explanation:
+          "A gap changes context, but the open still has to prove whether the new price area is being accepted or rejected.",
+        coaching: "Gap information is useful, but it is not a substitute for structure and confirmation.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "What does sector ETF strength do for a long stock setup in the same group?",
+        choices: [
+          { id: "a", label: "It can provide useful tailwind and context support." },
+          { id: "b", label: "It makes stops unnecessary." },
+          { id: "c", label: "It means the stock no longer needs its own setup." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Sector support does not guarantee the trade, but it often improves alignment and follow-through odds.",
+        coaching: "Stock, sector, and index context often work better together than alone.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "If a stock is strong but the broad market and its sector ETF are both weakening sharply, what is the cleaner conclusion?",
+        choices: [
+          { id: "a", label: "The stock may still work, but the setup deserves more caution because context is no longer helping." },
+          { id: "b", label: "Context never matters if the stock had one strong candle." },
+          { id: "c", label: "The best response is always to add more size." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "When context weakens, a stock long may still work, but the trade is no longer getting the same tailwind.",
+        coaching: "Context filters exist because good-looking setups do not all deserve equal trust.",
+      },
+    ],
+  },
+  {
+    slug: "derivatives-playbooks-quiz",
+    moduleSlug: "options-and-derivatives-playbooks",
+    title: "Derivatives Playbooks Quiz",
+    summary:
+      "Check your understanding of option contract choice, futures contract behavior, and forex pair structure.",
+    xpReward: 120,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "Why can an options trade lose even if the stock moved in your direction?",
+        choices: [
+          { id: "a", label: "Because time decay and contract choice still matter alongside direction." },
+          { id: "b", label: "Because options only respond to volume, not price." },
+          { id: "c", label: "Because direction never matters in options." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Options depend on the contract structure too. Time decay and sensitivity can hurt even if the underlying eventually goes the right way.",
+        coaching: "Derivatives add variables. They do not simplify the trade.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: knowing tick value is optional before sizing a futures trade.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "false",
+        explanation:
+          "Tick value is part of the real dollar risk. Without it, size is basically random.",
+        coaching: "Contract math comes before confidence.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "What is the cleanest beginner way to think about a forex pair?",
+        choices: [
+          { id: "a", label: "As one currency's strength or weakness relative to another." },
+          { id: "b", label: "As an isolated stock with no session context." },
+          { id: "c", label: "As a market where pair choice does not matter." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Forex pairs are relative relationships. That is why pair structure and session overlap matter.",
+        coaching: "The pair is the product. Treat it like a relationship, not a standalone ticker.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "Which approach best matches disciplined derivative trading?",
+        choices: [
+          { id: "a", label: "Choose the contract deliberately and size from the actual product math." },
+          { id: "b", label: "Always choose the cheapest option or the largest contract for faster gains." },
+          { id: "c", label: "Ignore product structure and focus only on candle color." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Derivatives require explicit contract-aware planning. The chart alone is not enough.",
+        coaching: "In leveraged products, bad instrument choice can ruin good chart reading.",
+      },
+    ],
+  },
+  {
+    slug: "crypto-playbooks-quiz",
+    moduleSlug: "crypto-trading-playbooks",
+    title: "Crypto Playbooks Quiz",
+    summary:
+      "Check whether you can think in crypto regimes, funding pressure, venue quality, and crypto-specific risk controls.",
+    xpReward: 120,
+    questions: [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "What is the cleanest first filter when trading crypto?",
+        choices: [
+          { id: "a", label: "Market quality: regime, liquidity, and venue." },
+          { id: "b", label: "Whether the coin name sounds exciting." },
+          { id: "c", label: "How many social posts mention it today." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Crypto quality starts with regime, liquidity, and venue. Pattern quality comes after that.",
+        coaching: "Do not let constant market access trick you into skipping market-quality checks.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        prompt: "True or false: perpetual contracts add funding and leverage pressures beyond the normal chart read.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Perpetuals bring their own contract behavior, including funding and liquidation dynamics.",
+        coaching: "Crypto derivatives need more structural respect, not less.",
+      },
+      {
+        id: "q3",
+        type: "pattern-match",
+        prompt: "Which guardrail belongs in a serious crypto risk playbook?",
+        choices: [
+          { id: "a", label: "Venue allowlist and leverage cap" },
+          { id: "b", label: "Trade any venue if the chart is green" },
+          { id: "c", label: "Hold every position through any weekend without a plan" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Crypto risk includes venue trust and leverage discipline, not just stop placement.",
+        coaching: "The product structure can hurt you even when the chart logic is reasonable.",
+      },
+      {
+        id: "q4",
+        type: "what-happens-next",
+        prompt: "If the market shifts from smooth trend to thin, chaotic chop, what should a disciplined crypto trader do?",
+        choices: [
+          { id: "a", label: "Reduce confidence, tighten filters, or skip until quality improves." },
+          { id: "b", label: "Use more leverage because volatility increased." },
+          { id: "c", label: "Assume the same playbook still has the same edge." },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Regime changes should change how much trust you place in the setup and whether you trade it at all.",
+        coaching: "Good traders adapt to regime. They do not force yesterday's playbook into today's conditions.",
+      },
+    ],
+  },
+  {
     slug: "psychology-discipline-quiz",
     moduleSlug: "psychology-and-discipline",
     title: "Psychology and Discipline Quiz",
@@ -3339,6 +4352,207 @@ export const chartChallenges: ChartChallenge[] = [
       "A clean breakout usually gives you two jobs: judge acceptance, then judge the retest.",
       "Retest entries often improve both location and risk compared with chasing extension.",
       "This sequence maps directly to trading logic later: level, breakout close, retest hold, then trigger.",
+    ],
+  },
+  {
+    slug: "gap-and-relative-strength-challenge",
+    moduleSlug: "stocks-and-equity-playbooks",
+    title: "Gap and Relative Strength Challenge",
+    summary:
+      "Read an equity opening sequence, identify the strongest opening drive, and judge whether the stock is acting like a leader or a trap.",
+    xpReward: 125,
+    candles: [
+      { open: 41.8, high: 42.3, low: 41.7, close: 42.2 },
+      { open: 42.2, high: 42.9, low: 42.0, close: 42.7 },
+      { open: 42.7, high: 43.4, low: 42.6, close: 43.2 },
+      { open: 43.2, high: 43.5, low: 42.9, close: 43.0 },
+      { open: 43.0, high: 43.1, low: 42.6, close: 42.8 },
+      { open: 42.8, high: 43.3, low: 42.7, close: 43.1 },
+      { open: 43.1, high: 43.8, low: 43.0, close: 43.6 },
+      { open: 43.6, high: 44.0, low: 43.4, close: 43.9 },
+      { open: 43.9, high: 44.1, low: 43.6, close: 43.8 },
+      { open: 43.8, high: 44.4, low: 43.7, close: 44.2 },
+    ],
+    questions: [
+      {
+        id: "opening-drive-leg",
+        type: "candle-range",
+        prompt: "Mark the strongest opening drive before the first real cooling pullback.",
+        instruction: "Click the first candle in the opening expansion, then the last candle before the move cools off.",
+        explanation:
+          "The cleanest opening drive is the first three-candle expansion that separates strongly from the open before the stock pauses and tests itself.",
+        coaching: "A good opening drive shows separation first. The better entry often comes later on the retest.",
+        correctCandleStart: 0,
+        correctCandleEnd: 2,
+        selectionLabel: "Opening drive",
+      },
+      {
+        id: "leader-read",
+        type: "multiple-choice",
+        prompt: "What is the best stock-trader read on this chart after the pullback holds?",
+        instruction: "Choose the answer that best fits a stock showing relative leadership.",
+        explanation:
+          "The strongest read is that the stock is acting like a leader: it gapped, drove cleanly, pulled back in control, and resumed higher instead of fully fading.",
+        coaching: "Leadership usually looks like strength plus hold, not just one fast candle.",
+        choices: [
+          { id: "relative-strength", label: "Relative strength leader with a controlled opening retest" },
+          { id: "full-gap-failure", label: "Immediate gap failure with no useful long edge" },
+          { id: "random-noise", label: "Random noise with no opening information" },
+        ],
+        correctChoiceId: "relative-strength",
+      },
+      {
+        id: "gap-support-zone",
+        type: "price-zone",
+        prompt: "Mark the best support zone for the opening-drive long thesis.",
+        instruction: "Mark the area where the pullback holds and the opening strength proves itself.",
+        explanation:
+          "The strongest support zone is the post-drive pullback area that holds above the opening launch point. That zone gives the long idea its cleanest invalidation.",
+        coaching: "When a stock is truly strong, the pullback should stabilize above the launch area rather than fully unwind the opening drive.",
+        correctZoneLow: 42.7,
+        correctZoneHigh: 43.1,
+        tolerance: 0.18,
+        selectionLabel: "Gap support zone",
+      },
+    ],
+    coachDebrief: [
+      "Stock playbooks often begin with selection, then opening behavior, then retest quality.",
+      "Leadership is not just speed. It is speed plus the ability to hold and resume.",
+      "This challenge maps directly into an equity scanner-plus-trigger workflow later.",
+    ],
+  },
+  {
+    slug: "leverage-and-contract-fit-challenge",
+    moduleSlug: "options-and-derivatives-playbooks",
+    title: "Leverage and Contract Fit Challenge",
+    summary:
+      "Judge a leveraged move, mark the best structure guide, and connect it to product selection discipline.",
+    xpReward: 130,
+    candles: [
+      { open: 118.4, high: 119.0, low: 118.1, close: 118.8 },
+      { open: 118.8, high: 119.6, low: 118.7, close: 119.4 },
+      { open: 119.4, high: 120.3, low: 119.2, close: 120.0 },
+      { open: 120.0, high: 120.2, low: 119.4, close: 119.6 },
+      { open: 119.6, high: 119.9, low: 119.1, close: 119.3 },
+      { open: 119.3, high: 120.1, low: 119.2, close: 119.9 },
+      { open: 119.9, high: 120.8, low: 119.7, close: 120.6 },
+      { open: 120.6, high: 121.4, low: 120.4, close: 121.1 },
+      { open: 121.1, high: 121.3, low: 120.7, close: 120.9 },
+      { open: 120.9, high: 121.8, low: 120.8, close: 121.6 },
+    ],
+    questions: [
+      {
+        id: "trend-guide",
+        type: "trendline",
+        prompt: "Draw the structural support guide connecting the higher lows after the pullback.",
+        instruction: "Click the first anchor low after the pullback begins, then the later low that confirms the same upward structure.",
+        explanation:
+          "The cleanest support guide connects the higher lows created after the chart resets and starts climbing again. That line shows structure, not just acceleration.",
+        coaching: "Leverage is easier to respect when you know exactly which structure would break the idea.",
+        correctLineStart: { candleIndex: 4, price: 119.1 },
+        correctLineEnd: { candleIndex: 8, price: 120.7 },
+        tolerance: 0.4,
+        selectionLabel: "Structure guide",
+      },
+      {
+        id: "contract-fit-read",
+        type: "multiple-choice",
+        prompt: "What is the cleanest product-selection conclusion for this kind of move?",
+        instruction: "Choose the answer that respects leverage and contract structure.",
+        explanation:
+          "The best answer is to choose the contract deliberately and size from the real risk. The move is attractive, but leverage does not remove the need for product discipline.",
+        coaching: "A good setup in a bad contract is still a bad trade decision.",
+        choices: [
+          { id: "contract-aware", label: "Use a contract-aware product choice and size it from actual risk" },
+          { id: "cheapest-option", label: "Choose the cheapest option contract because the chart looks strong" },
+          { id: "max-futures-size", label: "Use the largest leveraged contract available so the move matters more" },
+        ],
+        correctChoiceId: "contract-aware",
+      },
+      {
+        id: "invalidation-line",
+        type: "price-line",
+        prompt: "Where is the best invalidation line for the post-pullback long thesis?",
+        instruction: "Click the level that would most clearly break the higher-low structure.",
+        explanation:
+          "The best invalidation sits just under the pullback low that anchors the rebuilt structure. If that low fails cleanly, the long thesis weakens materially.",
+        coaching: "In leveraged products, bad invalidation placement turns normal noise into expensive damage.",
+        correctPrice: 119.1,
+        tolerance: 0.22,
+        selectionLabel: "Invalidation line",
+      },
+    ],
+    coachDebrief: [
+      "Derivative trading still starts with structure, but contract choice sits directly on top of it.",
+      "The right question is not only 'is the chart good?' but also 'is this the right product for the chart?'",
+      "This is the bridge from chart quality into contract-aware strategy design.",
+    ],
+  },
+  {
+    slug: "crypto-regime-shift-challenge",
+    moduleSlug: "crypto-trading-playbooks",
+    title: "Crypto Regime Shift Challenge",
+    summary:
+      "Read where a crypto chart shifts from trend quality into instability, then mark the risk zone where a disciplined trader should tighten filters.",
+    xpReward: 130,
+    candles: [
+      { open: 26.4, high: 26.9, low: 26.2, close: 26.8 },
+      { open: 26.8, high: 27.4, low: 26.7, close: 27.2 },
+      { open: 27.2, high: 27.9, low: 27.0, close: 27.7 },
+      { open: 27.7, high: 28.2, low: 27.5, close: 28.0 },
+      { open: 28.0, high: 28.3, low: 27.6, close: 27.8 },
+      { open: 27.8, high: 28.1, low: 27.2, close: 27.3 },
+      { open: 27.3, high: 27.9, low: 26.8, close: 27.7 },
+      { open: 27.7, high: 28.5, low: 27.4, close: 28.3 },
+      { open: 28.3, high: 28.8, low: 27.7, close: 27.9 },
+      { open: 27.9, high: 28.7, low: 27.5, close: 28.6 },
+    ],
+    questions: [
+      {
+        id: "regime-shift-range",
+        type: "candle-range",
+        prompt: "Mark the sequence where the clean uptrend shifts into unstable, whippy behavior.",
+        instruction: "Click the first candle where the trend quality starts degrading, then the last candle in that unstable stretch.",
+        explanation:
+          "The regime shift begins when the smooth climb breaks and larger whipsaws appear. That unstable middle section deserves more caution than the earlier trend leg.",
+        coaching: "Crypto edge often disappears gradually through market-quality degradation before it disappears directionally.",
+        correctCandleStart: 4,
+        correctCandleEnd: 8,
+        selectionLabel: "Regime shift",
+      },
+      {
+        id: "crypto-filter-zone",
+        type: "price-zone",
+        prompt: "Mark the zone where a crypto risk filter should become most defensive.",
+        instruction: "Mark the unstable price area where crowding and liquidity stress make clean continuation less trustworthy.",
+        explanation:
+          "The best defensive zone is the whippy upper area where the market keeps snapping around without the earlier smooth hold quality.",
+        coaching: "In crypto, structure quality and liquidity quality often deteriorate together.",
+        correctZoneLow: 27.7,
+        correctZoneHigh: 28.8,
+        tolerance: 0.2,
+        selectionLabel: "Defensive zone",
+      },
+      {
+        id: "crypto-regime-read",
+        type: "multiple-choice",
+        prompt: "What is the best disciplined read once this regime shift appears?",
+        instruction: "Choose the answer that respects crypto-specific market quality changes.",
+        explanation:
+          "The strongest answer is to tighten filters or skip until the market quality becomes cleaner again. Regime instability should change the plan.",
+        coaching: "The job is not to trade every move. The job is to trade when the environment still matches the playbook.",
+        choices: [
+          { id: "tighten-filters", label: "Tighten filters or reduce activity until quality improves" },
+          { id: "add-leverage", label: "Add leverage because the whipsaws mean more opportunity" },
+          { id: "ignore-regime", label: "Ignore the instability because crypto always behaves like this" },
+        ],
+        correctChoiceId: "tighten-filters",
+      },
+    ],
+    coachDebrief: [
+      "Crypto playbooks need regime awareness, not just pattern recognition.",
+      "When quality shifts, the trade plan should shift too.",
+      "This is the start of crypto-specific filter logic that later belongs inside system rules.",
     ],
   },
   {
@@ -3861,6 +5075,261 @@ export const scenarios: Scenario[] = [
       "Structure gives the setup. The retest gives the location. The trigger gives the entry.",
       "Breakout trades become cleaner when you stop treating every impulse candle like a mandatory chase.",
       "This simulator maps directly to system design later: level detection, acceptance test, retest trigger, stop, and management.",
+    ],
+  },
+  {
+    slug: "opening-drive-equity-simulator",
+    moduleSlug: "stocks-and-equity-playbooks",
+    title: "Opening Drive Equity Simulator",
+    summary:
+      "Practice choosing an equity leader, reading the opening drive, and waiting for the better stock entry instead of chasing the first burst.",
+    xpReward: 135,
+    setup:
+      "A stock on your watchlist gaps up on news, shows strong premarket volume, and opens with a clean push above the first range.",
+    steps: [
+      {
+        id: "equity-step-1",
+        title: "Opening strength appears",
+        marketContext:
+          "The stock is moving well, but the first opening drive is already stretched after the initial burst from the bell.",
+        tapeRead: [
+          "The stock is acting like a leader, not a random mover.",
+          "The opening drive is strong, but the immediate location is no longer ideal.",
+          "A leader can still be a bad entry if the price is too extended.",
+        ],
+        riskCallout: "Strong stock behavior does not cancel out bad entry location.",
+        actions: [
+          {
+            id: "chase-opening-drive",
+            label: "Buy immediately because the stock is clearly strong",
+            rationale: "The leader might run away if you wait.",
+          },
+          {
+            id: "wait-for-opening-retest",
+            label: "Wait for the first real pullback to test whether the opening strength holds",
+            rationale: "Use the retest to improve location and define the stop better.",
+          },
+          {
+            id: "short-strength",
+            label: "Short the first extension because the gap must fill",
+            rationale: "Every strong gap should fade once emotion cools down.",
+          },
+        ],
+        correctActionId: "wait-for-opening-retest",
+        feedback:
+          "Waiting is the cleaner equity-trader choice. The stock may be strong, but the opening retest is where structure becomes usable.",
+        outcome:
+          "The stock pulls back into the launch zone, holds above the opening support area, and starts to stabilize.",
+      },
+      {
+        id: "equity-step-2",
+        title: "Context check before entry",
+        marketContext:
+          "The retest is holding, the sector ETF is firm, and the broad market is not actively working against the idea.",
+        tapeRead: [
+          "The stock still has relative strength.",
+          "Sector and market context are supportive enough.",
+          "The stop can now sit beneath the opening support structure instead of in a random place.",
+        ],
+        riskCallout: "This is where context plus structure becomes a real stock playbook.",
+        actions: [
+          {
+            id: "enter-structured-long",
+            label: "Enter long with a stop beneath the opening support zone",
+            rationale: "The stock, sector, and location are now aligned well enough to act.",
+          },
+          {
+            id: "oversize-because-leader",
+            label: "Enter extra size because the stock is obviously the leader",
+            rationale: "A cleaner name means risk matters less.",
+          },
+          {
+            id: "ignore-context",
+            label: "Ignore the ETF and market context because only the stock matters",
+            rationale: "Single-name strength always overrides the broader tape.",
+          },
+        ],
+        correctActionId: "enter-structured-long",
+        feedback:
+          "This is the mature entry. The stock is still leading, context is helping instead of hurting, and the risk is tied to real structure.",
+        outcome:
+          "The stock resumes higher through the morning high and offers a clean partial into fresh expansion.",
+      },
+    ],
+    closingNotes: [
+      "A strong stock setup starts with selection, then opening behavior, then location.",
+      "Relative strength matters most when it still holds after the first rush cools off.",
+      "This simulator is the stock-trading version of system logic: universe filter, opening drive, retest, context filter, then trigger.",
+    ],
+  },
+  {
+    slug: "derivatives-choice-simulator",
+    moduleSlug: "options-and-derivatives-playbooks",
+    title: "Derivatives Choice Simulator",
+    summary:
+      "Practice choosing the right leveraged instrument and sizing discipline instead of reaching for the fastest product automatically.",
+    xpReward: 140,
+    setup:
+      "You have a clean directional chart idea, but you need to decide how to express it through derivatives without turning the instrument itself into the main risk.",
+    steps: [
+      {
+        id: "derivatives-step-1",
+        title: "Product choice before entry",
+        marketContext:
+          "The chart setup is valid, but you are choosing between a cheap short-dated option, a more deliberate option structure, or a leveraged futures contract.",
+        tapeRead: [
+          "The chart alone is not enough to choose the product.",
+          "Each derivative adds a different type of pressure: decay, leverage, or contract math.",
+          "The cleanest decision usually starts by matching the product to your actual skill and risk tolerance.",
+        ],
+        riskCallout: "In derivatives, a bad product choice can ruin a good chart read.",
+        actions: [
+          {
+            id: "contract-aware-choice",
+            label: "Choose the derivative structure deliberately and match it to the setup and risk plan",
+            rationale: "Respect contract behavior before entering anything.",
+          },
+          {
+            id: "cheapest-premium",
+            label: "Buy the cheapest short-dated option because it offers the biggest upside",
+            rationale: "Cheap premium is the best path to leverage.",
+          },
+          {
+            id: "largest-contract",
+            label: "Use the largest leveraged contract because the chart looks very clean",
+            rationale: "A strong chart removes the need for instrument caution.",
+          },
+        ],
+        correctActionId: "contract-aware-choice",
+        feedback:
+          "That is the right decision. Product structure, not just chart direction, determines whether the trade is actually appropriate.",
+        outcome:
+          "You avoid turning the trade into a contract gamble and keep the focus on structured execution.",
+      },
+      {
+        id: "derivatives-step-2",
+        title: "Sizing the trade",
+        marketContext:
+          "You have chosen a product that fits the idea better, but the stop distance and real contract exposure still need to be respected.",
+        tapeRead: [
+          "The chart invalidation point still defines the real risk.",
+          "Leverage does not change the need for position sizing.",
+          "The fastest route to damage is oversizing a product that already magnifies movement.",
+        ],
+        riskCallout: "Derivatives punish oversizing faster than plain products do.",
+        actions: [
+          {
+            id: "size-from-real-risk",
+            label: "Size the trade from real stop distance and contract exposure",
+            rationale: "Let the product math and invalidation level define the position size.",
+          },
+          {
+            id: "size-from-confidence",
+            label: "Use larger size because the product already matches the setup better",
+            rationale: "Better fit means higher conviction can override the risk math.",
+          },
+          {
+            id: "ignore-contract-math",
+            label: "Focus only on the setup quality and solve the contract details later",
+            rationale: "The chart is the only important variable.",
+          },
+        ],
+        correctActionId: "size-from-real-risk",
+        feedback:
+          "That is the disciplined move. The contract choice was only step one. Sizing still has to come from actual risk, not excitement.",
+        outcome:
+          "The derivative trade now behaves like a planned position rather than an oversized guess.",
+      },
+    ],
+    closingNotes: [
+      "Derivatives demand two decisions: chart logic and product logic.",
+      "The best instrument is the one that fits the idea without overwhelming the risk engine.",
+      "This simulator is practice for contract-aware system design, not just discretionary product choice.",
+    ],
+  },
+  {
+    slug: "crypto-venue-risk-simulator",
+    moduleSlug: "crypto-trading-playbooks",
+    title: "Crypto Venue Risk Simulator",
+    summary:
+      "Practice adapting to crypto regime changes, venue quality concerns, and leverage temptation inside a nonstop market.",
+    xpReward: 140,
+    setup:
+      "A crypto setup appears late in the week. The chart has looked strong, but liquidity is changing, funding is elevated, and the market is trading on a venue you do not fully trust yet.",
+    steps: [
+      {
+        id: "crypto-step-1",
+        title: "Regime quality changes",
+        marketContext:
+          "The earlier trend was smooth, but price is now moving with more whipsaw and less clean follow-through.",
+        tapeRead: [
+          "The chart is no longer in the same quality regime it started in.",
+          "More instability means lower trust in continuation logic.",
+          "A good crypto trader reacts to regime shifts instead of ignoring them.",
+        ],
+        riskCallout: "Crypto can change quality before it changes direction.",
+        actions: [
+          {
+            id: "tighten-or-skip",
+            label: "Tighten filters or skip until the market becomes cleaner again",
+            rationale: "Regime instability should lower aggression, not raise it.",
+          },
+          {
+            id: "increase-leverage",
+            label: "Increase leverage because volatility means bigger opportunity",
+            rationale: "Faster movement should always mean bigger size.",
+          },
+          {
+            id: "ignore-shift",
+            label: "Treat the chart exactly the same as the earlier trend regime",
+            rationale: "The pattern is all that matters.",
+          },
+        ],
+        correctActionId: "tighten-or-skip",
+        feedback:
+          "That is the disciplined response. Regime changes should change your participation rules, not just your emotions.",
+        outcome:
+          "You step back instead of forcing the same playbook into a lower-quality environment.",
+      },
+      {
+        id: "crypto-step-2",
+        title: "Venue and leverage decision",
+        marketContext:
+          "The setup still exists, but the venue is thinner than your usual choice and the product offers easy leverage.",
+        tapeRead: [
+          "Venue quality is part of the trade, not outside it.",
+          "Leverage temptation is highest when traders feel they might miss the move.",
+          "A serious crypto plan needs hard guardrails for both venue and size.",
+        ],
+        riskCallout: "Bad venue plus leverage is a structural risk stack, not just a brave trade.",
+        actions: [
+          {
+            id: "use-approved-venue-and-cap-risk",
+            label: "Only trade on an approved venue and keep leverage within the defined cap",
+            rationale: "Respect the crypto-specific risk playbook instead of improvising.",
+          },
+          {
+            id: "trade-anywhere-bigger",
+            label: "Take the trade on any venue and use extra leverage before the move leaves",
+            rationale: "Access matters more than infrastructure quality.",
+          },
+          {
+            id: "solve-risk-later",
+            label: "Enter first and decide on venue and leverage rules after the position moves",
+            rationale: "The chart edge is enough for now.",
+          },
+        ],
+        correctActionId: "use-approved-venue-and-cap-risk",
+        feedback:
+          "That is the mature crypto decision. Venue trust and leverage limits belong inside the trade plan from the start.",
+        outcome:
+          "You keep the crypto idea inside defined structural risk controls rather than letting nonstop access widen your rules.",
+      },
+    ],
+    closingNotes: [
+      "Crypto trading skill includes venue discipline and regime discipline, not just chart reading.",
+      "The best crypto trade is often the one that survives structural risk, not just directional volatility.",
+      "This simulator is the crypto version of a system guardrail stack: regime filter, venue allowlist, leverage cap, and participation rules.",
     ],
   },
   {
