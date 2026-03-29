@@ -1,14 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import type { ComponentType } from "react";
 import {
   ArrowRight,
   BrainCircuit,
-  ChartCandlestick,
-  PlayCircle,
-  Target,
-  Workflow,
+  Flame,
 } from "lucide-react";
 
 import { CandlestickChart } from "@/components/ui/candlestick-chart";
@@ -22,7 +18,6 @@ export function DashboardHome() {
   const { activeModule, progress, raw, reviewQueue, tierProgress, upcomingLesson } = useLearningProgress();
   const sampleChart = chartChallenges[0];
   const chartPreviewQuestion = sampleChart.questions.find((question) => question.type === "hotspot");
-  const nextStepLabel = upcomingLesson ? "Next lesson" : activeModule ? "Return to module" : "Open curriculum";
   const resumeHref = upcomingLesson
     ? `/lesson/${upcomingLesson.slug}`
     : activeModule?.drillSlug
@@ -30,31 +25,31 @@ export function DashboardHome() {
       : activeModule
         ? `/module/${activeModule.slug}`
         : "/learn";
-  const startHereSteps = [
+  const todaySteps = [
     {
       id: "primary",
-      eyebrow: "Start here",
+      eyebrow: "Step 1",
       title: upcomingLesson?.title ?? activeModule?.title ?? "Open the curriculum",
       detail:
         upcomingLesson?.summary ??
         activeModule?.summary ??
         "Jump into the first unlocked module so the course can guide the order for you.",
       href: resumeHref,
-      cta: upcomingLesson ? "Open lesson" : activeModule ? "Open module" : "Open curriculum",
+      cta: upcomingLesson ? "Start lesson" : activeModule ? "Open module" : "Open curriculum",
     },
     {
       id: "review",
-      eyebrow: "Then reinforce",
+      eyebrow: "Step 2",
       title: reviewQueue[0]?.title ?? "Clear your due review queue",
       detail:
         reviewQueue[0]?.reason ??
         "If anything is due, review it before pushing too far forward. That is how the app keeps concepts from fading.",
       href: reviewQueue[0]?.href ?? "/progress",
-      cta: reviewQueue[0] ? "Open review" : "Open progress",
+      cta: reviewQueue[0] ? "Review now" : "Open progress",
     },
     {
       id: "practice",
-      eyebrow: "Then apply it",
+      eyebrow: "Step 3",
       title: sampleChart.title,
       detail: "Once the concept is fresh, use a visual drill or scenario to prove you can apply it and not just recognize the words.",
       href: `/chart-challenge/${sampleChart.slug}`,
@@ -65,42 +60,24 @@ export function DashboardHome() {
   return (
     <div className="space-y-8">
       <section className="course-hero rounded-[32px] p-6 sm:p-8">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="course-chip-success rounded-full px-4 py-1 text-xs uppercase tracking-[0.28em]">
-            Learning Home
-          </span>
-          {activeModule ? (
-            <span className="course-pill text-xs uppercase tracking-[0.28em] text-slate-300">
-              Active module: {activeModule.title}
-            </span>
-          ) : null}
-        </div>
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(300px,0.9fr)]">
+          <div>
+            <p className="eyebrow-label">Today</p>
+            <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl xl:text-[3.6rem] xl:leading-[1.04]">
+              One clear lesson. One clear next step.
+            </h1>
+            <p className="section-copy mt-4 max-w-3xl text-base sm:text-lg">
+              This home screen should feel like a study app, not a dashboard. Start the next lesson, then clear one
+              review and one visual rep.
+            </p>
 
-        <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-          <div className="space-y-6">
-            <div>
-              <p className="eyebrow-label">Learning Home</p>
-              <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl xl:text-[3.7rem] xl:leading-[1.04]">
-                Pick up where you left off and keep the course moving.
-              </h1>
-              <p className="section-copy mt-4 max-w-3xl text-base sm:text-lg">
-                This home screen is organized like a study dashboard: one clear next lesson, one review queue, one
-                guided practice loop, and a visible curriculum map.
-              </p>
-            </div>
-
-            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.82fr)]">
+            <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)]">
               <Link
                 href={resumeHref}
-                className="course-card-raised focus-visible-ring rounded-[28px] p-5 transition hover:-translate-y-0.5"
+                className="course-card-raised focus-visible-ring rounded-[30px] p-6 transition hover:-translate-y-0.5"
               >
-                <div className="flex items-center justify-between gap-3">
-                  <p className="eyebrow-label">Continue Learning</p>
-                  <span className="course-chip-accent rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.22em]">
-                    {nextStepLabel}
-                  </span>
-                </div>
-                <h2 className="mt-3 text-2xl font-semibold leading-tight text-white">
+                <p className="eyebrow-label">Current lesson</p>
+                <h2 className="mt-3 text-3xl font-semibold leading-tight text-white">
                   {upcomingLesson?.title ?? activeModule?.title ?? "Open curriculum"}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-slate-300">
@@ -109,64 +86,61 @@ export function DashboardHome() {
                     "Jump into the next lesson or module and keep moving through the path."}
                 </p>
                 <div className="course-button-primary mt-5 px-4 py-3 text-sm">
-                  Resume now
+                  Start next lesson
                   <ArrowRight className="h-4 w-4" />
                 </div>
               </Link>
 
-              <div className="course-card rounded-[28px] p-5">
-                <p className="eyebrow-label">How Learning Works</p>
-                <div className="mt-4 space-y-3">
-                  <LoopStep icon={BrainCircuit} title="Lesson" detail="Short concept explanation with examples" />
-                  <LoopStep icon={Target} title="Rapid Review" detail="Repeat the core idea until recall is faster" />
-                  <LoopStep icon={ChartCandlestick} title="Chart Drill" detail="Apply the read directly on a chart" />
-                  <LoopStep icon={PlayCircle} title="Replay" detail="Make a decision and get feedback" />
+              <div className="grid gap-4">
+                <div className="course-card rounded-[28px] p-5">
+                  <p className="eyebrow-label">Daily streak</p>
+                  <div className="mt-3 flex items-center gap-3">
+                    <Flame className="h-5 w-5 text-slate-200" />
+                    <p className="font-mono text-3xl text-white">{progress.streakDays}d</p>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{progress.title}</p>
+                </div>
+                <div className="course-card rounded-[28px] p-5">
+                  <p className="eyebrow-label">Mastery</p>
+                  <div className="mt-4">
+                    <ProgressBar
+                      value={Math.round((progress.xpIntoLevel / progress.xpForNextLevel) * 100)}
+                      label={`${progress.totalXp} XP`}
+                    />
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-slate-300">
+                    {progress.reviewDueCount > 0
+                      ? `${progress.reviewDueCount} review items are ready right now.`
+                      : "No reviews due right now. Finish the next lesson to keep momentum."}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="course-card-raised rounded-[28px] p-5">
-            <p className="eyebrow-label">Progress Snapshot</p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              <MetricCard label="Total XP" value={`${progress.totalXp}`} />
-              <MetricCard label="Streak" value={`${progress.streakDays}d`} />
-              <MetricCard label="Quiz Accuracy" value={`${progress.quizAccuracy}%`} />
-              <MetricCard label="Drill Accuracy" value={`${progress.drillAccuracy}%`} />
-              <MetricCard label="Chart Accuracy" value={`${progress.chartAccuracy}%`} />
-              <MetricCard label="Replay Quality" value={`${progress.simulatorAccuracy}%`} />
-              <MetricCard label="Due Now" value={`${progress.reviewDueCount}`} />
-            </div>
-            <div className="mt-5">
-              <ProgressBar
-                value={Math.round((progress.xpIntoLevel / progress.xpForNextLevel) * 100)}
-                label="Rank progress"
-              />
-            </div>
-            <div className="course-inset mt-5 rounded-[24px] p-4">
-              <p className="text-sm font-semibold text-white">{progress.title}</p>
-              <p className="mt-2 text-sm leading-7 text-slate-300">
-                {progress.reviewDueCount > 0
-                  ? `${progress.reviewDueCount} review items are due now. Clear the weakest reps first, then continue forward.`
-                  : "No spaced reviews are due right now. Keep moving forward and the next reps will surface automatically."}
-              </p>
+          <div className="course-card-raised rounded-[30px] p-6">
+            <p className="eyebrow-label">Today&apos;s path</p>
+            <div className="mt-5 space-y-4">
+              {todaySteps.map((step, index) => (
+                <Link
+                  key={step.id}
+                  href={step.href}
+                  className="focus-visible-ring flex items-start gap-4 rounded-[24px] border border-white/8 bg-white/[0.03] p-4 transition hover:bg-white/[0.05]"
+                >
+                  <span className={`lesson-path-node h-14 w-14 text-sm ${index === 0 ? "lesson-path-node-active" : "lesson-path-node-upcoming"}`}>
+                    {index + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400">{step.eyebrow}</p>
+                    <h2 className="mt-2 text-xl font-semibold text-white">{step.title}</h2>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{step.detail}</p>
+                    <p className="mt-3 text-xs uppercase tracking-[0.22em] text-slate-400">{step.cta}</p>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-3">
-        {startHereSteps.map((step) => (
-          <Link key={step.id} href={step.href} className="course-card focus-visible-ring rounded-[28px] p-5 transition hover:bg-white/[0.05]">
-            <p className="eyebrow-label">{step.eyebrow}</p>
-            <h2 className="mt-3 text-2xl font-semibold text-white">{step.title}</h2>
-            <p className="mt-3 text-sm leading-7 text-slate-300">{step.detail}</p>
-            <div className="course-button-secondary mt-5 px-4 py-3 text-sm">
-              {step.cta}
-              <ArrowRight className="h-4 w-4" />
-            </div>
-          </Link>
-        ))}
       </section>
 
       <BeginnerKickoff completedLessonSlugs={raw.completedLessonSlugs} />
@@ -178,31 +152,10 @@ export function DashboardHome() {
         />
 
         <div className="grid gap-6">
-          <div className="course-card rounded-[32px] p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="eyebrow-label">Strategy Builder</p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">Turn lessons into a study blueprint</h2>
-              </div>
-              <Workflow className="h-5 w-5 text-slate-300" />
-            </div>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
-              Organize what you learn into a rule stack: context, trigger, filters, risk rules, exits, and later
-              automation guardrails.
-            </p>
-            <Link
-              href="/strategy-builder"
-              className="course-button-primary focus-visible-ring mt-5 px-4 py-3 text-sm"
-            >
-              Open builder
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
           <div className="course-card-raised min-w-0 overflow-hidden rounded-[32px] p-5">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
-                <p className="eyebrow-label">Visual Practice Preview</p>
+                <p className="eyebrow-label">Visual practice</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">{sampleChart.title}</h2>
               </div>
               <Link href={`/chart-challenge/${sampleChart.slug}`} className="text-sm text-slate-300">
@@ -218,7 +171,7 @@ export function DashboardHome() {
           <div className="course-card rounded-[32px] p-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="eyebrow-label">Curriculum Map</p>
+                <p className="eyebrow-label">Units</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Learn in a clear order</h2>
               </div>
               <Link href="/learn" className="text-sm text-slate-300">
@@ -245,28 +198,6 @@ export function DashboardHome() {
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-function LoopStep({
-  icon: Icon,
-  title,
-  detail,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  title: string;
-  detail: string;
-}) {
-  return (
-    <div className="course-inset flex items-start gap-3 rounded-2xl p-3">
-      <div className="rounded-xl border border-white/8 bg-white/[0.04] p-2">
-        <Icon className="h-4 w-4 text-slate-300" />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-white">{title}</p>
-        <p className="mt-1 text-sm leading-7 text-slate-300">{detail}</p>
-      </div>
     </div>
   );
 }
@@ -328,15 +259,6 @@ function ReviewQueueCard({
           </Link>
         </div>
       )}
-    </div>
-  );
-}
-
-function MetricCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="course-inset rounded-2xl p-4">
-      <p className="text-xs uppercase tracking-[0.22em] text-slate-400">{label}</p>
-      <p className="mt-3 font-mono text-2xl text-white">{value}</p>
     </div>
   );
 }

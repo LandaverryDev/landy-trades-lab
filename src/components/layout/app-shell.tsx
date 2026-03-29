@@ -3,17 +3,16 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowRight, BarChart3, BrainCircuit, LayoutDashboard, Target, Workflow } from "lucide-react";
+import { ArrowRight, BarChart3, BrainCircuit, LayoutDashboard, Sparkles, Target } from "lucide-react";
 
 import { BrandMark } from "@/components/ui/brand-mark";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { useLearningProgress } from "@/lib/learning-progress";
 
 const navItems = [
-  { href: "/", label: "Home", note: "Resume and review", icon: LayoutDashboard },
-  { href: "/learn", label: "Curriculum", note: "Modules and lessons", icon: BrainCircuit },
-  { href: "/strategy-builder", label: "Strategy Builder", note: "Turn concepts into rules", icon: Workflow },
-  { href: "/progress", label: "Progress", note: "XP, scores, streak", icon: BarChart3 },
+  { href: "/", label: "Today", note: "Start, continue, review", icon: LayoutDashboard },
+  { href: "/learn", label: "Path", note: "Units and lessons", icon: BrainCircuit },
+  { href: "/progress", label: "Progress", note: "Streak and mastery", icon: BarChart3 },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -32,52 +31,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="app-canvas relative min-h-screen overflow-hidden">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.04),_transparent_34%)]" />
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[1720px] flex-col gap-6 px-4 py-4 sm:px-6 lg:flex-row lg:px-8">
-        <aside className="glass-panel flex w-full min-w-0 flex-col gap-6 rounded-[32px] p-5 lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)] lg:w-[320px] lg:min-w-[320px] lg:overflow-y-auto">
-          <div className="flex items-center gap-4 border-b border-white/8 pb-5">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-[1560px] flex-col gap-6 px-4 py-4 sm:px-6 lg:flex-row lg:px-8">
+        <aside className="glass-panel flex w-full min-w-0 flex-col gap-5 rounded-[32px] p-5 lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)] lg:w-[298px] lg:min-w-[298px] lg:overflow-y-auto">
+          <div className="flex items-center gap-4 border-b border-white/8 pb-4">
             <BrandMark />
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-slate-300">Landy Trades Lab</p>
-              <h1 className="text-lg font-semibold text-white">Interactive learning workspace</h1>
-            </div>
-          </div>
-
-          <div className="course-card-raised rounded-[28px] p-5">
-            <p className="eyebrow-label">Continue Course</p>
-            <h2 className="mt-3 text-2xl font-semibold leading-tight text-white">
-              {upcomingLesson?.title ?? activeModule?.title ?? "Open your path"}
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
-              {upcomingLesson?.summary ??
-                activeModule?.summary ??
-                "Return to the next lesson, review, or practice block in your study path."}
-            </p>
-            <Link
-              href={resumeHref}
-              className="course-button-primary focus-visible-ring mt-5 px-4 py-3 text-sm"
-            >
-              Resume lesson
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="course-card rounded-[28px] p-4">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <p className="eyebrow-label">Current Level</p>
-                <p className="mt-3 font-mono text-3xl text-white">{progress.totalXp} XP</p>
-                <p className="mt-1 text-sm text-slate-300">{progress.title}</p>
-              </div>
-              <div className="course-chip-success rounded-2xl px-3 py-2 text-right">
-                <p className="font-mono text-lg">{progress.streakDays}d</p>
-                <p className="text-xs uppercase tracking-[0.24em] text-white/70">streak</p>
-              </div>
-            </div>
-            <div className="mt-5">
-              <ProgressBar
-                value={Math.round((progress.xpIntoLevel / progress.xpForNextLevel) * 100)}
-                label="Rank progress"
-              />
+              <h1 className="text-lg font-semibold text-white">Learn trading one step at a time</h1>
             </div>
           </div>
 
@@ -86,7 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <p className="eyebrow-label">Navigation</p>
               {reviewCount ? (
                 <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-200">
-                  {reviewCount} review items
+                  {reviewCount} due
                 </span>
               ) : null}
             </div>
@@ -122,24 +82,60 @@ export function AppShell({ children }: { children: ReactNode }) {
             </nav>
           </div>
 
+          <div className="course-card-raised rounded-[28px] p-5">
+            <p className="eyebrow-label">Continue</p>
+            <h2 className="mt-3 text-2xl font-semibold leading-tight text-white">
+              {upcomingLesson?.title ?? activeModule?.title ?? "Open your path"}
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-slate-300">
+              {upcomingLesson?.summary ??
+                activeModule?.summary ??
+                "Return to the next lesson, review, or practice block in your study path."}
+            </p>
+            <Link
+              href={resumeHref}
+              className="course-button-primary focus-visible-ring mt-5 px-4 py-3 text-sm"
+            >
+              Start next step
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
           <div className="course-card rounded-[28px] p-4">
             <div className="flex items-center gap-2">
               <Target className="h-4 w-4 text-slate-300" />
-              <p className="eyebrow-label">Study Flow</p>
+              <p className="eyebrow-label">Today&apos;s Goal</p>
+            </div>
+            <div className="mt-4 space-y-4">
+              <div className="course-inset rounded-2xl p-4">
+                <p className="font-mono text-2xl text-white">{progress.streakDays}d</p>
+                <p className="mt-1 text-sm text-slate-300">Current streak</p>
+              </div>
+              <div>
+                <ProgressBar
+                  value={Math.round((progress.xpIntoLevel / progress.xpForNextLevel) * 100)}
+                  label={`${progress.totalXp} XP · ${progress.title}`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="course-card rounded-[28px] p-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-slate-300" />
+              <p className="eyebrow-label">How To Use This</p>
             </div>
             <div className="mt-4 space-y-3 text-sm text-slate-300">
-              <p>1. Read the short lesson</p>
-              <p>2. Review the key idea</p>
-              <p>3. Practice it visually</p>
-              <p>4. Test the decision in context</p>
+              <p>1. Open the next lesson node.</p>
+              <p>2. Clear the mini checks inside it.</p>
+              <p>3. Finish the unit review and chart rep.</p>
             </div>
           </div>
 
           <div className="course-accent-panel mt-auto rounded-[28px] p-4">
-            <p className="eyebrow-label text-slate-200/70">Why This App Is Structured This Way</p>
+            <p className="eyebrow-label text-slate-200/70">Simple Rule</p>
             <p className="mt-3 text-sm leading-7 text-slate-200">
-              The goal is to learn one concept at a time, revisit weak spots automatically, and slowly turn knowledge
-              into clear, repeatable rules.
+              One lesson, one checkpoint, one rep loop. The app should always tell you the next best step.
             </p>
           </div>
         </aside>

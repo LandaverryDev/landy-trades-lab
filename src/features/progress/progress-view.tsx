@@ -16,11 +16,10 @@ export function ProgressView() {
         <div className="mt-4 grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <div>
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              Momentum, mastery, and what unlocks next.
+              Simple progress, clear next steps.
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
-              The progression model is designed to make learning feel earned. Lessons, review loops, quizzes, visual
-              practice, and scenario drills all feed one connected study system.
+              This page should answer three things only: how much you have cleared, what needs review, and what unit is next.
             </p>
           </div>
 
@@ -38,7 +37,7 @@ export function ProgressView() {
 
       <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6">
-          <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Rank Progression</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Mastery</p>
           <h2 className="mt-3 text-3xl font-semibold text-white">{progress.title}</h2>
           <p className="mt-2 text-sm leading-6 text-slate-300">
             {progress.reviewDueCount > 0
@@ -66,7 +65,7 @@ export function ProgressView() {
             </div>
 
             <div className="rounded-[24px] border border-white/8 bg-slate-950/70 p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Review Queue</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Review next</p>
               <div className="mt-3 space-y-3">
                 {reviewQueue.length ? (
                   reviewQueue.slice(0, 4).map((item) => (
@@ -105,7 +104,7 @@ export function ProgressView() {
         <div className="course-card-raised rounded-[32px] p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Unlock Map</p>
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Unit map</p>
               <h2 className="mt-2 text-3xl font-semibold text-white">Curriculum progression</h2>
             </div>
             <div className="flex flex-wrap gap-3">
