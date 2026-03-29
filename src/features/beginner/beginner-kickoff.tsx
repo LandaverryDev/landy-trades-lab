@@ -77,59 +77,55 @@ export function BeginnerKickoff({ completedLessonSlugs }: { completedLessonSlugs
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 xl:grid-cols-3">
-        {kickoffLessons.map((lesson) => (
-          <article key={lesson.slug} className="course-card rounded-[26px] p-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="font-mono text-sm text-slate-300">Lesson {String(lesson.order).padStart(2, "0")}</p>
-                <h3 className="mt-3 text-xl font-semibold text-white">{lesson.title}</h3>
+      <div className="mt-8 space-y-2">
+        {kickoffLessons.map((lesson, index) => (
+          <div key={lesson.slug} className={`flex flex-col items-center ${index % 3 === 0 ? "md:mr-auto md:ml-8" : index % 3 === 1 ? "md:mx-auto" : "md:ml-auto md:mr-8"}`}>
+            {lesson.status === "locked" ? (
+              <div className="flex flex-col items-center gap-4 text-center">
+                <span className="lesson-path-node lesson-path-node-upcoming">
+                  <Lock className="h-7 w-7" />
+                </span>
+                <div className="course-card min-w-[220px] max-w-[260px] rounded-[24px] px-4 py-4">
+                  <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400">Locked</p>
+                  <h3 className="mt-2 text-lg font-semibold text-white">{lesson.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{lesson.summary}</p>
+                  <p className="mt-3 text-xs uppercase tracking-[0.22em] text-slate-500">Finish the lesson before this one</p>
+                </div>
               </div>
-              <StatusPill status={lesson.status} />
-            </div>
-
-            <p className="mt-3 text-sm leading-7 text-slate-300">{lesson.summary}</p>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {lesson.keyTerms.slice(0, 3).map((term) => (
-                <span key={term} className="course-pill text-xs text-slate-200">
-                  {term}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-5 flex items-center justify-between gap-3">
-              <p className="text-xs uppercase tracking-[0.22em] text-slate-400">{lesson.estimatedMinutes} min lesson</p>
-              {lesson.status === "locked" ? (
-                <span className="inline-flex items-center gap-2 text-sm text-slate-400">
-                  <Lock className="h-4 w-4" />
-                  Finish the lesson before this one
-                </span>
-              ) : (
-                <Link
-                  href={`/lesson/${lesson.slug}`}
-                  className="course-button-primary focus-visible-ring px-4 py-2 text-sm"
+            ) : (
+              <Link href={`/lesson/${lesson.slug}`} className="focus-visible-ring flex flex-col items-center gap-4 text-center">
+                <span
+                  className={`lesson-path-node ${
+                    lesson.status === "completed" ? "lesson-path-node-done" : "lesson-path-node-active"
+                  }`}
                 >
-                  {lesson.status === "completed" ? "Review lesson" : "Start lesson"}
-                  {lesson.status === "completed" ? <CheckCircle2 className="h-4 w-4" /> : <PlayCircle className="h-4 w-4" />}
-                </Link>
-              )}
-            </div>
-          </article>
+                  {lesson.status === "completed" ? (
+                    <CheckCircle2 className="h-8 w-8" />
+                  ) : (
+                    <PlayCircle className="h-8 w-8" />
+                  )}
+                </span>
+                <div className="course-card min-w-[220px] max-w-[260px] rounded-[24px] px-4 py-4">
+                  <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400">
+                    Lesson {String(lesson.order).padStart(2, "0")} · {lesson.status === "completed" ? "Cleared" : "Start here"}
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold text-white">{lesson.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{lesson.summary}</p>
+                  <p className="mt-3 text-xs uppercase tracking-[0.22em] text-slate-400">{lesson.estimatedMinutes} min lesson</p>
+                </div>
+              </Link>
+            )}
+
+            {index < kickoffLessons.length - 1 ? (
+              <div
+                className={`lesson-path-connector ${
+                  lesson.status === "completed" ? "lesson-path-connector-done" : "lesson-path-connector-upcoming"
+                }`}
+              />
+            ) : null}
+          </div>
         ))}
       </div>
     </section>
   );
-}
-
-function StatusPill({ status }: { status: BeginnerKickoffStatus }) {
-  if (status === "completed") {
-    return <span className="course-chip-success rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.22em]">Completed</span>;
-  }
-
-  if (status === "current") {
-    return <span className="course-chip-accent rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.22em]">Current</span>;
-  }
-
-  return <span className="course-chip-muted rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.22em]">Locked</span>;
 }
