@@ -217,3 +217,47 @@ a {
   border: 1px solid var(--accent-border);
   background: rgba(145, 170, 206, 0.08);
 }
+
+.lesson-path-node {
+  display: inline-flex;
+  height: 6rem;
+  width: 6rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 4px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 16px 34px rgba(0, 0, 0, 0.24);
+}
+
+.lesson-path-node-done {
+  border-color: var(--success-border);
+  background: rgba(147, 197, 166, 0.24);
+  color: rgb(228 243 232);
+}
+
+.lesson-path-node-active {
+  border-color: var(--accent-border);
+  background: rgba(145, 170, 206, 0.24);
+  color: white;
+}
+
+.lesson-path-node-upcoming {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgb(148 163 184);
+}
+
+.lesson-path-connector {
+  margin-top: 0.6rem;
+  height: 3.25rem;
+  width: 0.35rem;
+  border-radius: 9999px;
+}
+
+.lesson-path-connector-done {
+  background: rgba(147, 197, 166, 0.38);
+}
+
+.lesson-path-connector-upcoming {
+  background: rgba(255, 255, 255, 0.08);
+}

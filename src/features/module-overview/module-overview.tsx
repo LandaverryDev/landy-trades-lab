@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight, BrainCircuit, ChartCandlestick, Lock, PlayCircle, Trophy } from "lucide-react";
+import { ArrowRight, BrainCircuit, ChartCandlestick, CheckCircle2, Lock, PlayCircle, Trophy } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { getChartChallengeBySlug, getModuleBySlug, getModuleLessons, getScenarioBySlug } from "@/lib/course";
@@ -216,12 +216,16 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)]">
         <div className="course-card rounded-[32px] p-6">
-          <p className="eyebrow-label">Learning Sequence</p>
-          <h2 className="mt-2 text-3xl font-semibold text-white">Work through this in order</h2>
+          <p className="eyebrow-label">Unit Path</p>
+          <h2 className="mt-2 text-3xl font-semibold text-white">Follow the lesson path</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
+            Work one node at a time. Finish the lessons first, then clear the checkpoint-style practice at the end of
+            the unit.
+          </p>
 
-          <div className="mt-6 space-y-4">
-            {sequenceItems.map((item) => (
-              <SequenceRow
+          <div className="mt-8 space-y-2">
+            {sequenceItems.map((item, index) => (
+              <PathNode
                 key={item.id}
                 step={item.step}
                 title={item.title}
@@ -232,6 +236,8 @@ export function ModuleOverview({ moduleSlug }: { moduleSlug: string }) {
                 kind={item.kind}
                 icon={item.icon}
                 active={!item.done && item.id === nextSequenceItem?.id}
+                lane={index % 3}
+                showConnector={index < sequenceItems.length - 1}
               />
             ))}
           </div>
@@ -356,6 +362,68 @@ function SequenceRow({
         <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
       </div>
     </Link>
+  );
+}
+
+function PathNode({
+  step,
+  title,
+  description,
+  href,
+  done,
+  meta,
+  kind,
+  icon,
+  active,
+  lane,
+  showConnector,
+}: {
+  step: string;
+  title: string;
+  description: string;
+  href: string;
+  done: boolean;
+  meta: string;
+  kind?: string;
+  icon?: ReactNode;
+  active?: boolean;
+  lane: number;
+  showConnector: boolean;
+}) {
+  const laneClass =
+    lane === 0 ? "md:mr-auto md:ml-8" : lane === 1 ? "md:mx-auto" : "md:ml-auto md:mr-8";
+
+  return (
+    <div className={`flex flex-col items-center ${laneClass}`}>
+      <Link href={href} className="focus-visible-ring flex flex-col items-center gap-4 text-center">
+        <span
+          className={`lesson-path-node ${
+            done ? "lesson-path-node-done" : active ? "lesson-path-node-active" : "lesson-path-node-upcoming"
+          }`}
+        >
+          {done ? (
+            <CheckCircle2 className="h-8 w-8" />
+          ) : icon ? (
+            <span className="text-slate-100">{icon}</span>
+          ) : (
+            <span className="font-mono text-lg text-white">{step}</span>
+          )}
+        </span>
+
+        <div className="course-card min-w-[220px] max-w-[260px] rounded-[24px] px-4 py-4">
+          <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400">
+            {done ? "Cleared" : active ? "Up next" : kind ?? "Lesson"}
+          </p>
+          <h3 className="mt-2 text-lg font-semibold text-white">{title}</h3>
+          <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.22em] text-slate-400">{meta}</p>
+        </div>
+      </Link>
+
+      {showConnector ? (
+        <div className={`lesson-path-connector ${done ? "lesson-path-connector-done" : "lesson-path-connector-upcoming"}`} />
+      ) : null}
+    </div>
   );
 }
 
