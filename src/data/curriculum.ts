@@ -61,7 +61,7 @@ export const learningModules: LearningModule[] = [
     quizSlug: "beginner-foundations-quiz",
     drillSlug: "beginner-foundations-rapid-review",
     chartChallengeSlug: "trend-and-support-challenge",
-    reviewChartChallengeSlugs: ["candle-context-review-challenge"],
+    reviewChartChallengeSlugs: ["candle-context-review-challenge", "candle-strength-review-challenge"],
     simulatorSlug: "open-drive-pullback",
     reviewScenarioSlugs: ["first-pullback-or-chase-simulator"],
   },
@@ -5120,6 +5120,34 @@ export const drillSets: DrillSet[] = [
           "Location and structure change the meaning of the candle. A strong bar in weak context may still be low quality.",
         coaching: "The candle matters, but where it formed matters just as much.",
       },
+      {
+        id: "q7",
+        type: "multiple-choice",
+        prompt: "When is skipping a trade the stronger beginner decision?",
+        choices: [
+          { id: "a", label: "When the setup is vague and the invalidation is not clear" },
+          { id: "b", label: "Never, because active traders should always stay in motion" },
+          { id: "c", label: "Only after entering first and seeing if it works" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Skipping weak trades is part of real process. A chart that cannot define the plan cleanly usually deserves less trust, not more hope.",
+        coaching: "The app should train cleaner decisions, not constant clicking.",
+      },
+      {
+        id: "q8",
+        type: "what-happens-next",
+        prompt: "Why can an exciting chart still be a bad beginner trade?",
+        choices: [
+          { id: "a", label: "Because weak liquidity or chaotic volatility can make execution and risk much worse" },
+          { id: "b", label: "Because exciting charts are automatically fake" },
+          { id: "c", label: "Because volatility never matters if the pattern looks strong" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Movement alone is not enough. Tradeability still matters, and a fast messy market can punish decent reads.",
+        coaching: "Ask whether the market is clean enough to trade before asking where to enter.",
+      },
     ],
   },
   {
@@ -5839,6 +5867,104 @@ export const chartChallenges: ChartChallenge[] = [
       "Candle reading gets stronger when you compare pushes and failed holds, not when you memorize names.",
       "The sequence matters because control can fade before the chart fully reverses.",
       "This kind of visual read later becomes measurable through close strength and rejection rules.",
+    ],
+  },
+  {
+    slug: "candle-strength-review-challenge",
+    moduleSlug: "market-bootcamp",
+    title: "Candle Strength Review",
+    summary:
+      "Practice reading which candles show stronger control, which show rejection, and where the sequence starts getting less trustworthy.",
+    xpReward: 90,
+    candles: [
+      { open: 72.1, high: 72.5, low: 71.9, close: 72.4 },
+      { open: 72.4, high: 72.9, low: 72.3, close: 72.8 },
+      { open: 72.8, high: 73.2, low: 72.7, close: 73.1 },
+      { open: 73.1, high: 73.6, low: 73.0, close: 73.5 },
+      { open: 73.5, high: 73.9, low: 73.3, close: 73.4 },
+      { open: 73.4, high: 73.5, low: 72.9, close: 73.0 },
+      { open: 73.0, high: 73.2, low: 72.6, close: 72.8 },
+      { open: 72.8, high: 73.0, low: 72.5, close: 72.9 },
+      { open: 72.9, high: 73.1, low: 72.4, close: 72.5 },
+      { open: 72.5, high: 72.7, low: 72.1, close: 72.2 },
+    ],
+    questions: [
+      {
+        id: "strongest-bullish-candle",
+        type: "hotspot",
+        prompt: "Click the candle zone that shows the clearest bullish control in the early push.",
+        instruction: "Pick the strongest bullish push, not just any green candle.",
+        explanation:
+          "The best answer is the strongest early expansion candle that closes near its high with clean follow-through behind it. That shows better buyer control than a weaker green bar with less conviction.",
+        coaching: "Start with body size and close location. A stronger candle usually shows both control and commitment into the close.",
+        hotspots: [
+          {
+            id: "early-setup",
+            label: "Early setup candle",
+            candleStart: 0,
+            candleEnd: 1,
+            priceLow: 71.9,
+            priceHigh: 72.9,
+            correct: false,
+            explanation:
+              "These candles are positive, but they are not the clearest strongest push in the sequence.",
+          },
+          {
+            id: "strong-bullish-push",
+            label: "Strong bullish push",
+            candleStart: 2,
+            candleEnd: 3,
+            priceLow: 72.7,
+            priceHigh: 73.6,
+            correct: true,
+            explanation:
+              "This is the cleanest early expansion zone. The bodies are stronger and the closes stay near the highs.",
+          },
+          {
+            id: "late-fade-zone",
+            label: "Late fade zone",
+            candleStart: 6,
+            candleEnd: 8,
+            priceLow: 72.4,
+            priceHigh: 73.2,
+            correct: false,
+            explanation:
+              "This section already shows weaker control and fading momentum, not the strongest bullish push.",
+          },
+        ],
+      },
+      {
+        id: "rejection-line",
+        type: "price-line",
+        prompt: "Place a line near the rejection area where buyers stop holding full control.",
+        instruction: "Click the zone where the sequence starts failing near the highs.",
+        explanation:
+          "The clearest rejection begins around the local high area. Price probes higher, but the closes weaken and the sequence stops holding strong control.",
+        coaching: "Rejection becomes more meaningful after a strong push, especially when the market stops closing near the highs.",
+        correctPrice: 73.5,
+        tolerance: 0.25,
+        selectionLabel: "Rejection area",
+      },
+      {
+        id: "fade-sequence",
+        type: "multiple-choice",
+        prompt: "What is the best read on the later half of the sequence?",
+        instruction: "Read the story of the candles, not just the final color.",
+        explanation:
+          "The best read is fading momentum after the early bullish push. The chart stops holding strong closes and starts slipping lower instead of continuing cleanly.",
+        coaching: "The sequence matters because strength can weaken before a chart fully reverses.",
+        choices: [
+          { id: "fading-momentum", label: "Fading momentum after an early bullish expansion" },
+          { id: "stronger-uptrend", label: "A stronger uptrend than the first half" },
+          { id: "pure-sideways", label: "Completely neutral sideways action from start to finish" },
+        ],
+        correctChoiceId: "fading-momentum",
+      },
+    ],
+    coachDebrief: [
+      "Candle strength comes from body, wick, and close location, not from color alone.",
+      "Rejection matters more after a stronger push than in the middle of noise.",
+      "Reading sequences is how a candle chart becomes a story instead of a list of bars.",
     ],
   },
   {
