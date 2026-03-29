@@ -13,12 +13,13 @@ import {
 
 import { CandlestickChart } from "@/components/ui/candlestick-chart";
 import { ProgressBar } from "@/components/ui/progress-bar";
+import { BeginnerKickoff } from "@/features/beginner/beginner-kickoff";
 import { chartChallenges } from "@/lib/course";
 import { useLearningProgress } from "@/lib/learning-progress";
 import type { ReviewQueueItem } from "@/types/trading";
 
 export function DashboardHome() {
-  const { activeModule, progress, reviewQueue, tierProgress, upcomingLesson } = useLearningProgress();
+  const { activeModule, progress, raw, reviewQueue, tierProgress, upcomingLesson } = useLearningProgress();
   const sampleChart = chartChallenges[0];
   const chartPreviewQuestion = sampleChart.questions.find((question) => question.type === "hotspot");
   const nextStepLabel = upcomingLesson ? "Next lesson" : activeModule ? "Return to module" : "Open curriculum";
@@ -167,6 +168,8 @@ export function DashboardHome() {
           </Link>
         ))}
       </section>
+
+      <BeginnerKickoff completedLessonSlugs={raw.completedLessonSlugs} />
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
         <ReviewQueueCard

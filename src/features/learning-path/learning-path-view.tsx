@@ -4,10 +4,11 @@ import Link from "next/link";
 import { ArrowRight, Lock } from "lucide-react";
 
 import { ProgressBar } from "@/components/ui/progress-bar";
+import { BeginnerKickoff } from "@/features/beginner/beginner-kickoff";
 import { useLearningProgress } from "@/lib/learning-progress";
 
 export function LearningPathView() {
-  const { activeModule, modules, progress, tierProgress } = useLearningProgress();
+  const { activeModule, modules, progress, raw, tierProgress } = useLearningProgress();
 
   return (
     <div className="space-y-8">
@@ -43,6 +44,8 @@ export function LearningPathView() {
           </div>
         </div>
       </section>
+
+      <BeginnerKickoff completedLessonSlugs={raw.completedLessonSlugs} />
 
       <section className="space-y-6">
         {tierProgress.map((tier) => {
