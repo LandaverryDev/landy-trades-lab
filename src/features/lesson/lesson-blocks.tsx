@@ -5,7 +5,15 @@ import { ArrowRight, Bot, Flame, ShieldAlert, Sparkles } from "lucide-react";
 
 import type { LessonBlock, LessonImageBlock, LessonQuickCheckBlock } from "@/types/trading";
 
-export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
+export function LessonBlocks({
+  blocks,
+  completedQuickCheckIds = [],
+  onQuickCheckComplete,
+}: {
+  blocks: LessonBlock[];
+  completedQuickCheckIds?: string[];
+  onQuickCheckComplete?: (blockId: string) => void;
+}) {
   return (
     <div className="mt-5 grid gap-4">
       {blocks.map((block) => {
@@ -70,7 +78,14 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
             return <LessonVisualCard key={block.id} block={block} />;
 
           case "quick-check":
-            return <InlineQuickCheck key={block.id} block={block} />;
+            return (
+              <InlineQuickCheck
+                key={block.id}
+                block={block}
+                completed={completedQuickCheckIds.includes(block.id)}
+                onComplete={onQuickCheckComplete}
+              />
+            );
 
           default:
             return null;
@@ -80,10 +95,30 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
   );
 }
 
-function InlineQuickCheck({ block }: { block: LessonQuickCheckBlock }) {
+function InlineQuickCheck({
+  block,
+  completed,
+  onComplete,
+}: {
+  block: LessonQuickCheckBlock;
+  completed: boolean;
+  onComplete?: (blockId: string) => void;
+}) {
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const isCorrect = selectedChoiceId === block.correctChoiceId;
+
+  function handleSubmit() {
+    if (!selectedChoiceId) {
+      return;
+    }
+
+    setSubmitted(true);
+
+    if (!completed) {
+      onComplete?.(block.id);
+    }
+  }
 
   return (
     <div className="course-card-raised rounded-[24px] p-5">
@@ -92,8 +127,12 @@ function InlineQuickCheck({ block }: { block: LessonQuickCheckBlock }) {
           <p className="eyebrow-label">Inline Practice</p>
           <h3 className="mt-2 text-lg font-semibold text-white">{block.title}</h3>
         </div>
-        <span className="course-chip-accent rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.2em]">
-          Quick check
+        <span
+          className={`rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.2em] ${
+            completed ? "course-chip-success" : "course-chip-accent"
+          }`}
+        >
+          {completed ? "Cleared" : "Quick check"}
         </span>
       </div>
 
@@ -142,7 +181,7 @@ function InlineQuickCheck({ block }: { block: LessonQuickCheckBlock }) {
           <button
             type="button"
             disabled={!selectedChoiceId}
-            onClick={() => setSubmitted(true)}
+            onClick={handleSubmit}
             className="course-button-primary focus-visible-ring px-4 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-40"
           >
             Check it

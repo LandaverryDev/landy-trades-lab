@@ -5,7 +5,13 @@ import { ArrowRight, RotateCcw } from "lucide-react";
 
 import type { LessonCheckpoint } from "@/types/trading";
 
-export function LessonCheckpointCard({ checkpoint }: { checkpoint: LessonCheckpoint }) {
+export function LessonCheckpointCard({
+  checkpoint,
+  onComplete,
+}: {
+  checkpoint: LessonCheckpoint;
+  onComplete?: () => void;
+}) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -30,6 +36,7 @@ export function LessonCheckpointCard({ checkpoint }: { checkpoint: LessonCheckpo
   function handleNext() {
     if (questionIndex === checkpoint.questions.length - 1) {
       setCompleted(true);
+      onComplete?.();
       return;
     }
 
