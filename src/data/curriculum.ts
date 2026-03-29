@@ -74,14 +74,14 @@ export const learningModules: LearningModule[] = [
     status: "locked",
     title: "Levels, Trends, and Risk",
     summary:
-      "Learn support and resistance, trend direction, stop placement, and simple position sizing.",
+      "Learn support and resistance, trend direction, stop placement, position sizing, and the market-structure clues that make a setup clean or noisy.",
     xpReward: 340,
-    lessonCount: 6,
-    estimatedMinutes: 50,
+    lessonCount: 9,
+    estimatedMinutes: 72,
     progressPercent: 0,
-    focusAreas: ["Support", "Resistance", "Trend direction", "Trend vs chop", "Risk basics"],
+    focusAreas: ["Support", "Resistance", "Trend direction", "Trend vs chop", "Volume", "Volatility", "Risk basics"],
     botBuilderHook:
-      "The next step is defining direction, levels, and invalidation in a way a rules engine could later evaluate.",
+      "The next step is defining direction, levels, invalidation, and participation quality in a way a rules engine could later evaluate.",
     unlockRule: "Unlock after Beginner Foundations",
     lessonSlugs: [
       "support-and-resistance",
@@ -90,12 +90,15 @@ export const learningModules: LearningModule[] = [
       "stop-loss-basics",
       "reward-to-risk-basics",
       "position-sizing-basics",
+      "market-structure-basics",
+      "volume-basics",
+      "volatility-basics",
     ],
     quizSlug: "levels-trends-risk-quiz",
     drillSlug: "levels-trends-risk-rapid-review",
     chartChallengeSlug: "trend-level-and-stop-challenge",
-    reviewChartChallengeSlugs: ["role-reversal-review-challenge"],
-    reviewScenarioSlugs: ["support-failure-risk-simulator"],
+    reviewChartChallengeSlugs: ["role-reversal-review-challenge", "volume-and-volatility-review-challenge"],
+    reviewScenarioSlugs: ["support-failure-risk-simulator", "range-or-expansion-simulator"],
   },
   {
     id: "module-03",
@@ -1397,6 +1400,276 @@ export const lessons: Lesson[] = [
       "A strong risk engine is what keeps strategy logic alive over time.",
     ],
     botBuilderSignals: ["Risk budget", "Stop distance", "Size formula", "Reward-to-risk filter"],
+    nextLessonSlug: "market-structure-basics",
+  },
+  {
+    slug: "market-structure-basics",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Market Structure Basics",
+    summary:
+      "Before you trade a chart, decide whether price is organizing cleanly or just overlapping in noise. Structure quality changes everything.",
+    objective: "Separate clean trend structure from messy chop so you stop forcing setups in low-quality conditions.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["Impulse", "Pullback", "Range", "Chop"],
+    sections: [
+      {
+        id: "structure-has-shape",
+        eyebrow: "Structure Read",
+        title: "Good charts move in readable phases: push, pause, test, continue or fail",
+        summary: "You are not just looking for direction. You are looking for organized movement.",
+        blocks: [
+          {
+            id: "structure-has-shape-text",
+            type: "text",
+            body:
+              "A cleaner chart usually shows an impulse move, then a pullback or pause, then a response. A messy chart overlaps, fakes out repeatedly, and gives weak follow-through after entries.",
+            bullets: [
+              "Impulse: price pushes with visible intent.",
+              "Pullback: price retraces without fully breaking the idea.",
+              "Chop: candles overlap and conviction stays weak.",
+            ],
+          },
+          {
+            id: "structure-has-shape-diagram",
+            type: "diagram",
+            title: "Three common chart states",
+            caption: "The job is to identify what kind of environment you are being asked to trade.",
+            items: [
+              {
+                label: "Trend",
+                value: "Directional structure",
+                detail: "Pushes and pullbacks stay organized enough to define entries and invalidation.",
+              },
+              {
+                label: "Range",
+                value: "Two-sided rotation",
+                detail: "Price reacts between clearer boundaries instead of trending cleanly.",
+              },
+              {
+                label: "Chop",
+                value: "Low-quality overlap",
+                detail: "The chart keeps moving, but not in a way that offers clean trade logic.",
+              },
+            ],
+          },
+          {
+            id: "structure-has-shape-check",
+            type: "quick-check",
+            title: "Structure check",
+            prompt: "What is the first goal of reading market structure?",
+            choices: [
+              { id: "a", label: "Decide whether the chart is organized enough to trade cleanly" },
+              { id: "b", label: "Find a way to trade every chart no matter how messy it is" },
+              { id: "c", label: "Ignore overlap as long as one candle looks exciting" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Structure reading is a quality filter. It tells you whether the market is giving you something tradable or just movement.",
+            coaching:
+              "Most beginner mistakes start one step too early: they ask where to enter before asking whether the structure deserves a trade at all.",
+          },
+        ],
+      },
+      {
+        id: "chop-is-information",
+        eyebrow: "Skip Logic",
+        title: "Chop is not a challenge to solve. It is usually a warning to reduce trust.",
+        summary: "A low-quality chart is still giving information. The information is often 'do less.'",
+        blocks: [
+          {
+            id: "chop-is-information-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Practical rule",
+            body: "When overlap grows, follow-through weakens, and levels keep failing, the trade quality usually drops faster than beginners expect.",
+          },
+          {
+            id: "chop-is-information-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Later this becomes a structure filter: overlap threshold, failed-break count, or minimum trend quality score before any setup is allowed.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Market structure is a quality filter, not just a chart description.",
+      "Clean movement usually alternates between impulse and pullback, not constant overlap.",
+      "Skipping chop is often a bigger edge than finding a new entry trick.",
+    ],
+    botBuilderSignals: ["Trend quality score", "Range filter", "Overlap threshold", "Failed-break count"],
+    nextLessonSlug: "volume-basics",
+  },
+  {
+    slug: "volume-basics",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Volume Basics",
+    summary:
+      "Volume tells you whether participation is showing up behind the move. It does not replace the chart, but it changes how much trust the chart deserves.",
+    objective: "Use volume as confirmation so you can tell the difference between supported movement and thin, low-conviction price action.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["Participation", "Expansion", "Dry-up", "Confirmation"],
+    sections: [
+      {
+        id: "volume-confirms",
+        eyebrow: "Participation",
+        title: "Volume is one way to ask whether the move has real participation behind it",
+        summary: "Strong moves often attract stronger participation. Weak moves often do not.",
+        blocks: [
+          {
+            id: "volume-confirms-text",
+            type: "text",
+            body:
+              "A breakout with improving volume often deserves more trust than a breakout that barely clears a level on weak participation. The same is true for pullback defenses and reversals.",
+            bullets: [
+              "Improving volume can support the move.",
+              "Dry volume can warn that follow-through may be weaker.",
+              "Volume helps most when paired with structure, not used alone.",
+            ],
+          },
+          {
+            id: "volume-confirms-callout",
+            type: "callout",
+            tone: "neutral",
+            title: "Keep it simple",
+            body: "Do not treat volume as magic. Use it as a confirmation layer for the structure you already see.",
+          },
+          {
+            id: "volume-confirms-check",
+            type: "quick-check",
+            title: "Volume check",
+            prompt: "When is volume most useful to a beginner?",
+            choices: [
+              { id: "a", label: "When it confirms a breakout, defense, or pullback you already understand structurally" },
+              { id: "b", label: "When it replaces all chart structure and level reading" },
+              { id: "c", label: "When it guarantees the next candle will continue" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Volume works best as supporting evidence. It does not do the whole job by itself.",
+            coaching:
+              "The chart still comes first. Volume helps you decide how much confidence to place in what the chart is trying to do.",
+          },
+        ],
+      },
+      {
+        id: "volume-context",
+        eyebrow: "Execution Lens",
+        title: "Low volume can turn a good-looking chart into a weaker trade",
+        summary: "Thin participation often means more fake moves, worse fills, and less conviction.",
+        blocks: [
+          {
+            id: "volume-context-diagram",
+            type: "diagram",
+            title: "What volume can help you judge",
+            caption: "The question is not just direction. It is whether the move deserves trust.",
+            items: [
+              {
+                label: "Breakout",
+                value: "Participation behind escape",
+                detail: "A stronger push through a level usually looks better when more participants join it.",
+              },
+              {
+                label: "Pullback hold",
+                value: "Response quality",
+                detail: "A support defense often matters more when the response actually attracts interest.",
+              },
+              {
+                label: "Noise",
+                value: "Thin movement",
+                detail: "Weak participation can make the chart look active without providing clean follow-through.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Volume helps confirm whether movement has real participation behind it.",
+      "Low volume often makes a setup less trustworthy, even if the shape looks fine.",
+      "Volume is a confirmation tool, not a replacement for structure and levels.",
+    ],
+    botBuilderSignals: ["Relative volume", "Breakout participation", "Dry-up filter", "Confirmation threshold"],
+    nextLessonSlug: "volatility-basics",
+  },
+  {
+    slug: "volatility-basics",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Volatility Basics",
+    summary:
+      "Volatility tells you how fast price is moving and how much space it covers. That changes trade location, stop distance, size, and whether the market is even behaving well enough to trade.",
+    objective: "Recognize when volatility is healthy, when it is compressed, and when it is too chaotic for the current setup quality.",
+    estimatedMinutes: 8,
+    xpReward: 80,
+    keyTerms: ["Compression", "Expansion", "Range size", "Chaotic tape"],
+    sections: [
+      {
+        id: "volatility-sets-the-feel",
+        eyebrow: "Market Feel",
+        title: "Volatility changes how forgiving the chart feels",
+        summary: "The same setup logic behaves differently in calm compression versus wild expansion.",
+        blocks: [
+          {
+            id: "volatility-sets-the-feel-text",
+            type: "text",
+            body:
+              "Compressed volatility can lead to tight ranges and cleaner break points. Expanding volatility can create better momentum but also wider stops and faster mistakes. Extreme, chaotic volatility can destroy clean execution entirely.",
+            bullets: [
+              "Compression can create cleaner release points.",
+              "Healthy expansion can improve follow-through.",
+              "Chaotic expansion can reduce precision and discipline.",
+            ],
+          },
+          {
+            id: "volatility-sets-the-feel-check",
+            type: "quick-check",
+            title: "Volatility check",
+            prompt: "Why does volatility matter even before you think about direction?",
+            choices: [
+              { id: "a", label: "Because it changes stop distance, size, and how cleanly a setup can be executed" },
+              { id: "b", label: "Because volatility only matters after a trade is already closed" },
+              { id: "c", label: "Because more volatility always makes every setup better" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Volatility affects both opportunity and risk. It shapes whether the idea is even practical to trade with discipline.",
+            coaching:
+              "A setup is not just 'long or short.' It is also a question of whether the chart's current speed and range fit your rules.",
+          },
+        ],
+      },
+      {
+        id: "match-the-market",
+        eyebrow: "Risk Fit",
+        title: "You are not trying to survive every volatility regime with the same plan",
+        summary: "Good traders adjust trust, size, and participation to the market's current behavior.",
+        blocks: [
+          {
+            id: "match-the-market-callout",
+            type: "callout",
+            tone: "warning",
+            title: "Common beginner mistake",
+            body: "Beginners often use the same entry aggression and size in quiet ranges, clean trends, and chaotic spikes. The market does not reward that kind of rigidity.",
+          },
+          {
+            id: "match-the-market-bot",
+            type: "callout",
+            tone: "bot",
+            title: "Bot-builder lens",
+            body: "Later this becomes regime logic: only allow certain setups when volatility is inside an acceptable range, and reduce risk when it is not.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Volatility changes the practical quality of a setup, not just the speed of the chart.",
+      "Compression, healthy expansion, and chaotic expansion deserve different levels of trust.",
+      "Good risk logic adapts to regime instead of pretending every tape behaves the same way.",
+    ],
+    botBuilderSignals: ["Range expansion", "Compression filter", "ATR-style threshold", "Regime gate"],
     nextLessonSlug: "stocks-and-etfs-basics",
   },
   {
@@ -3895,7 +4168,7 @@ export const quizzes: Quiz[] = [
     moduleSlug: "levels-trends-and-risk",
     title: "Levels, Trends, and Risk Quiz",
     summary:
-      "Test the second beginner module: chart levels, trend sequence, stop placement, and sizing logic.",
+      "Test the second beginner module: chart levels, trend sequence, structure quality, volume, volatility, stop placement, and sizing logic.",
     xpReward: 100,
     questions: [
       {
@@ -3988,6 +4261,48 @@ export const quizzes: Quiz[] = [
         explanation:
           "Trend direction and trend quality are not the same. Weak structure can reduce edge even when the market is leaning one way.",
         coaching: "That is the whole point of learning trend quality and chop filters before chasing every move.",
+      },
+      {
+        id: "q7",
+        type: "multiple-choice",
+        prompt: "What does clean market structure usually give you first?",
+        choices: [
+          { id: "a", label: "A clearer map for trade logic, pullbacks, and invalidation" },
+          { id: "b", label: "Proof that stops and risk rules are no longer needed" },
+          { id: "c", label: "Permission to trade any breakout without hesitation" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Structure quality matters because it makes the chart easier to trust and easier to plan around.",
+        coaching: "You are not just labeling the chart. You are deciding whether it deserves a trade plan.",
+      },
+      {
+        id: "q8",
+        type: "pattern-match",
+        prompt: "What is the best beginner use of volume?",
+        choices: [
+          { id: "a", label: "Use it to confirm structure and levels that already make sense" },
+          { id: "b", label: "Use it instead of structure, levels, and context" },
+          { id: "c", label: "Use it as proof the next candle must continue" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Volume works best as supporting evidence. It can strengthen a breakout, defense, or trend read you already understand structurally.",
+        coaching: "Let volume reinforce a good read. Do not ask it to rescue a weak one.",
+      },
+      {
+        id: "q9",
+        type: "what-happens-next",
+        prompt: "If volatility expands sharply and the chart becomes much wider and more chaotic, what is usually the disciplined adjustment?",
+        choices: [
+          { id: "a", label: "Reduce trust, reduce size, or wait for a cleaner regime" },
+          { id: "b", label: "Increase size because bigger movement means easier money" },
+          { id: "c", label: "Treat the setup exactly the same because direction did not change" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Volatility changes the practical quality of the setup. Wider, faster movement often demands tighter filters or less size.",
+        coaching: "Regime fit matters. A directional market can still be a poor execution environment.",
       },
     ],
   },
@@ -4647,7 +4962,7 @@ export const drillSets: DrillSet[] = [
     moduleSlug: "levels-trends-and-risk",
     title: "Levels, Trends, and Risk Rapid Review",
     summary:
-      "A short repetition loop on support/resistance, trend sequence, stops, and sizing logic.",
+      "A short repetition loop on support/resistance, trend sequence, structure quality, volume, volatility, stops, and sizing logic.",
     xpReward: 90,
     questions: [
       {
@@ -4732,6 +5047,47 @@ export const drillSets: DrillSet[] = [
         explanation:
           "Reward-to-risk is a trade-selection filter. It helps you avoid cramped setups that may not pay enough even if they work.",
         coaching: "Use it to improve selection, not to pretend probability no longer matters.",
+      },
+      {
+        id: "q7",
+        type: "multiple-choice",
+        prompt: "What is the first value of reading market structure well?",
+        choices: [
+          { id: "a", label: "It tells you whether the chart is organized enough to trust" },
+          { id: "b", label: "It guarantees any clean-looking level will hold" },
+          { id: "c", label: "It replaces stop logic with confidence" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Structure reading is a quality filter. It helps decide whether the environment deserves a trade plan at all.",
+        coaching: "The first edge is often the decision not to force weak structure.",
+      },
+      {
+        id: "q8",
+        type: "true-false",
+        prompt: "True or false: volume is usually most useful when it confirms a move or defense you already understand on the chart.",
+        choices: [
+          { id: "true", label: "True" },
+          { id: "false", label: "False" },
+        ],
+        correctChoiceId: "true",
+        explanation:
+          "Volume adds confidence when it supports the structure. It is not meant to replace the structure read itself.",
+        coaching: "The chart still comes first. Volume helps judge participation behind it.",
+      },
+      {
+        id: "q9",
+        type: "what-happens-next",
+        prompt: "What is usually the right response when volatility turns from manageable to chaotic?",
+        choices: [
+          { id: "a", label: "Reduce confidence, reduce size, or wait for a cleaner regime" },
+          { id: "b", label: "Trade more aggressively because the market is moving faster" },
+          { id: "c", label: "Assume the same execution quality still applies" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Chaotic volatility can ruin otherwise decent-looking setups by widening stops and damaging execution quality.",
+        coaching: "Good risk logic adapts to regime instead of assuming every tape deserves the same aggression.",
       },
     ],
   },
@@ -5601,6 +5957,60 @@ export const chartChallenges: ChartChallenge[] = [
       "Role reversal is one of the clearest bridges from visual chart reading into rule logic.",
       "A retest zone improves both timing and stop placement because the level now has a job to do.",
       "This is exactly the kind of structure that later becomes breakout-hold code.",
+    ],
+  },
+  {
+    slug: "volume-and-volatility-review-challenge",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Volume and Volatility Review",
+    summary:
+      "Reinforce whether a chart is compressing cleanly before expansion and whether participation actually supports the move.",
+    xpReward: 95,
+    candles: [
+      { open: 54.2, high: 54.7, low: 54.0, close: 54.5, volume: 92000 },
+      { open: 54.5, high: 54.8, low: 54.2, close: 54.6, volume: 88000 },
+      { open: 54.6, high: 54.7, low: 54.3, close: 54.4, volume: 76000 },
+      { open: 54.4, high: 54.6, low: 54.2, close: 54.5, volume: 71000 },
+      { open: 54.5, high: 54.6, low: 54.3, close: 54.4, volume: 69000 },
+      { open: 54.4, high: 54.5, low: 54.2, close: 54.3, volume: 64000 },
+      { open: 54.3, high: 55.0, low: 54.2, close: 54.9, volume: 134000 },
+      { open: 54.9, high: 55.4, low: 54.8, close: 55.2, volume: 151000 },
+      { open: 55.2, high: 55.5, low: 55.0, close: 55.3, volume: 142000 },
+      { open: 55.3, high: 55.4, low: 55.0, close: 55.1, volume: 116000 },
+    ],
+    questions: [
+      {
+        id: "compression-window",
+        type: "candle-range",
+        prompt: "Mark the compression phase before the expansion move begins.",
+        instruction: "Click the first candle where the range tightens, then the last compressed candle before the breakout expands.",
+        explanation:
+          "The compression phase is the tight, quieter section before the breakout candles widen and participation expands. That is where the chart starts storing pressure instead of releasing it.",
+        coaching: "Compression is useful because it gives you a cleaner decision area before the move speeds up.",
+        correctCandleStart: 2,
+        correctCandleEnd: 5,
+        selectionLabel: "Compression zone",
+      },
+      {
+        id: "participation-read",
+        type: "multiple-choice",
+        prompt: "What is the best read on the move once it breaks out of compression?",
+        instruction: "Choose the answer that best combines structure, volume, and volatility.",
+        explanation:
+          "The best read is a cleaner expansion with stronger participation. The chart compresses first, then the breakout candles widen and volume increases, which gives the move more credibility than a thin random spike.",
+        coaching: "This is the relationship to remember: compression can create a cleaner launch, and rising participation can improve trust in the release.",
+        choices: [
+          { id: "clean-expansion", label: "Clean expansion with improving participation behind the move" },
+          { id: "thin-noise", label: "Thin random noise with no useful change in quality" },
+          { id: "automatic-short", label: "An automatic short because volatility increased" },
+        ],
+        correctChoiceId: "clean-expansion",
+      },
+    ],
+    coachDebrief: [
+      "Compression and expansion are useful only when you can connect them back to structure and participation.",
+      "Volume helps answer whether the breakout deserves trust, not whether the candle looks exciting.",
+      "This is the early version of regime filtering: quiet build, clean release, then judge whether the move is still manageable.",
     ],
   },
   {
@@ -7350,6 +7760,91 @@ export const scenarios: Scenario[] = [
       "Levels matter most when they clearly separate valid from invalid trade logic.",
       "Risk discipline means accepting when the chart disproves the idea.",
       "A stop is not a punishment. It is the rule that keeps one idea from becoming a bigger problem.",
+    ],
+  },
+  {
+    slug: "range-or-expansion-simulator",
+    moduleSlug: "levels-trends-and-risk",
+    title: "Range Or Expansion Simulator",
+    summary:
+      "Practice deciding whether the chart is still trapped in low-quality chop or finally expanding into something worth trusting.",
+    xpReward: 115,
+    setup:
+      "A stock spent most of the morning inside a tight range. It is starting to move, but the question is whether the move is clean enough to trust or still too noisy to treat seriously.",
+    steps: [
+      {
+        id: "range-or-expansion-step-1",
+        title: "Still inside the range",
+        marketContext:
+          "Price keeps poking both sides of the range, but each attempt quickly falls back into overlap and the candles keep stacking on top of each other.",
+        tapeRead: [
+          "The chart is active, but the movement is still overlapping heavily.",
+          "The range boundaries are visible, yet neither side is gaining clean control.",
+          "This is a quality question before it is an entry question.",
+        ],
+        riskCallout: "Movement alone is not edge. If the chart is still overlapping badly, trust should stay low.",
+        actions: [
+          {
+            id: "wait-for-clean-break",
+            label: "Wait for a cleaner break with stronger follow-through",
+            rationale: "The chart still looks trapped in low-quality range behavior.",
+          },
+          {
+            id: "force-midrange-entry",
+            label: "Enter in the middle of the range because the move feels close",
+            rationale: "It is better to get early than to miss the breakout.",
+          },
+          {
+            id: "double-size-inside-range",
+            label: "Use larger size because the candles look small",
+            rationale: "Small candles always mean safer trades.",
+          },
+        ],
+        correctActionId: "wait-for-clean-break",
+        feedback:
+          "That is the disciplined choice. When overlap stays high, the better trade is often patience rather than prediction.",
+        outcome:
+          "Price keeps whipping inside the same range for several more bars, proving that the earlier movement was not clean expansion yet.",
+      },
+      {
+        id: "range-or-expansion-step-2",
+        title: "Participation improves on the break",
+        marketContext:
+          "A later candle breaks above the range high, closes strong, and the next candle holds above that level instead of slipping back inside.",
+        tapeRead: [
+          "The move now looks different from the earlier range pokes.",
+          "There is cleaner expansion and early acceptance above the old ceiling.",
+          "The chart is finally offering structure that can define both a thesis and a stop.",
+        ],
+        riskCallout: "A cleaner break becomes tradable when the chart starts behaving differently, not simply because one candle crossed the line.",
+        actions: [
+          {
+            id: "plan-around-hold",
+            label: "Treat the breakout hold as the first tradeable structure and plan risk around it",
+            rationale: "The move now has clearer acceptance and a more defensible invalidation point.",
+          },
+          {
+            id: "short-the-strength",
+            label: "Fade the breakout immediately because volatility increased",
+            rationale: "Fast movement should be sold automatically.",
+          },
+          {
+            id: "remove-stop-on-breakout",
+            label: "Enter without a stop because the breakout already proved the thesis",
+            rationale: "A strong close means the level no longer needs to be tested.",
+          },
+        ],
+        correctActionId: "plan-around-hold",
+        feedback:
+          "This is the better read. The chart finally moved from overlap into cleaner expansion, which means the trade can now be planned around real structure instead of hope.",
+        outcome:
+          "Price holds above the old range and extends higher, rewarding the trader who waited for the market to become clearer before acting.",
+      },
+    ],
+    closingNotes: [
+      "The first decision is often whether the market is even behaving well enough to trade.",
+      "Clean expansion matters more than random movement inside noise.",
+      "This is how structure, volatility, and patience combine into better decision quality.",
     ],
   },
   {
