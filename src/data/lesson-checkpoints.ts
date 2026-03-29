@@ -51,6 +51,41 @@ export const lessonCheckpoints: LessonCheckpoint[] = [
     ],
   },
   {
+    lessonSlug: "trading-vs-investing",
+    title: "Time Horizon Check",
+    summary: "Make sure the trading-vs-investing split is actually clear.",
+    questions: [
+      {
+        id: "time-horizon-core",
+        prompt: "What is the clearest beginner difference between trading and investing?",
+        choices: [
+          { id: "a", label: "Trading usually needs tighter timing and faster risk decisions" },
+          { id: "b", label: "Investing never uses risk control" },
+          { id: "c", label: "They are exactly the same thing with different names" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Trading works on a shorter time horizon, so timing, invalidation, and execution quality become more important much faster.",
+        coaching:
+          "This is why the app keeps teaching setup, trigger, and risk logic so early.",
+      },
+      {
+        id: "decision-speed-core",
+        prompt: "Why does shorter time horizon usually demand more structure?",
+        choices: [
+          { id: "a", label: "Because you have less time for a vague thesis to rescue a weak entry" },
+          { id: "b", label: "Because traders do not need a plan" },
+          { id: "c", label: "Because longer-term charts are the only ones that use risk" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Shorter trades usually need clearer timing and faster invalidation because the window for being wrong is less forgiving.",
+        coaching:
+          "Speed increases the need for structure. It does not remove it.",
+      },
+    ],
+  },
+  {
     lessonSlug: "basic-market-concepts",
     title: "Quick Check",
     summary: "Check whether the market basics are starting to connect.",
@@ -163,6 +198,76 @@ export const lessonCheckpoints: LessonCheckpoint[] = [
     ],
   },
   {
+    lessonSlug: "bullish-vs-bearish-candles",
+    title: "Direction Check",
+    summary: "Lock in the simplest candle read before moving to strength and rejection.",
+    questions: [
+      {
+        id: "bullish-core",
+        prompt: "What does a bullish candle tell you first?",
+        choices: [
+          { id: "a", label: "Buyers finished that interval stronger than sellers" },
+          { id: "b", label: "The next candle must also go up" },
+          { id: "c", label: "It is automatically a good trade" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A bullish candle means the close finished above the open, so buyers controlled that interval better than sellers.",
+        coaching:
+          "Read what happened first. Prediction comes later, if at all.",
+      },
+      {
+        id: "direction-not-enough",
+        prompt: "Why is candle color alone not enough?",
+        choices: [
+          { id: "a", label: "Because strength, wicks, and location still decide how meaningful the candle is" },
+          { id: "b", label: "Because candle color never matters at all" },
+          { id: "c", label: "Because indicators replace candles completely" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Color gives the first directional clue, but the rest of the candle and its context decide how much trust that clue deserves.",
+        coaching:
+          "Direction is the first layer. It is not the full read.",
+      },
+    ],
+  },
+  {
+    lessonSlug: "close-strength-and-rejection",
+    title: "Strength Check",
+    summary: "Make sure close strength and wick rejection are actually landing.",
+    questions: [
+      {
+        id: "close-strength-core",
+        prompt: "What usually makes a bullish candle feel stronger?",
+        choices: [
+          { id: "a", label: "It closes near the high instead of giving much of the move back" },
+          { id: "b", label: "It is green, even if the close is weak" },
+          { id: "c", label: "It has a well-known candle name" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A stronger bullish candle usually holds control into the close rather than leaking back into the range.",
+        coaching:
+          "Close location is one of the fastest ways to judge candle strength.",
+      },
+      {
+        id: "wick-rejection-core",
+        prompt: "What is the cleanest beginner read of a long upper wick?",
+        choices: [
+          { id: "a", label: "Higher prices were explored, but buyers could not fully hold them" },
+          { id: "b", label: "The next move must reverse hard" },
+          { id: "c", label: "The candle body no longer matters" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A long upper wick often means rejection or hesitation at higher prices, though context still matters.",
+        coaching:
+          "Treat the wick as evidence, not a guaranteed signal.",
+      },
+    ],
+  },
+  {
     lessonSlug: "support-and-resistance",
     title: "Level Check",
     summary: "Test whether you can think in zones instead of exact magic lines.",
@@ -180,6 +285,41 @@ export const lessonCheckpoints: LessonCheckpoint[] = [
           "Support is usually a zone where demand may appear. It is not a promise. Strong support can still fail.",
         coaching:
           "Thinking in zones instead of exact lines will make your chart reads and stop placement more realistic.",
+      },
+    ],
+  },
+  {
+    lessonSlug: "candle-location-and-context",
+    title: "Context Check",
+    summary: "Make sure candle location is starting to matter more than candle color alone.",
+    questions: [
+      {
+        id: "location-core",
+        prompt: "Which candle is usually more informative?",
+        choices: [
+          { id: "a", label: "A strong candle at a meaningful level or after a clean retest" },
+          { id: "b", label: "Any random candle in messy overlap" },
+          { id: "c", label: "Only the biggest candle on the chart no matter where it formed" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Location gives the candle meaning. The same shape can matter more or less depending on where it forms.",
+        coaching:
+          "The candle matters, but the story around it matters more.",
+      },
+      {
+        id: "structure-before-signal",
+        prompt: "What question should come before 'Was that candle green?'",
+        choices: [
+          { id: "a", label: "What was the chart doing before the candle formed?" },
+          { id: "b", label: "How fast can I enter?" },
+          { id: "c", label: "What is the candle's nickname?" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Sequence and structure decide whether a candle belongs to a useful idea or just to random movement.",
+        coaching:
+          "Context first, then signal. That order protects beginners from weak trades.",
       },
     ],
   },

@@ -42,12 +42,12 @@ export const learningModules: LearningModule[] = [
     status: "active",
     title: "Beginner Foundations",
     summary:
-      "A visual starter flow covering what trading is, the basic market concepts that matter first, and how to read candlesticks.",
+      "A visual starter flow covering what trading is, the market concepts that matter first, and the core candle-reading skills every beginner needs.",
     xpReward: 280,
-    lessonCount: 5,
-    estimatedMinutes: 38,
+    lessonCount: 7,
+    estimatedMinutes: 52,
     progressPercent: 34,
-    focusAreas: ["What is trading?", "Trading vs investing", "Basic market concepts", "Candlestick reading"],
+    focusAreas: ["What is trading?", "Trading vs investing", "Basic market concepts", "Candlestick reading", "Candle strength", "Candle context"],
     botBuilderHook:
       "This module teaches the first machine-readable inputs you will later need for strategy rules: market type, price movement, and candle behavior.",
     unlockRule: "Available now",
@@ -56,6 +56,8 @@ export const learningModules: LearningModule[] = [
       "trading-vs-investing",
       "basic-market-concepts",
       "candlestick-basics",
+      "bullish-vs-bearish-candles",
+      "close-strength-and-rejection",
       "candle-location-and-context",
     ],
     quizSlug: "beginner-foundations-quiz",
@@ -919,6 +921,217 @@ export const lessons: Lesson[] = [
       "Visual reads can be translated into numerical strategy rules later.",
     ],
     botBuilderSignals: ["Body-to-range ratio", "Wick rejection threshold", "Close location", "Consecutive closes"],
+    nextLessonSlug: "bullish-vs-bearish-candles",
+  },
+  {
+    slug: "bullish-vs-bearish-candles",
+    moduleSlug: "market-bootcamp",
+    title: "Bullish vs Bearish Candles",
+    summary:
+      "Learn the simplest candle split first: which side controlled the interval and how confidently they held that control into the close.",
+    objective: "Tell the difference between bullish control and bearish control without overcomplicating the read.",
+    estimatedMinutes: 7,
+    xpReward: 70,
+    keyTerms: ["Bullish candle", "Bearish candle", "Control", "Close"],
+    sections: [
+      {
+        id: "bullish-bearish-core",
+        eyebrow: "Direction Read",
+        title: "A bullish candle shows buyers finished stronger. A bearish candle shows sellers finished stronger.",
+        summary: "Start with who won the interval, then ask how clearly they won it.",
+        blocks: [
+          {
+            id: "bullish-bearish-core-text",
+            type: "text",
+            body:
+              "If the close is above the open, buyers won that candle. If the close is below the open, sellers won that candle. That alone is not enough for a trade, but it is the first reading skill you need.",
+            bullets: [
+              "Bullish candle: close above open.",
+              "Bearish candle: close below open.",
+              "The bigger question is how strong that control actually was.",
+            ],
+          },
+          {
+            id: "bullish-bearish-core-diagram",
+            type: "diagram",
+            title: "Two simple candle reads",
+            caption: "Use direction first, then ask whether the control looked strong or weak.",
+            items: [
+              {
+                label: "Bullish",
+                value: "Close above open",
+                detail: "Buyers finished the interval with more control than sellers.",
+              },
+              {
+                label: "Bearish",
+                value: "Close below open",
+                detail: "Sellers finished the interval with more control than buyers.",
+              },
+              {
+                label: "Next question",
+                value: "How clear was the win?",
+                detail: "Body size and close location decide whether the candle looks strong or weak.",
+              },
+            ],
+          },
+          {
+            id: "bullish-bearish-core-check",
+            type: "quick-check",
+            title: "Direction check",
+            prompt: "What is the fastest beginner read of a bullish candle?",
+            choices: [
+              { id: "a", label: "The candle closed above its open, so buyers finished stronger for that interval" },
+              { id: "b", label: "The next candle must also go up" },
+              { id: "c", label: "It is always a good long trade by itself" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "A bullish candle means buyers controlled that interval better than sellers. That is a clue, not a complete trade plan.",
+            coaching:
+              "Read what happened first. Do not jump straight to prediction.",
+          },
+        ],
+      },
+      {
+        id: "direction-is-not-enough",
+        eyebrow: "Beginner Filter",
+        title: "Direction alone is not enough. You still need strength and context.",
+        summary: "A candle can be bullish but weak, or bearish but low quality.",
+        blocks: [
+          {
+            id: "direction-is-not-enough-callout",
+            type: "callout",
+            tone: "coach",
+            title: "Simple warning",
+            body: "Do not treat every green candle as buy and every red candle as sell. Direction is the first read, not the whole read.",
+          },
+          {
+            id: "direction-is-not-enough-check",
+            type: "quick-check",
+            title: "Meaning check",
+            prompt: "Why is candle color alone not enough?",
+            choices: [
+              { id: "a", label: "Because strength, wicks, and location still decide how meaningful the candle is" },
+              { id: "b", label: "Because candle color never tells you anything" },
+              { id: "c", label: "Because only indicators matter" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Color gives you the first directional clue, but body size, wick behavior, and location decide how useful that clue is.",
+            coaching:
+              "Think of color as the first layer of the read, not the final answer.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Bullish and bearish candles tell you who finished the interval stronger.",
+      "Direction is only the first layer of candle reading.",
+      "Strength and context decide whether a candle actually matters.",
+    ],
+    botBuilderSignals: ["Open-close direction", "Bullish close", "Bearish close", "Directional bias"],
+    nextLessonSlug: "close-strength-and-rejection",
+  },
+  {
+    slug: "close-strength-and-rejection",
+    moduleSlug: "market-bootcamp",
+    title: "Close Strength and Rejection",
+    summary:
+      "A candle tells a fuller story when you judge where it closed inside its range and whether price got rejected along the way.",
+    objective: "Read close strength and wick rejection so you can tell the difference between strong control and weaker, less convincing candles.",
+    estimatedMinutes: 8,
+    xpReward: 75,
+    keyTerms: ["Close strength", "Upper wick", "Lower wick", "Rejection"],
+    sections: [
+      {
+        id: "close-strength-core",
+        eyebrow: "Strength Read",
+        title: "The closer the close is to one end of the range, the clearer the control usually feels",
+        summary: "Strong closes usually look more convincing than candles that give back much of the move.",
+        blocks: [
+          {
+            id: "close-strength-core-text",
+            type: "text",
+            body:
+              "A bullish candle closing near its high often looks stronger than one that closes in the middle of its range. A bearish candle closing near its low often looks stronger than one that bounces back before the close.",
+            bullets: [
+              "Close near high: stronger bullish control.",
+              "Close near low: stronger bearish control.",
+              "Mid-range close: more mixed or less convincing control.",
+            ],
+          },
+          {
+            id: "close-strength-core-check",
+            type: "quick-check",
+            title: "Close-strength check",
+            prompt: "What usually makes a bullish candle feel stronger?",
+            choices: [
+              { id: "a", label: "It closes near the top of its range instead of giving much of the move back" },
+              { id: "b", label: "It is green, even if the close is weak and sloppy" },
+              { id: "c", label: "It has a name traders talk about online" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "A stronger bullish candle usually keeps control into the close instead of leaking back through the body.",
+            coaching:
+              "This is one of the fastest visual habits to build: ask how well the side in control actually held the close.",
+          },
+        ],
+      },
+      {
+        id: "wick-rejection-core",
+        eyebrow: "Rejection Read",
+        title: "Wicks show where price explored and where one side lost some control",
+        summary: "A long wick often means price tested an area but could not hold it cleanly.",
+        blocks: [
+          {
+            id: "wick-rejection-core-diagram",
+            type: "diagram",
+            title: "Quick wick reads",
+            caption: "A wick is often evidence of exploration and rejection, not a complete signal by itself.",
+            items: [
+              {
+                label: "Long upper wick",
+                value: "Higher prices rejected",
+                detail: "Buyers pushed up but could not fully hold those prices into the close.",
+              },
+              {
+                label: "Long lower wick",
+                value: "Lower prices rejected",
+                detail: "Sellers pushed down but could not fully hold those prices into the close.",
+              },
+              {
+                label: "Short wicks",
+                value: "Cleaner control",
+                detail: "The side in control kept more of the candle's range into the close.",
+              },
+            ],
+          },
+          {
+            id: "wick-rejection-core-check",
+            type: "quick-check",
+            title: "Rejection check",
+            prompt: "What does a long upper wick usually suggest first?",
+            choices: [
+              { id: "a", label: "Price explored higher, but buyers could not fully hold those levels" },
+              { id: "b", label: "The market must reverse immediately" },
+              { id: "c", label: "The candle body no longer matters" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "A long upper wick often signals rejection or hesitation near the highs, though context still decides how important that is.",
+            coaching:
+              "Treat wicks as evidence. They are clues about control, not automatic entry signals.",
+          },
+        ],
+      },
+    ],
+    takeaways: [
+      "Close location helps show how clearly one side controlled the candle.",
+      "Wicks often reveal exploration and rejection.",
+      "Strong candles usually combine direction, stronger close location, and cleaner control.",
+    ],
+    botBuilderSignals: ["Close-to-range ratio", "Upper wick percentage", "Lower wick percentage", "Control score"],
     nextLessonSlug: "candle-location-and-context",
   },
   {
@@ -4225,7 +4438,7 @@ export const quizzes: Quiz[] = [
     moduleSlug: "market-bootcamp",
     title: "Beginner Foundations Quiz",
     summary:
-      "A short interactive check on the first three ideas: what trading is, how markets behave, and what candlesticks are telling you.",
+      "A short interactive check on the first beginner ideas: trade structure, market basics, and the first layers of candle reading.",
     xpReward: 90,
     questions: [
       {
@@ -4325,6 +4538,34 @@ export const quizzes: Quiz[] = [
         explanation:
           "Trading usually works on a shorter horizon, so timing, invalidation, and execution become much more important.",
         coaching: "That difference is why this app keeps repeating setup, trigger, and risk logic from the start.",
+      },
+      {
+        id: "q6",
+        type: "pattern-match",
+        prompt: "What usually makes a bullish candle feel stronger?",
+        choices: [
+          { id: "a", label: "It closes near the high instead of giving much of the move back" },
+          { id: "b", label: "It is green, even if the close is weak" },
+          { id: "c", label: "It has a well-known candle name" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A stronger bullish candle usually holds more control into the close. That makes the candle feel cleaner and more convincing.",
+        coaching: "Body, wick, and close matter more than labels.",
+      },
+      {
+        id: "q7",
+        type: "what-happens-next",
+        prompt: "What is the better beginner conclusion if a candle looks strong but forms in random chop?",
+        choices: [
+          { id: "a", label: "Treat it cautiously because location and sequence still matter" },
+          { id: "b", label: "Take it immediately because strong candles are always enough" },
+          { id: "c", label: "Ignore all other chart context" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A strong-looking candle can still be low information if it forms in weak context. Structure decides how much trust the candle deserves.",
+        coaching: "This is the core beginner shift: context before impulse.",
       },
     ],
   },
