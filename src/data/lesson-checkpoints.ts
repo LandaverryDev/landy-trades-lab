@@ -20,6 +20,34 @@ export const lessonCheckpoints: LessonCheckpoint[] = [
         coaching:
           "If you think trading is prediction first, you will ignore risk too early. The better frame is decision quality plus protection.",
       },
+      {
+        id: "trade-structure",
+        prompt: "Which answer best describes a real trade plan?",
+        choices: [
+          { id: "a", label: "A setup, a trigger, and a clear point where the idea is wrong" },
+          { id: "b", label: "A fast chart and a strong feeling" },
+          { id: "c", label: "Any trade that might work if you give it enough room" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A trade plan needs structure. Without a trigger and invalidation, it is just opinion with money attached to it.",
+        coaching:
+          "This is the basic pattern the whole app keeps teaching: why now, what confirms it, what breaks it.",
+      },
+      {
+        id: "trade-skip",
+        prompt: "When is doing nothing the better trade decision?",
+        choices: [
+          { id: "a", label: "When the idea is vague and the risk cannot be defined clearly" },
+          { id: "b", label: "Never, because traders should always be active" },
+          { id: "c", label: "Only after taking the trade first" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Skipping weak ideas is part of disciplined trading. The goal is better decisions, not constant activity.",
+        coaching:
+          "You do not need more action. You need cleaner action.",
+      },
     ],
   },
   {
@@ -41,12 +69,40 @@ export const lessonCheckpoints: LessonCheckpoint[] = [
         coaching:
           "Later, strategy rules will still reduce back to this: who is in control, where, and with how much participation.",
       },
+      {
+        id: "market-transfer",
+        prompt: "What remains true across stocks, futures, forex, and crypto?",
+        choices: [
+          { id: "a", label: "You still have to read movement, timing, and risk" },
+          { id: "b", label: "They all behave with the same speed and structure" },
+          { id: "c", label: "One simple pattern works identically in every market all the time" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "The product changes, but the beginner job is still the same: read price behavior, judge quality, and manage risk.",
+        coaching:
+          "That is why the course starts with shared market logic before drilling into specific vehicles.",
+      },
+      {
+        id: "tradeability",
+        prompt: "Why can an exciting chart still be a poor beginner trade?",
+        choices: [
+          { id: "a", label: "Because liquidity and volatility can make execution and risk much harder" },
+          { id: "b", label: "Because exciting charts are always fake" },
+          { id: "c", label: "Because volatility never matters to traders" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "Movement alone is not enough. A market also has to be tradeable, which means readable and executable with realistic risk.",
+        coaching:
+          "Ask whether the market is clean enough to trade before asking where to click.",
+      },
     ],
   },
   {
     lessonSlug: "candlestick-basics",
     title: "Candle Read Check",
-    summary: "Use one fast question to lock in the candlestick mental model.",
+    summary: "Use a few fast checks to lock in the candlestick mental model.",
     questions: [
       {
         id: "body-vs-wick",
@@ -75,6 +131,34 @@ export const lessonCheckpoints: LessonCheckpoint[] = [
           "A strong close near the high suggests buyers maintained pressure through that interval, though context still decides how important it is.",
         coaching:
           "Do not overread one candle alone. Combine candle behavior with trend, levels, and location.",
+      },
+      {
+        id: "wick-meaning",
+        prompt: "What does a long upper wick usually suggest first?",
+        choices: [
+          { id: "a", label: "Price pushed higher but could not fully hold those levels into the close" },
+          { id: "b", label: "The next candle must reverse downward" },
+          { id: "c", label: "The candle body no longer matters" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A long upper wick often means rejection or hesitation at higher prices, though context decides how important that clue is.",
+        coaching:
+          "Read the wick as evidence, not as an automatic trade command.",
+      },
+      {
+        id: "context-over-name",
+        prompt: "Why should a beginner care more about context than candle names?",
+        choices: [
+          { id: "a", label: "Because the same candle shape can mean different things in different locations" },
+          { id: "b", label: "Because candle names are the only thing that matters later" },
+          { id: "c", label: "Because candles never give useful information" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "A candle becomes meaningful only when you read it inside the structure around it.",
+        coaching:
+          "This is the big shift: stop memorizing names first and start reading the story of control, rejection, and location.",
       },
     ],
   },

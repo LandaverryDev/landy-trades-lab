@@ -349,7 +349,7 @@ export const lessons: Lesson[] = [
     summary:
       "Trading is a short-term decision on movement, timing, and risk. It is not random guessing and it is not just clicking buy.",
     objective: "Understand what a trader is actually trying to do and what makes a trade idea structured.",
-    estimatedMinutes: 6,
+    estimatedMinutes: 12,
     xpReward: 60,
     keyTerms: ["Price movement", "Setup", "Trigger", "Invalidation"],
     sections: [
@@ -443,6 +443,57 @@ export const lessons: Lesson[] = [
             tone: "bot",
             title: "Bot-builder lens",
             body: "Strategies and bots need these same three ideas. They just need them written as clear rules instead of intuition.",
+          },
+          {
+            id: "risk-first-check",
+            type: "quick-check",
+            title: "Risk-first check",
+            prompt: "What should come before thinking about profit?",
+            choices: [
+              { id: "a", label: "Where the idea is wrong and how risk is controlled" },
+              { id: "b", label: "How fast the chart looks like it could move" },
+              { id: "c", label: "How much money the best-case outcome could make" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Profit matters, but only after the trade has a clear invalidation and a risk plan. That order keeps one bad decision from doing too much damage.",
+            coaching:
+              "A beginner who thinks risk first will learn faster because losses stay smaller and feedback stays usable.",
+          },
+        ],
+      },
+      {
+        id: "skip-before-click",
+        eyebrow: "Decision Filter",
+        title: "A big part of trading is deciding not to take weak trades",
+        summary: "The goal is not constant action. The goal is cleaner decisions.",
+        blocks: [
+          {
+            id: "skip-before-click-text",
+            type: "text",
+            body:
+              "A trade can be rejected before entry if the setup is vague, the trigger never appears, or the stop would be too random. Skipping weak ideas is part of real trading, not hesitation.",
+            bullets: [
+              "No clear setup: skip.",
+              "No real trigger: skip.",
+              "No clear invalidation: skip.",
+            ],
+          },
+          {
+            id: "skip-before-click-check",
+            type: "quick-check",
+            title: "Skip logic check",
+            prompt: "When is skipping a trade the better decision?",
+            choices: [
+              { id: "a", label: "When the idea is vague and you cannot define the entry or invalidation clearly" },
+              { id: "b", label: "Never, because a trader should always stay active" },
+              { id: "c", label: "Only after taking the trade and hoping it works first" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Skipping weak structure is part of disciplined trading. The market will always offer more movement later.",
+            coaching:
+              "The app should train decision quality, not just action bias. Good traders often protect themselves by doing less.",
           },
         ],
       },
@@ -561,7 +612,7 @@ export const lessons: Lesson[] = [
     summary:
       "Before strategies or indicators, you need to know what you are trading, why price moves, and how different markets package the same core game.",
     objective: "Understand the basic market language that every beginner needs before deeper chart work.",
-    estimatedMinutes: 8,
+    estimatedMinutes: 10,
     xpReward: 70,
     keyTerms: ["Liquidity", "Volatility", "Leverage", "Session"],
     sections: [
@@ -649,6 +700,57 @@ export const lessons: Lesson[] = [
             tone: "bot",
             title: "Bot-builder lens",
             body: "Later, systems need market-specific settings like session hours, volatility filters, and leverage limits.",
+          },
+          {
+            id: "market-map-check",
+            type: "quick-check",
+            title: "Market transfer check",
+            prompt: "What stays most consistent across stocks, futures, forex, and crypto?",
+            choices: [
+              { id: "a", label: "You still need to read movement, timing, and risk clearly" },
+              { id: "b", label: "They all move with identical speed and behavior" },
+              { id: "c", label: "One chart pattern works the same with no adjustment in every condition" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "The instruments differ, but the shared beginner job remains the same: read price, judge quality, and manage risk.",
+            coaching:
+              "That is why the course teaches transferable reading skills before it pushes deeply into any one product.",
+          },
+        ],
+      },
+      {
+        id: "liquidity-and-volatility",
+        eyebrow: "Tradeability",
+        title: "Liquidity and volatility decide how easy or difficult the chart is to trade",
+        summary: "A market can be active without being clean, and fast without being friendly.",
+        blocks: [
+          {
+            id: "liquidity-and-volatility-text",
+            type: "text",
+            body:
+              "Liquidity affects how easily you can enter and exit. Volatility affects how much price expands and contracts. A chart with weak liquidity or chaotic volatility can punish even a decent read.",
+            bullets: [
+              "Better liquidity usually means cleaner fills.",
+              "Higher volatility can create opportunity, but also wider risk.",
+              "Tradeability is not the same thing as excitement.",
+            ],
+          },
+          {
+            id: "liquidity-and-volatility-check",
+            type: "quick-check",
+            title: "Tradeability check",
+            prompt: "Why can a chart that looks exciting still be a poor beginner trade?",
+            choices: [
+              { id: "a", label: "Because weak liquidity or chaotic volatility can make execution and risk much harder" },
+              { id: "b", label: "Because excitement automatically means the move is fake" },
+              { id: "c", label: "Because volatility never matters for traders" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Movement alone is not enough. Trade quality also depends on whether the market can be read and executed cleanly.",
+            coaching:
+              "This is one of the earliest professional habits to build: ask whether the market is tradeable before asking where to click.",
           },
         ],
       },
@@ -744,6 +846,69 @@ export const lessons: Lesson[] = [
             tone: "bot",
             title: "Bot-builder lens",
             body: "What looks visual now can later become measurements like body-to-range ratio, wick percentage, and consecutive close direction.",
+          },
+          {
+            id: "sequence-check",
+            type: "quick-check",
+            title: "Context check",
+            prompt: "Why can the same green candle mean different things on two different charts?",
+            choices: [
+              { id: "a", label: "Because the location and sequence around it change its meaning" },
+              { id: "b", label: "Because candle color is random and never matters" },
+              { id: "c", label: "Because every green candle is automatically a buy" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "A candle is part of a story. Where it appears and what price was doing before it formed determine how useful it is.",
+            coaching:
+              "This is the shift from memorizing candle names to actually reading the chart.",
+          },
+        ],
+      },
+      {
+        id: "read-strength-fast",
+        eyebrow: "Fast Pattern Read",
+        title: "Read candle strength by asking who controlled the close",
+        summary: "The closer the close is to one end of the range, the clearer that candle usually feels.",
+        blocks: [
+          {
+            id: "read-strength-fast-diagram",
+            type: "diagram",
+            title: "Three quick candle reads",
+            caption: "Start with control and close location before worrying about names.",
+            items: [
+              {
+                label: "Strong bullish close",
+                value: "Buyers in control",
+                detail: "A larger body closing near the high often suggests better buyer control through the interval.",
+              },
+              {
+                label: "Strong bearish close",
+                value: "Sellers in control",
+                detail: "A larger body closing near the low often suggests stronger seller control.",
+              },
+              {
+                label: "Long wick, weaker close",
+                value: "Rejection or hesitation",
+                detail: "Price explored, but one side could not hold full control into the close.",
+              },
+            ],
+          },
+          {
+            id: "read-strength-fast-check",
+            type: "quick-check",
+            title: "Close-strength check",
+            prompt: "What usually makes a candle feel stronger in one direction?",
+            choices: [
+              { id: "a", label: "A larger body and a close near the end of the range controlled by that side" },
+              { id: "b", label: "Only the candle color, even if the close is weak" },
+              { id: "c", label: "The candle name, even if the shape says something else" },
+            ],
+            correctChoiceId: "a",
+            explanation:
+              "Strong directional candles usually show more body and a close near the edge of the range controlled by that side.",
+            coaching:
+              "This is the fast visual habit to build first: body, wick, close, then context.",
           },
         ],
       },
